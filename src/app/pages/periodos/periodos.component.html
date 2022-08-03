@@ -1,0 +1,113 @@
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <!--Encabezado-->
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                <!-- Bucador y boto nuevo-->
+                <div class="d-flex align-items-start mb-2 buscador">
+                    <div class="input-group me-1">
+                        <span class="input-group-text" id="buscar-algo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </span>
+                        <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                            aria-describedby="buscar-algo" (keyup)="buscarPeriodo(txtTermino.value)" #txtTermino>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearPeriodo()">Crear</button>
+                </div>
+
+                <!--Alerta-->
+                <div class="mb-1" *ngIf="cargando">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h6 class="alert-heading">Cargando...</h6>
+                        <div class="spinner-border" role="status">
+                        </div>
+                        <p>Por favor espera</p>
+                    </div>
+                </div>
+
+                <!--Tabla d contenido-->
+                <div class="table-responsive mb-1" *ngIf="!cargando">
+                    <div class="alert alert-primary" role="alert" *ngIf="periodos.length==0">
+                        No hay registros.
+                    </div>
+                    <table class="table table-bordered table-hover" *ngIf="periodos.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col" class="w100"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let periodo of periodos; let i=index">
+                                <th>{{desde+i+1}}</th>
+                                <td>{{periodo.nombre | uppercase}}</td>
+                                <td>
+                                    <div class="btn-group text-center">
+                                        <button type="button" class="btn btn-outline-primary me-1"
+                                            data-bs-toggle="modal" data-bs-target="#crear" data-bs-placement="top"
+                                            title="Editar" (click)="editarPeriodo(periodo)">
+                                            <span>
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-placement="top"
+                                            title="Eliminar" (click)="eliminarPeriodo(periodo)">
+                                            <span>
+                                                <i class="bi bi-trash-fill"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex align-items-start" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
+                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
+                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{{tituloperiodo}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="periodoForm" autocomplete="off" (submit)="guardarPeriodo()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nivelexample" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nivelexample" formControlName="nombre"
+                            placeholder="Nombre periodo">
+                        <div class="form-text text-danger" *ngIf="campoRequerido('nombre')">
+                            El campo nombre es requerido
+                        </div>
+                        <div class="form-text text-danger" *ngIf="campoMaxLengh('nombre',30)">
+                            El campo nombre debe tener como maximo 30 caracteres
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        #closebutton>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">{{boton}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+/* Escabezado*/
+.encabezado{
+    background-color: #fff;
+}
+.encabezado .icono svg{
+    color:  #000;
+}
+.encabezado p{
+    margin-left: 10px;
+}

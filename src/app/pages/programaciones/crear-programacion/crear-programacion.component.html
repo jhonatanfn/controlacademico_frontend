@@ -1,0 +1,169 @@
+<div class="row">
+    <div class="col-12 col-lg-4">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <!--Encabezado-->
+                <app-headertable [titulo]="titulo1" [icono]="icono1"></app-headertable>
+                <div class="row">
+                    <div class="col-12">
+                        <form [formGroup]="programacionForm" (submit)="agregarProgramacion2()">
+                            <div class="row">
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="periodoId" class="form-label">Periodo</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="periodoId">
+                                            <option value="">Seleccionar periodo</option>
+                                            <option *ngFor="let periodo of periodos" 
+                                            [value]="[periodo.id,periodo.nombre]">
+                                                {{periodo.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('periodoId')" id="periodoId"
+                                            class="form-text text-danger">
+                                            El Periodo es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="aulaId" class="form-label">Aula</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="aulaId">
+                                            <option value="">Seleccionar Aula</option>
+                                            <option *ngFor="let aula of aulas" 
+                                            [value]="[aula.id,aula.nombre]">
+                                                {{aula.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('aulaId')" id="aulaId"
+                                            class="form-text text-danger">
+                                            El Aula es requerida
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="areaId" class="form-label">Area</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="areaId" (change)="listarSubareas()">
+                                            <option value="">Seleccionar area</option>
+                                            <option *ngFor="let area of areas" 
+                                            [value]="[area.id,area.nombre]">
+                                                {{area.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('areaId')" id="areaId" class="form-text text-danger">
+                                            El Area es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="subareaId" class="form-label">Subarea</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="subareaId">
+                                            <option value="">Seleccionar subarea</option>
+                                            <option *ngFor="let subarea of subareas" 
+                                            [value]="[subarea.id,subarea.nombre]">
+                                                {{subarea.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('subareaId')" id="subareaId"
+                                            class="form-text text-danger">
+                                            El SubArea es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="docenteId" class="form-label">Docente</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="docenteId">
+                                            <option value="">Seleccionar docente</option>
+                                            <option *ngFor="let docente of docentes" 
+                                            [value]="[docente.id,docente.persona?.nombres,docente.persona?.apellidopaterno,docente.persona?.apellidomaterno]">
+                                                {{docente.persona?.nombres}}
+                                                {{docente.persona?.apellidopaterno}}
+                                                {{docente.persona?.apellidomaterno}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('docenteId')" id="docenteId"
+                                            class="form-text text-danger">
+                                            El Docente es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-8">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-primary" role="alert" 
+                        *ngIf="programaciones.length==0">
+                            No hay registros.
+                          </div>
+                    </div>
+                    <div class="col-12">
+
+                        <div class="table-responsive mb-1" *ngIf="programaciones.length>0">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="w70">Periodo</th>
+                                        <th scope="col">Subarea</th>
+                                        <th scope="col">Aula</th>
+                                        <th scope="col">Docente</th>
+                                        <th scope="col" class="w70"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let p of programaciones">
+                                       
+                                        <td>{{p.periodoNombre}}</td>
+                                        <td>{{p.subareaNombre}}</td>
+                                        <td>{{p.aulaNombre}}</td>
+                                        <td>{{p.docenteNombres}} 
+                                            {{p.docenteApellidoP}}
+                                            {{p.docenteApellidoM}}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group text-center">
+                                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                (click)="eliminarProgramacion(p)">
+                                                    <span>
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" 
+                        *ngIf="programaciones.length>0"
+                        (click)="guardar()" >Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

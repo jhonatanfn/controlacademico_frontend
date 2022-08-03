@@ -1,0 +1,181 @@
+<div class="row">
+    <div class="col-12">
+        <form [formGroup]="docenteForm" (ngSubmit)="guardarDocente()" autocomplete="off">
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <div class="card contenido-principal">
+                        <div class="card-body">
+                            <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                            <div class="row">
+                                <div class="col-12">
+                                   
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="dni" class="form-label">Tipo Documento</label>
+                                                    <select class="form-select" aria-label="Default select example"
+                                                        formControlName="tipodocumentoId">
+                                                        <option value="">Seleccionar tipo documento</option>
+                                                        <option *ngFor="let tipo of tipos" [value]="tipo.id">
+                                                            {{tipo.nombre}}
+                                                        </option>
+                                                    </select>
+                                                    <div *ngIf="campoRequerido('tipodocumentoId')" id="tipodocumentoId"
+                                                        class="form-text text-danger">
+                                                        El campo tipo documento es requerido
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="dni" class="form-label">N° Documento</label>
+                                                    <input type="text" class="form-control" formControlName="numero" id="numero"
+                                                        aria-describedby="numero">
+                                                    <div id="numero" class="form-text text-danger" 
+                                                    *ngIf="campoRequerido('numero')">
+                                                        El campo número documento es requerido
+                                                    </div>
+                                                    <div id="numero" class="form-text text-danger"
+                                                        *ngIf="campoMaxLengh('numero',8)">
+                                                        El campo número documento debe tener 8 caracteres
+                                                    </div>
+                                                    <div id="numero" class="form-text text-danger"
+                                                    *ngIf="campoMinLength('numero',8)">
+                                                        El campo número documento debe tener 8 caracteres
+                                                    </div>
+                                                    <div id="numero" class="form-text text-danger"
+                                                    *ngIf="campoNumeros('numero')">
+                                                        Solo se aceptan numeros
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+            
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="nombre" class="form-label">Nombres</label>
+                                                    <input type="text" class="form-control" formControlName="nombres" 
+                                                    id="nombres"
+                                                        aria-describedby="nombres">
+                                                    <div id="nombres" class="form-text text-danger" 
+                                                    *ngIf="campoRequerido('nombres')">
+                                                        El campo nombres es requerido
+                                                    </div>
+                                                    <div id="nombres" class="form-text text-danger"
+                                                        *ngIf="campoMaxLengh('nombres',50)">
+                                                        El campo nombres debe tener como maximo 50 caracteres
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="apellidopaterno" class="form-label">Apellido Paterno</label>
+                                                    <input type="text" class="form-control" formControlName="apellidopaterno"
+                                                        id="apellidopaterno" aria-describedby="apellidopaterno">
+                                                    <div id="apellidopaterno" class="form-text text-danger"
+                                                        *ngIf="campoRequerido('apellidopaterno')">
+                                                        El campo apellido paterno es requerido
+                                                    </div>
+                                                    <div id="apellidopaterno" class="form-text text-danger"
+                                                        *ngIf="campoMaxLengh('apellidopaterno',20)">
+                                                        El campo apellido paterno debe tener como maximo 20 caracteres
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="apellidomaterno" class="form-label">Apellido Materno</label>
+                                                    <input type="text" class="form-control" formControlName="apellidomaterno"
+                                                        id="apellidomaterno" aria-describedby="apellidomaterno">
+                                                    <div id="apellidomaterno" class="form-text text-danger"
+                                                        *ngIf="campoRequerido('apellidomaterno')">
+                                                        El campo apellido materno es requerido
+                                                    </div>
+                                                    <div id="apellidomaterno" class="form-text text-danger"
+                                                        *ngIf="campoMaxLengh('apellidomaterno',20)">
+                                                        El campo apellido materno debe tener como maximo 20 caracteres
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="telefono" class="form-label">Teléfono</label>
+                                                    <input type="text" class="form-control" formControlName="telefono" id="telefono"
+                                                        aria-describedby="telefono">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    <label for="direccion" class="form-label">Dirección</label>
+                                                    <input type="text" class="form-control" formControlName="direccion"
+                                                        id="direccion" aria-describedby="direccion">
+                                                </div>
+                                            </div>
+                                        </div>
+            
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+            
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <div class="col-12 col-lg-6">
+                    <div class="card contenido-principal">
+                        <div class="card-body">
+                            <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="nombreusuario" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" 
+                                                formControlName="nombreusuario" id="nombreusuario"
+                                                    aria-describedby="numero">
+                                                <div *ngIf="campoRequerido('nombreusuario')" id="tipodocumentoId"
+                                                    class="form-text text-danger">
+                                                    El campo Nombre Usuario es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="emailusuario" class="form-label">Email</label>
+                                                <input type="email" class="form-control" 
+                                                formControlName="emailusuario" id="emailusuario"
+                                                    aria-describedby="numero">
+                                                <div *ngIf="campoRequerido('emailusuario')" id="emailusuario"
+                                                    class="form-text text-danger">
+                                                    El campo Email Usuario es requerido
+                                                </div>
+                                                <div *ngIf="campoEmail('emailusuario')" id="emailusuario"
+                                                    class="form-text text-danger">
+                                                    Formato no es válido
+                                                </div>
+                                                <div *ngIf="emailRepetido('emailusuario')" id="emailusuario"
+                                                    class="form-text text-danger">
+                                                    El email ya existe
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+
+            </div>
+        </form>
+    </div>
+</div>

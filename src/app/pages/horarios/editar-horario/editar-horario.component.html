@@ -1,0 +1,134 @@
+<div class="row">
+    <div class="col-12 col-lg-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <form [formGroup]="horarioForm" (submit)="buscarHorario()">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="periodoId" class="form-label">Periodo</label>
+                                                <select class="form-select" aria-label="Seleccionar periodo"
+                                                    formControlName="periodoId">
+                                                    <option value="">Seleccionar Periodo</option>
+                                                    <option *ngFor="let periodo of periodos"
+                                                        [value]="[periodo.id,periodo.nombre]">
+                                                        {{periodo.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('periodoId')" id="periodoId"
+                                                    class="form-text text-danger">
+                                                    La periodo es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary me-2 mb-1">
+                                                <i class="bi bi-search"></i>
+                                                Buscar
+                                            </button>
+                                            <button type="button" class="btn btn-primary me-2 mb-1"
+                                                (click)="actualizarHorario()">
+                                                <i class="bi bi-upload"></i>
+                                                Actualizar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card w-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Aula:</h6>
+                                        <p class="card-text"> {{ aulanombre | uppercase }}</p>
+                                        <h6 class="card-title">Nivel:</h6>
+                                        <p class="card-text">{{ nivelnombre | uppercase }}</p>
+                                        <h6 class="card-title">Grado:</h6>
+                                        <p class="card-text">{{ gradonombre | uppercase }}</p>
+                                        <h6 class="card-title">Seccion:</h6>
+                                        <p class="card-text">{{ seccionnombre | uppercase }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-9">
+        <div class="row">
+            <div class="col-12">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                        <div class="row">
+                            <div class="col-12" *ngIf="cargando">
+                                <div class="mb-1">
+                                    <div class="alert alert-info text-center" role="alert">
+                                        <h6 class="alert-heading">Cargando...</h6>
+                                        <div class="spinner-border" role="status">
+                                        </div>
+                                        <p>Por favor espera</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12" *ngIf="!cargando">
+                                <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
+                                    {{message}}
+                                </div>
+                                <div class="row m-1 table-responsive" *ngIf="datos.length>0">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th *ngFor="let dia of dias" scope="col" class="w300 text-center">
+                                                    <p> {{dia.nombre | uppercase}}</p>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let in of intervalos">
+                                                <td *ngFor="let dato of datos.slice(in.inicio,in.final)">
+                                                    <p>{{dato.hora.inicio}} - {{dato.hora.fin}}
+                                                    </p>
+                                                    <select class="form-select" aria-label="Seleccionar subarea"
+                                                        *ngIf="dato.hora.tipo===1" [(ngModel)]="dato.subareaId"
+                                                        (change)="verificaSeleccion(dato)">
+                                                        <option value=0>Seleccionar Subarea</option>
+                                                        <option *ngFor="let subarea of subareas" [value]="subarea.id">
+                                                            {{subarea.nombre | uppercase}}
+                                                        </option>
+                                                    </select>
+                                                    <strong *ngIf="dato.hora.tipo===0" class="text-center">
+                                                        RECREO
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

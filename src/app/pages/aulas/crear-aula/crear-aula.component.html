@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col-12 col-lg-6">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <!--Encabezado-->
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                <div class="row">
+                    <div class="col-12">
+                        <form [formGroup]="aulaForm" (submit)="crearAula()" autocomplete="off">
+                            <div class="row">
+                                <div class="col-12 col-md-12">
+
+                                    <div class="mb-3">
+                                        <label for="nivelId" class="form-label">Nivel</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="nivelId">
+                                            <option value="">Seleccionar nivel</option>
+                                            <option *ngFor="let nivel of niveles" [value]="nivel.id">
+                                                {{nivel.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('nivelId')" id="nivelId"
+                                            class="form-text text-danger">
+                                            El nivel es requerido
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="gradoId" class="form-label">Grado</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="gradoId">
+                                            <option value="">Seleccionar grado</option>
+                                            <option *ngFor="let grado of grados" [value]="grado.id">
+                                                {{grado.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('gradoId')" id="gradoId"
+                                            class="form-text text-danger">
+                                            El grado es requerido
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="seccionId" class="form-label">Seccion</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="seccionId">
+                                            <option value="">Seleccionar seccion</option>
+                                            <option *ngFor="let seccion of secciones" [value]="seccion.id">
+                                                {{seccion.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('seccionId')" id="seccionId"
+                                            class="form-text text-danger">
+                                            La seccion es requerida
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="nombre" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" formControlName="nombre" 
+                                        id="nombre"
+                                            aria-describedby="nombre">
+                                        <div id="nombre" class="form-text text-danger" 
+                                        *ngIf="campoRequerido('nombre')">
+                                            El campo nombre es requerido
+                                        </div>
+                                        <div id="nombre" class="form-text text-danger"
+                                            *ngIf="campoMaxLengh('nombre',20)">
+                                            El campo nombre debe tener como maximo 40 caracteres
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

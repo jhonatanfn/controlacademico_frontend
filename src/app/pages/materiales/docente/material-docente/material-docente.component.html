@@ -1,0 +1,240 @@
+<div class="row">
+
+    <div class="col-12 col-lg-3">
+        <div class="col-12 col-lg-12">
+            <div class="card contenido-principal">
+                <div class="card-body">
+                    <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card w-100">
+                                <div class="card-body">
+                                    <h6 class="card-title">Periodo:</h6>
+                                    <p class="card-text"> {{ periodonombre | uppercase }}</p>
+                                    <h6 class="card-title">Aula:</h6>
+                                    <p class="card-text">{{ aulanombre | uppercase }}</p>
+                                    <h6 class="card-title">Subarea:</h6>
+                                    <p class="card-text"> {{ subareanombre | uppercase }}</p>
+                                    <h6 class="card-title">Docente:</h6>
+                                    <p class="card-text"> {{ docentenombre | uppercase }}</p>
+                                    <h6 class="card-title">Total de Materiales:</h6>
+                                    <p class="card-text"> {{ total }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-9">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                <div class="d-flex align-items-start mb-2 buscador">
+                    <div class="input-group me-1">
+                        <span class="input-group-text" id="buscar-algo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </span>
+                        <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                            aria-describedby="buscar-algo" (keyup)="buscarMaterial(txtTermino.value)" #txtTermino>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearMaterial()">
+                        Crear
+                    </button>
+                </div>
+
+                <div class="mb-1" *ngIf="cargando">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h6 class="alert-heading">Cargando...</h6>
+                        <div class="spinner-border" role="status">
+                        </div>
+                        <p>Por favor espera</p>
+                    </div>
+                </div>
+                <div class="table-responsive mb-1" *ngIf="!cargando">
+                    <div class="alert alert-primary" role="alert" *ngIf="materiales.length==0">
+                        No hay registros.
+                    </div>
+                    <table class="table table-bordered table-hover" *ngIf="materiales.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col">Titulo</th>
+                                <th scope="col">Archivo</th>
+                                <th scope="col" class="w100"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let material of materiales; let i=index">
+                                <th>{{desde+i+1}}</th>
+                                <td>{{material.titulo}}</td>
+                                <td class="text-center">
+                                    <a *ngIf="material?.archivo" href="{{material?.archivo}}" target="_blank"
+                                        class="text-center" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Descargar">
+                                        <img src="../../../../assets/img/download.png" alt=""
+                                            style="width: 40px; height: 40px;">
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="btn-group text-center">
+                                        <button type="button" class="btn btn-outline-primary me-1"
+                                            data-bs-toggle="modal" data-bs-target="#detalle" data-bs-placement="top"
+                                            title="Detalle" (click)="detalleMaterial(material)">
+                                            <span>
+                                                <i class="bi bi-file-pdf-fill"></i>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-success me-1"
+                                            data-bs-toggle="modal" data-bs-target="#crear" data-bs-placement="top"
+                                            title="Editar" (click)="editarMaterial(material)">
+                                            <span>
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-placement="top"
+                                            title="Eliminar" (click)="eliminarMaterial(material)">
+                                            <span>
+                                                <i class="bi bi-trash-fill"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex align-items-start" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-6)" type="button"
+                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                    <button [disabled]="ds" (click)="cambiarPagina(6)" type="button"
+                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Detalle Material</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="d-flex flex-column flex-lg-row justify-content-start">
+                    <img [src]="material?.programacion?.subarea?.area?.img! | imgarea" alt="imagen"
+                        class="imagen me-3 mb-2">
+                    <div>
+                        <h6>Titulo:</h6>
+                        <p>{{material?.titulo}}</p>
+                        <h6 *ngIf="material?.subtitulo==''">Subtitulo:</h6>
+                        <p *ngIf="material?.subtitulo==''">{{material?.subtitulo}}</p>
+                        <h6>Descripción:</h6>
+                        <p class="text-justify">{{material?.descripcion}}</p>
+                        <h6>Creado por:</h6>
+                        <p>{{material?.programacion?.docente?.persona?.nombres}}</p>
+                        <h6>Fecha:</h6>
+                        <p>{{material?.fecha}}</p>
+                        <a *ngIf="material?.archivo" href="{{material?.archivo}}" target="_blank">
+                            <img src="../../../../assets/img/descarga.png" alt="" class="descarga">
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{{titulo}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form [formGroup]="materialForm" (submit)="guardarMaterial()" autocomplete="off">
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="titulo" class="form-label">Titulo</label>
+                                <input type="text" class="form-control" id="titulo" formControlName="titulo"
+                                    placeholder="Escribir el titulo">
+                                <div class="form-text text-danger" *ngIf="campoRequerido('titulo')">
+                                    El campo titulo es requerido
+                                </div>
+                                <div class="form-text text-danger" *ngIf="campoMaxLengh('titulo',100)">
+                                    El campo titulo debe tener como maximo 100 caracteres
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="subtitulo" class="form-label">SubTitulo</label>
+                                <input type="text" class="form-control" id="subtitulo" formControlName="subtitulo"
+                                    placeholder="Escribir el subtitulo">
+                                <div class="form-text text-danger" *ngIf="campoMaxLengh('subtitulo',100)">
+                                    El campo subtitulo debe tener como maximo 100 caracteres
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="descripcion" rows="7" cols="7"
+                                    formControlName="descripcion" placeholder="Escribir la descripcion"></textarea>
+                                <div class="form-text text-danger" *ngIf="campoRequerido('descripcion')">
+                                    El campo descripcion es requerido
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Archivo</label>
+                                <input type="file" class="form-control" id="formFile" formControlName="archivo"
+                                    (change)="cambiarArchivo($event)">
+                            </div>
+                            <div class="mb-1" *ngIf="cargandocrear">
+                                <div class="alert alert-info text-center" role="alert">
+                                    <h6 class="alert-heading">Subiendo archivo...</h6>
+                                    <div class="spinner-border" role="status">
+                                    </div>
+                                    <p>Por favor espera</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        #closebutton2>Cerrar</button>
+                    <button type="submit" class="btn btn-primary">{{boton}}</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

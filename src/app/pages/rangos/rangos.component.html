@@ -1,0 +1,169 @@
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <!--Encabezado-->
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                <!-- Bucador y boto nuevo-->
+                <div class="d-flex align-items-start mb-2 buscador">
+                    <div class="input-group me-1">
+                        <span class="input-group-text" id="buscar-algo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </span>
+                        <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                            aria-describedby="buscar-algo" (keyup)="buscarRango(txtTermino.value)" #txtTermino>
+                    </div>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearRango()">Crear</button>
+                </div>
+
+                <!--Alerta-->
+                <div class="mb-1" *ngIf="cargando">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h6 class="alert-heading">Cargando...</h6>
+                        <div class="spinner-border" role="status">
+                        </div>
+                        <p>Por favor espera</p>
+                    </div>
+                </div>
+
+                <!--Tabla d contenido-->
+                <div class="table-responsive mb-1" *ngIf="!cargando">
+                    <div class="alert alert-primary" role="alert" *ngIf="rangos.length==0">
+                        No hay registros.
+                    </div>
+                    <table class="table table-bordered table-hover" *ngIf="rangos.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col">Letra</th>
+                                <th scope="col">Inicio</th>
+                                <th scope="col">Fin</th>
+                                <th scope="col">Situación</th>
+                                <th scope="col">Color</th>
+                                <th scope="col" class="w100"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let rango of rangos; let i=index">
+                                <th>{{desde+i+1}}</th>
+                                <td>{{rango.letra | uppercase}}</td>
+                                <td>{{rango.inicio}}</td>
+                                <td>{{rango.fin}}</td>
+                                <td>{{rango.situacion | uppercase}}</td>
+                                <td>{{rango.color | uppercase}}</td>
+                                <td>
+                                    <div class="btn-group text-center">
+                                        <button type="button" class="btn btn-outline-primary me-1"
+                                            data-bs-toggle="modal" data-bs-target="#crear" data-bs-placement="top"
+                                            title="Editar" (click)="editarRango(rango)">
+                                            <span>
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger" data-bs-placement="top"
+                                            title="Eliminar" (click)="eliminarRango(rango)">
+                                            <span>
+                                                <i class="bi bi-trash-fill"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex align-items-start" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
+                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
+                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{{titulorango}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="rangoForm" autocomplete="off" (submit)="guardarRango()">
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="letra" class="form-label">Letra</label>
+                        <input type="text" class="form-control" id="letra" formControlName="letra"
+                            placeholder="Ingresar letra">
+                        <div class="form-text text-danger" *ngIf="campoRequerido('letra')">
+                            El campo letra es requerido
+                        </div>
+                        <div class="form-text text-danger" *ngIf="campoMaxLengh('letra',2)">
+                            El campo letra debe tener como maximo 2 caracteres
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inicio" class="form-label">Inicio</label>
+                        <input type="text" class="form-control" id="inicio" formControlName="inicio"
+                            placeholder="Ingresar inicio">
+                        <div class="form-text text-danger" *ngIf="campoRequerido('inicio')">
+                            El campo inicio es requerido
+                        </div>
+                        <div class="form-text text-danger" *ngIf="campoRango('inicio')">
+                            El valor debe estar entre 0 a 20.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fin" class="form-label">Fin</label>
+                        <input type="text" class="form-control" id="fin" formControlName="fin"
+                            placeholder="Ingresar fin">
+                        <div class="form-text text-danger" *ngIf="campoRequerido('fin')">
+                            El campo fin es requerido
+                        </div>
+                        <div class="form-text text-danger" *ngIf="campoRango('fin')">
+                            El valor debe estar entre 0 a 20.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="situacion" class="form-label">Situación</label>
+                        <input type="text" class="form-control" id="situacion" formControlName="situacion"
+                            placeholder="Ingresar situacion">
+                        <div class="form-text text-danger" *ngIf="campoRequerido('situacion')">
+                            El campo situacion es requerido
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="color" class="form-label">Color</label>
+                        <select class="form-select" aria-label="Default select example" formControlName="color">
+                            <option value="">Seleccionar color</option>
+                            <option *ngFor="let color of colores" [value]="color.nombre">
+                                {{color.nombre}}
+                            </option>
+                        </select>
+                        <div class="form-text text-danger" *ngIf="campoRequerido('color')">
+                            El campo color es requerido
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        #closebutton>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">{{boton}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

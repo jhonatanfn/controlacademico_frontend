@@ -1,0 +1,105 @@
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card contenido-principal">
+            <div class="card-body">
+
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+
+                <div class="row">
+                    <div class="col-12 col-lg-2">
+                        <div class="mb-3">
+                            <select class="form-select" aria-label="Default select example"
+                                [(ngModel)]="periodoseleccionado" (change)="listarMatriculas()">
+                                <option value="">Seleccionar Periodo</option>
+                                <option *ngFor="let periodo of periodos" [value]="periodo.id">
+                                    {{periodo.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-10">
+                        <div class="d-flex align-items-start mb-2 buscador">
+                            <div class="input-group me-1">
+                                <span class="input-group-text" id="buscar-algo">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-search" viewBox="0 0 16 16">
+                                        <path
+                                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                    </svg>
+                                </span>
+                                <input type="search" class="form-control" 
+                                placeholder="Buscar" aria-label="Buscar"
+                                    aria-describedby="buscar-algo" (keyup)="buscarMatriculas(txtTermino.value)" #txtTermino>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-1" *ngIf="cargando">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h6 class="alert-heading">Cargando...</h6>
+                        <div class="spinner-border" role="status">
+                        </div>
+                        <p>Por favor espera</p>
+                    </div>
+                </div>
+
+
+                <div class="table-responsive mb-1" *ngIf="!cargando">
+                    <div class="alert alert-primary" role="alert" *ngIf="matriculas.length==0">
+                        No hay registros.
+                    </div>
+                    <table class="table table-bordered table-hover" *ngIf="matriculas.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col" class="w70">Periodo</th>
+                                <th scope="col">Aula</th>
+                                <th scope="col">Subarea</th>
+                                <th scope="col">Docente</th>
+                                <th scope="col" class="w70"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let matricula of matriculas; let i=index">
+                                <td>{{ desde+i+1 }}</td>
+                                <td>{{matricula.programacion?.periodo?.nombre}}</td>
+                                <td>{{matricula.programacion?.aula?.nombre}}</td>
+                                <td>{{matricula.programacion?.subarea?.nombre}}</td>
+                                <td>
+                                    {{matricula.programacion?.docente?.persona?.nombres}}
+                                    {{matricula.programacion?.docente?.persona?.apellidopaterno}}
+                                    {{matricula.programacion?.docente?.persona?.apellidomaterno}}
+                                </td>
+                                <td>
+                                    <div class="btn-group text-center">
+                                        <button type="button" class="btn btn-outline-primary me-1"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Notas"
+                                            [routerLink]="[matricula.id]">
+                                            <span>
+                                                <i class="bi bi-file-earmark-ruled"></i>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-success me-1"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Asistencias"
+                                            [routerLink]="['asistencia',matricula.id]">
+                                            <span>
+                                                <i class="bi bi-calendar-check"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex align-items-start" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
+                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
+                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

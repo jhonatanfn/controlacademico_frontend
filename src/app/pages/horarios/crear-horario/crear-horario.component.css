@@ -1,0 +1,58 @@
+
+.cajon{
+    background-color: #fff;
+    border-style: groove;
+    height: 70px; 
+    width: 200px; 
+}
+.cajon-cabecera{
+    background-color: rgba(212, 214, 210, 0.692);
+    border-style: groove;
+    font-weight: 900;
+    height: 60px; 
+    width: 200px; 
+}
+.cajon-hora{
+    background-color: rgba(212, 214, 210, 0.692);
+    border-style: groove;
+    font-weight: 900;
+    height: 70px; 
+    width: 120px; 
+}
+.cajon-hora-titulo{
+    background-color: rgba(212, 214, 210, 0.692);
+    border-style: groove;
+    font-weight: 900;
+    height: 60px; 
+    width: 120px; 
+}
+
+.w300{
+    width: 300px; 
+}
+
+/* --- MEDIAQUERIES ---  */
+
+/* Dispositivo SM */
+@media screen and (max-width: 576px){
+    
+}
+
+/* Dispositivo MD */
+@media screen and (max-width: 768px) {
+    
+}
+
+/* Dispositivo LG */
+@media screen and (max-width: 992px) {
+    
+    
+}
+/* Dispositivo XL */
+@media screen and (max-width: 1200px) {
+  
+}
+/* Dispositivo XXL */
+@media screen and (max-width: 1400px){
+  
+}

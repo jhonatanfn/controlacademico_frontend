@@ -1,0 +1,150 @@
+<div class="row">
+    <div class="col-12 col-lg-5">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-3">
+
+                            <div class="mb-3">
+                                <ng-select [(ngModel)]="selectedAlumno" (change)="alumnoSeleccionado()"
+                                    placeholder="Buscar alumno">
+                                    <ng-option *ngFor="let alumno of alumnos"
+                                        [value]="[alumno.id,alumno.persona?.numero,alumno.persona?.nombres,alumno.persona?.apellidopaterno,alumno.persona?.apellidomaterno]">
+                                        {{alumno.persona?.numero}} -
+                                        {{alumno.persona?.apellidopaterno}} {{alumno.persona?.apellidomaterno}}
+                                        {{alumno.persona?.nombres}}
+                                    </ng-option>
+                                </ng-select>
+                                <div *ngIf="campoRequerido('alumnoId')" id="alumnoId" class="form-text text-danger">
+                                    El alumno es requerido
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3" *ngIf="existeAlumno">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Número Documento:</h6>
+                                    <p class="card-text">{{alumno_numero}}</p>
+                                    <h6 class="card-title">Nombres y Apellidos:</h6>
+                                    <p class="card-text">
+                                        {{alumno_nombres}}
+                                        {{alumno_apellidopaterno}}
+                                        {{alumno_apellidomaterno}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 col-lg-7">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                <div class="row">
+                    <div class="col-12">
+                        <form [formGroup]="matriculaForm" (submit)="generarMatricula()">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="periodoId" class="form-label">Periodo</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="periodoId">
+                                            <option value="">Seleccionar periodo</option>
+                                            <option *ngFor="let periodo of periodos" [value]="periodo.id">
+                                                {{periodo.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('periodoId')" id="periodoId"
+                                            class="form-text text-danger">
+                                            El periodo es requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="aulaId" class="form-label">Aula</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="aulaId">
+                                            <option value="">Seleccionar aula</option>
+                                            <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre,aula.nivel,aula.grado,aula.seccion]">
+                                                {{aula.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('aulaId')" id="aulaId" class="form-text text-danger">
+                                            El aula es requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col d-flex justify-content-start">
+                                    <button type="submit" class="btn btn-primary btn-sm me-2">
+                                        <i class="bi bi-search"></i>
+                                        Buscar
+                                    </button>
+                                    
+                                    <button type="button" class="btn btn-primary btn-sm me-2" 
+                                    [disabled]="programaciones.length==0"
+                                        (click)="guardarMatricula()">
+                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        Guardar
+                                    </button>
+                                    <button type="button" class="btn btn-success btn-sm me-2"
+                                        (click)="imprimirMatricula('OPEN')" [disabled]="programaciones.length==0">
+                                        <i class="bi bi-printer"></i>
+                                        Imprimir
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-12 mt-2">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-primary" role="alert" *ngIf="programaciones.length==0">
+                                    No hay registros.
+                                </div>
+                            </div>
+
+                            <div class="col-12" *ngIf="programaciones.length>0">
+
+                                <div class="table-responsive mb-1">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="w70">Periodo</th>
+                                                <th scope="col">Aula</th>
+                                                <th scope="col">Subarea</th>
+                                                <th scope="col">Docente</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let p of programaciones">
+                                                <td>{{p.periodo?.nombre}}</td>
+                                                <td>{{p.aula?.nombre}}</td>
+                                                <td>{{p.subarea?.nombre}}</td>
+                                                <td>{{p.docente?.persona?.nombres}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

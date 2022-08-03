@@ -1,0 +1,62 @@
+body{
+    background-image: url(../img/fondo.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.flex-container{
+    height: 665px;
+    display: flex;
+    flex-direction:row-reverse;
+}
+
+.flex-container .caja-principal{
+    background-color: #fff;
+    box-shadow: 0px 0px 10px 1px rgb(117, 115, 115);
+    width: 400px;
+    height: auto;
+    border-radius: 2px;
+   
+}
+.flex-container .logo{
+    width: 100px;
+    height: 100px;
+}
+
+.flex-container .caja-principal div, button{
+    margin-bottom: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 15px;
+}
+
+
+/* --- MEDIAQUERIES ---  */
+
+/* Dispositivo xs */
+@media screen and (max-width: 320px) {
+   
+}
+
+/* Dispositivo SM */
+@media screen and (max-width: 576px){
+    
+}
+
+/* Dispositivo MD */
+@media screen and (max-width: 768px) {
+	
+}
+
+/* Dispositivo LG */
+@media screen and (max-width: 992px) {
+    
+}
+/* Dispositivo XL */
+@media screen and (max-width: 1200px) {
+    
+}
+/* Dispositivo XXL */
+@media screen and (max-width: 1400px){
+    
+}

@@ -1,0 +1,169 @@
+<div class="row">
+    <div class="col-12 col-lg-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <form [formGroup]="horarioForm" (submit)="buscarHorario()">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="periodoId" class="form-label">Periodo</label>
+                                                <select class="form-select" aria-label="Seleccionar periodo"
+                                                    formControlName="periodoId">
+                                                    <option value="">Seleccionar Periodo</option>
+                                                    <option *ngFor="let periodo of periodos"
+                                                        [value]="[periodo.id,periodo.nombre]">
+                                                        {{periodo.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('periodoId')" id="periodoId"
+                                                    class="form-text text-danger">
+                                                    La periodo es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="aulaId" class="form-label">Aula</label>
+                                                <select class="form-select" aria-label="Seleccionar aula"
+                                                    formControlName="aulaId" (change)="listarAlumnos()">
+                                                    <option value="">Seleccionar Aula</option>
+                                                    <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre,aula.nivel?.nombre,aula.grado?.nombre,aula.seccion?.nombre]">
+                                                        {{aula.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('aulaId')" id="aulaId"
+                                                    class="form-text text-danger">
+                                                    La aula es requerida
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary me-2 mb-1">
+                                                <i class="bi bi-search"></i>
+                                                Buscar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12" *ngIf="datos.length>0">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card w-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Periodo:</h6>
+                                        <p class="card-text"> {{ periodonombre | uppercase }}</p>
+                                        <h6 class="card-title">Aula:</h6>
+                                        <p class="card-text">{{ aulanombre | uppercase }}</p>                                       
+                                        <h6 class="card-title">Alumno:</h6>
+                                        <p class="card-text" *ngFor="let objeto of listaAlumno"> 
+                                            {{ objeto.persona?.nombres | uppercase }}
+                                            {{ objeto.persona?.apellidopaterno | uppercase }}
+                                            {{ objeto.persona?.apellidomaterno | uppercase }}
+                                        </p>                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-9">
+        <div class="row">
+            <div class="col-12">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                        <div class="row">
+                            <div class="col-12" *ngIf="cargando">
+                                <div class="mb-1">
+                                    <div class="alert alert-info text-center" role="alert">
+                                        <h6 class="alert-heading">Cargando...</h6>
+                                        <div class="spinner-border" role="status">
+                                        </div>
+                                        <p>Por favor espera</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12" *ngIf="!cargando">
+                                <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
+                                    {{message}}
+                                </div>
+                                <div class="row" *ngIf="datos.length>0">                                    
+                                    <div class="col-12">
+                                        <div class="d-lg-flex d-flex-column justify-content-end mb-1" *ngIf="datos.length>0">                                          
+                                            <button type="button" class="btn btn-danger btn-sm me-2" (click)="generatePDF('OPEN')"
+                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Visualizar PDF">
+                                                <i class="bi bi-file-earmark-pdf"></i>
+                                                Visualizar
+                                            </button>
+                                            <button type="button" class="btn btn-primary btn-sm me-2" (click)="generatePDF('PRINT')"
+                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Imprimir PDF">
+                                                <i class="bi bi-printer"></i>
+                                                Imprimir
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-sm me-2"
+                                                (click)="generatePDF('DOWNLOAD')" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Descargar PDF">
+                                                <i class="bi bi-arrow-down-circle"></i>
+                                                Descargar
+                                            </button>
+                                        </div>
+                                    </div>                               
+                                    <div class="col-12 table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="w100">
+
+                                                    </th>
+                                                    <th *ngFor="let dia of dias" scope="col" class="w300 text-center">
+                                                        <p> {{dia.nombre | uppercase}}</p>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let in of intervalos">
+                                                    <td>
+                                                        {{in.rango.inicio}} - {{in.rango.fin}}
+                                                    </td>
+                                                    <td *ngFor="let dato of datos.slice(in.inicio,in.final)">
+                                                     
+                                                        <p class="text-center" *ngIf="dato.hora.tipo===1">
+                                                            {{dato.programacion?.subarea?.nombre}}
+                                                        </p>
+                                                        <strong *ngIf="dato.hora.tipo===0">
+                                                            <p class="text-center">RECREO</p>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

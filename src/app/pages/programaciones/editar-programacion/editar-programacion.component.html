@@ -1,0 +1,151 @@
+<div class="row">
+
+    <!--
+    <div class="col-12 col-lg-6">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <app-headertable [titulo]="titulo1" [icono]="icono1"></app-headertable>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <h6 class="card-title">Periodo:</h6>
+                                <p class="card-text"> {{ programacionForm.controls['periodo'].value }}</p>
+                                <h6 class="card-title">Aula:</h6>
+                                <p class="card-text">{{ programacionForm.controls['aula'].value }}</p>
+                                <h6 class="card-title">Area:</h6>
+                                <p class="card-text"> {{ programacionForm.controls['area'].value }}</p>
+                                <h6 class="card-title">Subarea:</h6>
+                                <p class="card-text">  {{ programacionForm.controls['subarea'].value }}</p>
+                                <h6 class="card-title">Docente:</h6>
+                                <p class="card-text"> {{ programacionForm.controls['docente'].value }}</p>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+
+    <div class="col-12 col-lg-6">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                <div class="row">
+                    <div class="col-12">
+                        <form [formGroup]="programacionForm" (submit)="actualizar()" autocomplete="off">
+
+                            <div class="row">
+
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="periodoId" class="form-label">Periodo</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="periodoId">
+                                            <option value="">Seleccionar periodo</option>
+                                            <option *ngFor="let periodo of periodos" [value]="periodo.id">
+                                                {{periodo.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('periodoId')" id="periodoId"
+                                            class="form-text text-danger">
+                                            El Periodo es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="aulaId" class="form-label">Aula</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="aulaId">
+                                            <option value="">Seleccionar Aula</option>
+                                            <option *ngFor="let aula of aulas" [value]="aula.id">
+                                                {{aula.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('aulaId')" id="aulaId" class="form-text text-danger">
+                                            El Aula es requerida
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-12">
+                                    <div class="col-12 col-md-12">
+                                        <div class="mb-3">
+                                            <label for="areaId" class="form-label">Area</label>
+                                            <select class="form-select" aria-label="Default select example"
+                                                formControlName="areaId" (change)="listarSubareas()">
+                                                <option value="">Seleccionar area</option>
+                                                <option *ngFor="let area of areas" [value]="area.id">
+                                                    {{area.nombre}}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="campoRequerido('areaId')" id="areaId"
+                                                class="form-text text-danger">
+                                                El Area es requerido
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="subareaId" class="form-label">Subarea</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="subareaId">
+                                            <option value="">Seleccionar subarea</option>
+                                            <option *ngFor="let subarea of subareas" [value]="subarea.id">
+                                                {{subarea.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('subareaId')" id="subareaId"
+                                            class="form-text text-danger">
+                                            El SubArea es requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="docenteId" class="form-label">Docente</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="docenteId">
+                                            <option value="">Seleccionar subarea</option>
+                                            <option *ngFor="let docente of docentes" [value]="docente.id">
+                                                {{docente.persona?.nombres}}
+                                                {{docente.persona?.apellidopaterno}}
+                                                {{docente.persona?.apellidomaterno}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('docenteId')" id="docenteId"
+                                            class="form-text text-danger">
+                                            El Docente es requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-12">
+                                    <div class="mb-3">
+                                        <label for="numeromaxmat" class="form-label">Número Maximo de Matriculas</label>
+                                        <input type="text" class="form-control" formControlName="numeromaxmat"
+                                            id="numeromaxmat" aria-describedby="numeromaxmat">
+                                        <div class="form-text text-danger" *ngIf="campoRequerido('numeromaxmat')">
+                                            El campo numero maximo de matriculas es requerido
+                                        </div>
+                                        <div class="form-text text-danger" *ngIf="campoNumeros()">
+                                            Solo se aceptan numeros.
+                                        </div>
+                                        <div class="form-text text-danger" *ngIf="numeroPermitido()">
+                                            El numero debe ser mayor o igual a {{numeromat}}.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

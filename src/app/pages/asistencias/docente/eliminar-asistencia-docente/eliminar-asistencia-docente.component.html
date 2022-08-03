@@ -1,0 +1,129 @@
+<div class="row">
+    <div class="col-12 col-lg-4">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <form [formGroup]="asisForm" (submit)="buscarMatriculas()">
+                                    <div class="row">
+                                    
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="fechaIn" class="form-label">Fecha</label>
+                                                <input type="date" class="form-control"
+                                                formControlName="fecha" 
+                                                (change)="limpiarTabla()">
+                                                <div *ngIf="campoRequerido('fecha')" id="fecha"
+                                                    class="form-text text-danger">
+                                                    La fecha es requerida
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                    <div class="d-lg-flex d-flex-column justify-content-start mt-1" 
+                                    *ngIf="datos.length>0">
+                                    <button type="button" class="btn btn-primary"
+                                        (click)="eliminarAsistencias()">
+                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        Eliminar
+                                    </button>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card w-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Periodo:</h6>
+                                        <p class="card-text"> {{ periodonombre | uppercase }}</p>
+                                        <h6 class="card-title">Aula:</h6>
+                                        <p class="card-text">{{ aulanombre | uppercase }}</p>
+                                        <h6 class="card-title">Area:</h6>
+                                        <p class="card-text"> {{ areanombre | uppercase }}</p>
+                                        <h6 class="card-title">Subarea:</h6>
+                                        <p class="card-text"> {{ subareanombre | uppercase }}</p>
+                                        <h6 class="card-title">Docente:</h6>
+                                        <p class="card-text"> {{ docentenombre  | uppercase}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-12 col-lg-8">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
+                            No hay registros.
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" *ngIf="datos.length>0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="w70">N°</th>
+                                        <th scope="col">Apellidos y Nombres</th>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col" class="w70">Situación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let dato of datos; let i= index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{dato.matricula?.alumno?.persona?.apellidopaterno | uppercase}} 
+                                            {{dato.matricula?.alumno?.persona?.apellidomaterno | uppercase}}
+                                            {{dato.matricula?.alumno?.persona?.nombres | uppercase}}
+                                        </td>
+                                        <td>{{dato.fecha | date:'dd/MM/yyyy'}}</td>
+                                        <td>
+                                            <span *ngIf="dato.situacionId==4"
+                                                class="badge rounded-pill bg-danger cursor">
+                                                {{dato.situacion?.nombre | uppercase}}
+                                            </span>
+                                            <span *ngIf="dato.situacionId==14"
+                                                class="badge rounded-pill bg-success cursor">
+                                                {{dato.situacion?.nombre | uppercase}}
+                                            </span>
+                                            <span *ngIf="dato.situacionId==24" 
+                                            class="badge rounded-pill bg-primary cursor">
+                                            {{dato.situacion?.nombre | uppercase}}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

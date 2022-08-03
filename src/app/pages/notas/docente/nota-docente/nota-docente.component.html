@@ -1,0 +1,120 @@
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card contenido-principal">
+            <div class="card-body">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                
+                <div class="row">
+                    <div class="col-12 col-lg-2">
+                        <div class="mb-3">
+                            <select class="form-select" aria-label="Default select example"
+                                [(ngModel)]="periodoseleccionado" (change)="listarProgramaciones()">
+                                <option value="">Seleccionar Periodo</option>
+                                <option *ngFor="let periodo of periodos" [value]="periodo.id">
+                                    {{periodo.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-10">
+                        <div class="d-flex align-items-start mb-2 buscador">
+                            <div class="input-group me-1">
+                                <span class="input-group-text" id="buscar-algo">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                    </svg>
+                                </span>
+                                <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                                (keyup)="buscarProgramaciones(txtnombre.value)" #txtnombre
+                                    aria-describedby="buscar-algo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+         
+
+                <!--Alerta-->
+                <div class="mb-1" *ngIf="cargando">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h6 class="alert-heading">Cargando...</h6>
+                        <div class="spinner-border" role="status">
+                        </div>
+                        <p>Por favor espera</p>
+                    </div>
+                </div>
+
+                <!--Tabla d contenido-->
+                <div class="table-responsive mb-1" *ngIf="!cargando">
+                    <div class="alert alert-primary" role="alert" *ngIf="programaciones.length==0">
+                        No hay registros.
+                    </div>
+                    <table class="table table-bordered table-hover" *ngIf="programaciones.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col">Periodo</th>
+                                <th scope="col">Subarea</th>
+                                <th scope="col">Aula</th>
+                                <th scope="col">Docente</th>
+                                <th scope="col">N° Matriculas</th>
+                                <th scope="col" class="w100"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let programacion of programaciones; let i=index">
+                                <th>{{desde+i+1}}</th>
+                                <td>{{programacion.periodo?.nombre | uppercase}}</td>
+                                <td>{{programacion.subarea?.nombre | uppercase}}</td>
+                                <td>{{programacion.aula?.nombre | uppercase}}</td>
+                                <td>{{programacion.docente?.persona?.nombres | uppercase}} 
+                                    {{programacion.docente?.persona?.apellidopaterno | uppercase}} 
+                                    {{programacion.docente?.persona?.apellidomaterno | uppercase}} 
+                                </td>
+                                <td>{{programacion.numeromat}} de {{programacion.numeromaxmat}}</td>
+                                <td>
+                                    <div class="btn-group text-center">
+                                        <button type="button" class="btn btn-outline-primary me-1" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="top" 
+                                        title="Crear"
+                                        [routerLink]="['crear',programacion.id]" >
+                                            <span>
+                                                <i class="bi bi-file-earmark-check-fill"></i>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-success me-1"
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="top" 
+                                        title="Editar"  
+                                        [routerLink]="['editar',programacion.id]">
+                                            <span>
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </span>
+                                        </button>
+
+                                        <button type="button" class="btn btn-outline-danger me-1"
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-placement="top" 
+                                        title="Eliminar"  
+                                        [routerLink]="['eliminar',programacion.id]">
+                                            <span>
+                                                <i class="bi bi-trash-fill"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex align-items-start" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-secondary  btn-sm">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

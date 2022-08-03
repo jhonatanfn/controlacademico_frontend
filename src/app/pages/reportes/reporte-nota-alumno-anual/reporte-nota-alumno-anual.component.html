@@ -1,0 +1,318 @@
+<div class="row">
+    <div class="col-12 col-lg-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <form [formGroup]="repForm" (submit)="buscarNotas()">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="periodoId" class="form-label">Periodo</label>
+                                                <select class="form-select" aria-label="Seleccionar periodo"
+                                                    formControlName="periodoId" (change)="cargarMatriculas()">
+                                                    <option value="">Seleccionar Periodo</option>
+                                                    <option *ngFor="let periodo of periodos"
+                                                        [value]="[periodo.id,periodo.nombre]">
+                                                        {{periodo.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('periodoId')" id="periodoId"
+                                                    class="form-text text-danger">
+                                                    La periodo es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="aulaId" class="form-label">Aula</label>
+                                                <select class="form-select" aria-label="Seleccionar aula"
+                                                    formControlName="aulaId" (change)="cargarMatriculas()">
+                                                    <option value="">Seleccionar Aula</option>
+                                                    <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre]">
+                                                        {{aula.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('aulaId')" id="aulaId"
+                                                    class="form-text text-danger">
+                                                    La aula es requerida
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="subareaId" class="form-label">Subarea</label>
+                                                <select class="form-select" aria-label="Seleccionar aula"
+                                                    formControlName="subareaId" (change)="cargarMatriculas()">
+                                                    <option value="">Seleccionar Subarea</option>
+                                                    <option *ngFor="let subarea of subareas"
+                                                        [value]="[subarea.id,subarea.nombre]">
+                                                        {{subarea.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('subareaId')" id="subareaId"
+                                                    class="form-text text-danger">
+                                                    La subarea es requerida
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="matriculaId" class="form-label">Alumnos</label>
+                                                <select class="form-select" aria-label="Seleccionar matricula"
+                                                    formControlName="matriculaId">
+                                                    <option value="">Seleccionar alumno</option>
+                                                    <option *ngFor="let matricula of matriculas"
+                                                        [value]="[matricula.id]">
+                                                        {{matricula.alumno?.persona?.apellidopaterno}}
+                                                        {{matricula.alumno?.persona?.apellidomaterno}}
+                                                        {{matricula.alumno?.persona?.nombres}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('matriculaId')" id="matriculaId"
+                                                    class="form-text text-danger">
+                                                    El alumno es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary me-2">
+                                        <i class="bi bi-search"></i>
+                                        Buscar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="datos.length>0">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card w-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Periodo:</h6>
+                                        <p class="card-text"> {{ periodonombre | uppercase }}</p>
+                                        <h6 class="card-title">Aula:</h6>
+                                        <p class="card-text">{{ aulanombre | uppercase }}</p>
+                                        <h6 class="card-title">Subarea:</h6>
+                                        <p class="card-text"> {{ subareanombre | uppercase }}</p>
+                                        <h6 class="card-title">Docente:</h6>
+                                        <p class="card-text"> {{ docentenombre | uppercase }}</p>
+                                        <h6 class="card-title">Alumno:</h6>
+                                        <p class="card-text"> {{ alumnonombre | uppercase }}</p>
+                                        <h6 class="card-title">Promedio Anual:</h6>
+                                        <p class="card-text" *ngIf="bandBoton==0"> {{ promedioanual }}</p>
+                                        <p class="card-text" *ngIf="bandBoton==1"> {{ promedioanualLetra }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-9">
+        <div class="row">
+            <div class="col-12">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-lg-flex d-flex-column justify-content-end mt-1" *ngIf="datos.length>0">
+                                    <button type="button" class="btn btn-success btn-sm me-2" (click)="coversionNotas()"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="{{mensajeboton}}">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                        Convertir
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm me-2"
+                                        (click)="generatePDF('OPEN')" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Visualizar PDF">
+                                        <i class="bi bi-file-earmark-pdf"></i>
+                                        Visualizar
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm me-2"
+                                        (click)="generatePDF('PRINT')" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Imprimir PDF">
+                                        <i class="bi bi-printer"></i>
+                                        Imprimir
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm me-2"
+                                        (click)="generatePDF('DOWNLOAD')" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="Descargar PDF">
+                                        <i class="bi bi-arrow-down-circle"></i>
+                                        Descargar
+                                    </button>
+                                </div>
+                                <div class="mb-1" *ngIf="cargando">
+                                    <div class="alert alert-info text-center" role="alert">
+                                        <h6 class="alert-heading">Cargando...</h6>
+                                        <div class="spinner-border" role="status">
+                                        </div>
+                                        <p>Por favor espera</p>
+                                    </div>
+                                </div>
+                                <div class="table-responsive mt-2" *ngIf="!cargando">
+                                    <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
+                                        No hay registros.
+                                    </div>
+                                    <table class="table table-bordered table-hover" *ngIf="datos.length>0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="w70">N°</th>
+                                                <th scope="col">Fecha</th>
+                                                <th scope="col">Ciclo</th>
+                                                <th scope="col">Subarea</th>
+                                                <th scope="col">Evaluacion</th>
+                                                <th scope="col">Nota</th>
+                                                <th scope="col">Situación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let dato of datosAux; let i= index">
+                                                <td>{{ i+1 }}</td>
+                                                <td>{{ dato.fecha | date:'dd/MM/yyyy' }}</td>
+                                                <td>{{dato.ciclo}}</td>
+                                                <td>{{dato.subarea}}</td>
+                                                <td> {{dato.evaluacion}}</td>
+                                                <td>
+                                                    <small *ngIf="bandBoton==0"
+                                                        style="font-size: 1rem;">{{dato.valor}}</small>
+                                                    <small *ngIf="bandBoton==1"
+                                                        style="font-size: 1rem;">{{dato.letra}}</small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge rounded-pill bg-{{dato.alias}}">
+                                                        {{dato.situacion}}
+                                                    </span>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--
+            <div class="col-12" *ngIf="datos.length>0">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo4" [icono]="icono4"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive mt-2">
+                                    <table class="table table-bordered table-hover" *ngIf="datos.length>0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="w70">N°</th>
+                                                <th scope="col">Ciclo</th>
+                                                <th scope="col">Subarea</th>
+                                                <th scope="col">Evaluacion</th>
+                                                <th scope="col">Promedio</th>
+                                                <th scope="col">Situación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let prom of promedios; let i= index">
+                                                <td>{{ i+1}}</td>
+                                                <td>{{prom.cicloObj?.nombre}}</td>
+                                                <td>{{prom.subareanombre}}</td>
+                                                <td>{{prom.evaluacionObj?.nombre}}</td>
+                                                <td>
+                                                    <small *ngIf="bandBoton==0"
+                                                        style="font-size: 1rem;">{{prom.promedioevaluacion}}</small>
+                                                    <small *ngIf="bandBoton==1"
+                                                        style="font-size: 1rem;">{{prom.promEvalLetra}}</small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge rounded-pill bg-danger"
+                                                        *ngIf="prom.promedioevaluacion>=0 && prom.promedioevaluacion<=10">
+                                                        {{prom.promEvalSituacion}}
+                                                    </span>
+                                                    <span class="badge rounded-pill bg-secondary"
+                                                        *ngIf="prom.promedioevaluacion>=11 && prom.promedioevaluacion<=14">
+                                                        {{prom.promEvalSituacion}}
+                                                    </span>
+                                                    <span class="badge rounded-pill bg-primary"
+                                                        *ngIf="prom.promedioevaluacion>=15 && prom.promedioevaluacion<=17">
+                                                        {{prom.promEvalSituacion}}
+                                                    </span>
+                                                    <span class="badge rounded-pill bg-success"
+                                                        *ngIf="prom.promedioevaluacion>=18 && prom.promedioevaluacion<=20">
+                                                        {{prom.promEvalSituacion}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+-->
+
+            <div class="col-12" *ngIf="datos.length>0">
+                <div class="card contenido-principal">
+                    <div class="card-body">
+                        <app-headertable [titulo]="titulo5" [icono]="icono5"></app-headertable>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive mt-2">
+                                    <table class="table table-bordered table-hover" *ngIf="datos.length>0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="w70">N°</th>
+                                                <th scope="col">Ciclo</th>
+                                                <th scope="col">Subarea</th>
+                                                <th scope="col">Promedio</th>
+                                                <th scope="col">Situación</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let prom of promediosAnual; let i= index">
+                                                <td>{{ i+1}}</td>
+                                                <td>{{prom.ciclonombre}}</td>
+                                                <td>{{prom.subareanombre}}</td>
+                                                <td>
+                                                    <small *ngIf="bandBoton==0"
+                                                        style="font-size: 1rem;">{{prom.promediobimestral}}</small>
+                                                    <small *ngIf="bandBoton==1"
+                                                        style="font-size: 1rem;">{{prom.promedioletra}}</small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge rounded-pill bg-{{prom.alias}}">
+                                                        {{prom.promediosituacion}}
+                                                    </span>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

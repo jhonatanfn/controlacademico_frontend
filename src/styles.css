@@ -1,0 +1,74 @@
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+body{
+    background-color: rgba(245, 245, 248, 0.89);
+}
+
+.w100{
+    width: 100px;
+}
+
+.w70{
+    width: 70px;
+}
+
+.cursor{
+    cursor: pointer;
+}
+
+/* Contenedor de Tablas */
+.contenido-principal{
+    background-color:  #fff;
+    border: 1px solid rgb(214, 209, 209);
+    box-shadow: 1px 1px 5px 0px rgb(214, 209, 209);
+}
+
+.imgTable{
+    width: 30px;
+	height: 30px;
+	border-radius: 100px;
+	margin-right: 5px;
+}
+
+/* Buscador*/
+.contenido-principal .buscador{
+    background-color: #fff;
+}
+.contenido-principal .buscador svg{
+    color:  #000;
+}
+
+
+/* --- MEDIAQUERIES ---  */
+
+/* Dispositivo SM */
+@media screen and (max-width: 576px){
+
+}
+
+/* Dispositivo MD */
+@media screen and (max-width: 768px) {
+	.contenido-principal .tabla{
+        overflow: visible;
+    }
+}
+
+/* Dispositivo LG */
+@media screen and (max-width: 992px) {
+    
+}
+/* Dispositivo XL */
+@media screen and (max-width: 1200px) {
+    .contenido-principal{
+        margin-top: 80px;
+    }
+}
+/* Dispositivo XXL */
+@media screen and (max-width: 1400px){
+    .contenido-principal{
+        margin-top: 20px;
+    }
+    .contenido-principal table{
+        overflow: hidden;
+    }
+}
