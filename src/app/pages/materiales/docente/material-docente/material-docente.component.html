@@ -1,10 +1,11 @@
 <div class="row">
-
     <div class="col-12 col-lg-3">
         <div class="col-12 col-lg-12">
             <div class="card contenido-principal">
-                <div class="card-body">
+                <div class="card-header">
                     <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                </div>
+                <div class="card-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="card w-100">
@@ -30,8 +31,10 @@
 
     <div class="col-12 col-lg-9">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="d-flex align-items-start mb-2 buscador">
                     <div class="input-group me-1">
                         <span class="input-group-text" id="buscar-algo">
@@ -44,8 +47,9 @@
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                             aria-describedby="buscar-algo" (keyup)="buscarMaterial(txtTermino.value)" #txtTermino>
                     </div>
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
                         (click)="crearMaterial()">
+                        <i class="bi bi-plus-square me-2"></i>
                         Crear
                     </button>
                 </div>
@@ -85,24 +89,24 @@
                                 </td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-outline-primary me-1"
-                                            data-bs-toggle="modal" data-bs-target="#detalle" data-bs-placement="top"
-                                            title="Detalle" (click)="detalleMaterial(material)">
+                                        <button type="button" class="btn btn-info me-1" data-bs-toggle="modal"
+                                            data-bs-target="#detalle" data-bs-placement="top" title="Detalle"
+                                            (click)="detalleMaterial(material)">
                                             <span>
-                                                <i class="bi bi-file-pdf-fill"></i>
+                                                <i class="bi bi-file-pdf"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-outline-success me-1"
-                                            data-bs-toggle="modal" data-bs-target="#crear" data-bs-placement="top"
-                                            title="Editar" (click)="editarMaterial(material)">
+                                        <button type="button" class="btn btn-success me-1" data-bs-toggle="modal"
+                                            data-bs-target="#crear" data-bs-placement="top" title="Editar"
+                                            (click)="editarMaterial(material)">
                                             <span>
-                                                <i class="bi bi-pencil-fill"></i>
+                                                <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger" data-bs-placement="top"
+                                        <button type="button" class="btn btn-danger" data-bs-placement="top"
                                             title="Eliminar" (click)="eliminarMaterial(material)">
                                             <span>
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-x-circle"></i>
                                             </span>
                                         </button>
                                     </div>
@@ -155,7 +159,9 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Cerrar</button>
             </div>
         </div>
     </div>
@@ -223,18 +229,17 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        #closebutton2>Cerrar</button>
-                    <button type="submit" class="btn btn-primary">{{boton}}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton2>
+                        <i class="bi bi-x-lg"></i>
+                        Cerrar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-hdd"></i>
+                        {{boton}}</button>
                 </div>
-
             </form>
-
         </div>
     </div>
 </div>

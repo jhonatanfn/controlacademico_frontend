@@ -9,7 +9,6 @@ import { Subarea } from 'src/app/models/subarea.model';
 import { AulaService } from 'src/app/services/aula.service';
 import { HoraService } from 'src/app/services/hora.service';
 import { HorarioService } from 'src/app/services/horario.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { SubareaService } from 'src/app/services/subarea.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -22,8 +21,8 @@ import Swal from 'sweetalert2';
 })
 export class EliminarHorarioComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Eliminar Horarios';
+  public icono: string = 'bi bi-x-circle';
   public titulo2: string = 'Horarios';
   public icono2: string = 'bi bi-calendar-check';
   public titulo3: string = 'Resumen';
@@ -48,19 +47,11 @@ export class EliminarHorarioComponent implements OnInit {
   public gradonombre: string = "";
   public seccionnombre: string = "";
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     private periodoService: PeriodoService, private aulaService: AulaService,
     private subareaService: SubareaService, private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
     private router: Router, private route: ActivatedRoute) {
-
-    this.menuService.getTituloRuta()
-      .subscribe({
-        next: ({ titulo, icono }) => {
-          this.titulo = titulo;
-          this.icono = icono;
-        }
-      });
 
     if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
       this.dias = this.horarioService.dias;
@@ -196,7 +187,7 @@ export class EliminarHorarioComponent implements OnInit {
 
   eliminarHorario() {
     this.formSubmitted = true;
-    if (this.horarioForm.valid && this.datos.length>0) {
+    if (this.horarioForm.valid && this.datos.length > 0) {
       Swal.fire({
         title: 'Eliminar',
         text: "¿Desea eliminar el horario?",
@@ -208,14 +199,14 @@ export class EliminarHorarioComponent implements OnInit {
         confirmButtonText: 'Eliminar'
       }).then((result) => {
         if (result.isConfirmed) {
-          this.datos.forEach(dato=>{
-            if(dato.hora.tipo===1){
+          this.datos.forEach(dato => {
+            if (dato.hora.tipo === 1) {
               this.horarioService.borrar(Number(dato.id))
-              .subscribe({
-                next: ({ok})=>{
-                  if(ok){}
-                }
-              });
+                .subscribe({
+                  next: ({ ok }) => {
+                    if (ok) { }
+                  }
+                });
             }
           });
           Swal.fire({

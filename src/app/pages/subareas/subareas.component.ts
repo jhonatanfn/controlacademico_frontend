@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Area } from 'src/app/models/area.model';
 import { Subarea } from 'src/app/models/subarea.model';
 import { AreaService } from 'src/app/services/area.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { SubareaService } from 'src/app/services/subarea.service';
 import Swal from 'sweetalert2';
 
@@ -16,8 +15,8 @@ export class SubareasComponent implements OnInit {
 
   public subareas: Subarea[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Subareas';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public numeropaginas = 0;
@@ -33,16 +32,10 @@ export class SubareasComponent implements OnInit {
 
   @ViewChild('closebutton') closebutton: any;
 
-  constructor(private menuService: MenuService,
+  constructor(
     private subareaService: SubareaService,
     private fb: FormBuilder,
     private areaService: AreaService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
 
     this.areaService.listar()
       .subscribe(({ areas }) => {

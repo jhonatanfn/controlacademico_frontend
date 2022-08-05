@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Apoderado } from 'src/app/models/apoderado.model';
 import { Tipodocumento } from 'src/app/models/tipodocumento.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { ApoderadoService } from 'src/app/services/apoderado.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { TipodocumentoService } from 'src/app/services/tipodocumento.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -18,8 +16,8 @@ import Swal from 'sweetalert2';
 })
 export class CrearApoderadoComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Nuevo Apoderado';
+  public icono: string = 'bi bi-plus-square';
   public titulo2: string = 'Datos de usuario';
   public icono2: string = 'bi bi-person-check-fill';
   public tipos: Tipodocumento[] = [];
@@ -28,17 +26,11 @@ export class CrearApoderadoComponent implements OnInit {
   public usuarios: Usuario[] = [];
   public repetido: boolean = false;
 
-  constructor(private menuService: MenuService,
+  constructor(
     private tipodocuementoService: TipodocumentoService,
     private fb: FormBuilder, private personaService: PersonaService,
     private apoderadoService: ApoderadoService, private router: Router,
     private usuarioService: UsuarioService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
 
     this.tipodocuementoService.listar()
       .subscribe(({ tipodocumentos }) => {

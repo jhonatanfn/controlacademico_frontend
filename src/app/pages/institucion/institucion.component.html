@@ -1,15 +1,18 @@
 <div class="row mb-5">
     <div class="col-12 col-lg-5">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <!--Encabezado-->
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <!--Formulario-->
                 <div class="row acerca-de d-flex align-items-start px-3">
                     <div class="col-12 col-lg-12 foto text-center">
-                        <img *ngIf="!imgTemp" [src]="institucion.img! | imginstitucion" class="rounded-circle mb-3 mt-1"
-                            alt="">
-                        <img *ngIf="imgTemp" [src]="imgTemp" class="rounded-circle mb-3 mt-1" alt="">
+                        <img *ngIf="!imgTemp" [src]="institucion.img! | imginstitucion" 
+                        class="img-fluid mb-3 mt-1"
+                            alt="imagen institucion">
+                        <img *ngIf="imgTemp" [src]="imgTemp" class="img-fluid mb-3 mt-1" alt="imagen institucion">
                     </div>
                     <div class="col-12 col-lg-12 mb-3">
                         <input class="form-control" type="file" id="formFile" (change)="cambiarImagen($event)">
@@ -26,8 +29,8 @@
 
                     <div class="d-grid gap-2 col-12 mx-auto">
                         <button class="btn btn-primary" type="button" [disabled]="!imagenSubir" (click)="subirImagen()">
-                            <i class="bi bi-cloud-arrow-up"></i>
-                            Actualizar imagen
+                            <i class="bi bi-hdd"></i>
+                            Actualizar
                         </button>
                     </div>
                 </div>
@@ -38,11 +41,12 @@
 
     <div class="col-12 col-lg-7">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <!--Encabezado-->
                 <app-headertable [titulo]="titulo4" [icono]="icono4"></app-headertable>
+            </div>
+            <div class="card-body">
                 <!--Formulario-->
-
                 <div class="row">
                     <div class="col-12">
                         <form [formGroup]="datosForm" (ngSubmit)="actualizarDatos()" autocomplete="off">
@@ -118,8 +122,8 @@
                             </div>
                             <div class="d-grid gap-2 col-12 mx-auto">
                                 <button class="btn btn-primary" type="submit">
-                                    <i class="bi bi-cloud-arrow-up"></i>
-                                    Actualizar datos
+                                    <i class="bi bi-hdd"></i>
+                                    Actualizar
                                 </button>
                             </div>
                         </form>

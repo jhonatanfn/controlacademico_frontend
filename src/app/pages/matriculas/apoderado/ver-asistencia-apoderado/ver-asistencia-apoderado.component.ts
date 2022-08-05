@@ -21,7 +21,7 @@ export class VerAsistenciaApoderadoComponent implements OnInit {
 
   public titulo1: string = 'Buscar Asistencias';
   public icono1: string = 'bi bi-search';
-  public titulo2: string = 'Lista';
+  public titulo2: string = 'Tabla Asistencias';
   public icono2: string = 'bi bi-table';
   public titulo3: string = 'Resumen';
   public icono3: string = 'bi bi-card-checklist';

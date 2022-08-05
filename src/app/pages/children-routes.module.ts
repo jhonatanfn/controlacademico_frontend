@@ -95,17 +95,24 @@ const childrenRoutes: Routes = [
     path: '', component: DashboardComponent,
     canActivate: [TodoGuard],
     data: {
-      titulo: 'Inicio', icono: 'bi bi-house-door-fill',
-      principal: 'Inicio', accion: '', enlace: ''
+      titulo: 'Inicio', icono: 'bi bi-speedometer',
+      accion: 'Bienvenido', enlace: ''
     }
   },
-
+  {
+    path: 'institucion', component: InstitucionComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Institución', icono: 'bi bi-building',
+      accion: 'Actualizar', enlace: 'institucion'
+    }
+  },
   {
     path: 'usuarios', component: UsuariosComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Usuarios', icono: 'bi bi-table',
-      principal: 'Usuarios', accion: '', enlace: 'usuarios'
+      titulo: 'Usuarios', icono: 'bi bi-person',
+      accion: 'Lista', enlace: 'usuarios'
     }
   },
 
@@ -113,8 +120,8 @@ const childrenRoutes: Routes = [
     path: 'areas', component: AreasComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Areas', icono: 'bi bi-table',
-      principal: 'Areas', accion: '', enlace: 'areas'
+      titulo: 'Areas', icono: 'bi bi-folder2-open',
+      accion: 'Lista', enlace: 'areas'
     }
   },
 
@@ -122,26 +129,18 @@ const childrenRoutes: Routes = [
     path: 'periodos', component: PeriodosComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Periodos', icono: 'bi bi-table',
-      principal: 'Periodos', accion: '', enlace: 'periodos'
+      titulo: 'Periodos', icono: 'bi bi-hourglass-split',
+      accion: 'Lista', enlace: 'periodos'
     }
   },
 
-  {
-    path: 'institucion', component: InstitucionComponent,
-    canActivate: [AdminGuard],
-    data: {
-      titulo: 'Institución', icono: 'bi bi-table',
-      principal: 'Institución', accion: '', enlace: 'institucion'
-    }
-  },
 
   {
     path: 'subareas', component: SubareasComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Subareas', icono: 'bi bi-table',
-      principal: 'Subareas', accion: '', enlace: 'subareas'
+      titulo: 'Subareas', icono: 'bi bi-collection',
+      accion: 'Lista', enlace: 'subareas'
     }
   },
 
@@ -158,8 +157,8 @@ const childrenRoutes: Routes = [
     path: 'perfil', component: PerfilComponent,
     canActivate: [TodoGuard],
     data: {
-      titulo: 'Datos del Perfil', icono: 'bi bi-card-checklist',
-      principal: 'Perfil', accion: '', enlace: 'perfil'
+      titulo: 'Perfil', icono: 'bi bi-postcard',
+      accion: 'Actualizar', enlace: 'perfil'
     }
   },
 
@@ -168,8 +167,8 @@ const childrenRoutes: Routes = [
     path: 'docentes', component: DocentesComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Docentes', icono: 'bi bi-table',
-      principal: 'Docentes', accion: '', enlace: 'docentes'
+      titulo: 'Docentes', icono: 'bi bi-person-video3',
+      accion: 'Lista', enlace: 'docentes'
     }
   },
 
@@ -177,8 +176,8 @@ const childrenRoutes: Routes = [
     path: 'docentes/crear', component: CrearDocenteComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Crear Docente', icono: 'bi bi-file-earmark-text',
-      principal: 'Docentes', accion: 'Crear', enlace: 'docentes'
+      titulo: 'Docentes', icono: 'bi bi-person-video3',
+      accion: 'Crear', enlace: 'docentes'
     }
   },
 
@@ -186,8 +185,8 @@ const childrenRoutes: Routes = [
     path: 'docentes/editar/:id', component: EditarDocenteComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Editar Docente', icono: 'bi bi-pencil-fill',
-      principal: 'Docentes', accion: 'Editar', enlace: 'docentes'
+      titulo: 'Docentes', icono: 'bi bi-person-video3',
+      accion: 'Editar', enlace: 'docentes'
     }
   },
 
@@ -195,50 +194,48 @@ const childrenRoutes: Routes = [
     path: 'alumnos', component: AlumnosComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Alumnos', icono: 'bi bi-table',
-      principal: 'Alumnos', accion: '', enlace: 'alumnos'
+      titulo: 'Alumnos', icono: 'bi bi-mortarboard',
+      accion: 'Lista', enlace: 'alumnos'
     }
   },
   {
     path: 'alumnos/crear', component: CrearAlumnoComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Crear Alumno', icono: 'bi bi-file-earmark-text',
-      principal: 'Alumnos', accion: 'Crear', enlace: 'alumnos'
+      titulo: 'Alumnos', icono: 'bi bi-mortarboard',
+      accion: 'Crear', enlace: 'alumnos'
     }
   },
   {
     path: 'alumnos/editar/:id', component: EditarAlumnoComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Editar Alumno', icono: 'bi bi-pencil-fill',
-      principal: 'Alumnos', accion: 'Editar', enlace: 'alumnos'
+      titulo: 'Alumnos', icono: 'bi bi-mortarboard',
+      accion: 'Editar', enlace: 'alumnos'
     }
   },
-
   {
     path: 'apoderados', component: ApoderadosComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Apoderados', icono: 'bi bi-table',
-      principal: 'Apoderados', accion: '', enlace: 'apoderados'
+      titulo: 'Apoderados', icono: 'bi bi-file-ppt',
+      accion: 'Lista', enlace: 'apoderados'
     }
   },
-
   {
     path: 'apoderados/crear', component: CrearApoderadoComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Crear Apoderado', icono: 'bi bi-file-earmark-text',
-      principal: 'Apoderados', accion: 'Crear', enlace: 'apoderados'
+      titulo: 'Apoderados', icono: 'bi bi-file-ppt',
+      accion: 'Crear', enlace: 'apoderados'
     }
   },
   {
     path: 'apoderados/editar/:id', component: EditarApoderadoComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Editar Apoderado', icono: 'bi bi-pencil-fill',
-      principal: 'Apoderados', accion: 'Editar', enlace: 'apoderados'
+      titulo: 'Apoderados', icono: 'bi bi-file-ppt',
+      accion: 'Editar', enlace: 'apoderados'
     }
   },
 
@@ -246,8 +243,8 @@ const childrenRoutes: Routes = [
     path: 'niveles', component: NivelesComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Niveles', icono: 'bi bi-table',
-      principal: 'Niveles', accion: '', enlace: 'niveles'
+      titulo: 'Niveles', icono: 'bi bi-receipt',
+      accion: 'Lista', enlace: 'niveles'
     }
   },
 
@@ -255,8 +252,8 @@ const childrenRoutes: Routes = [
     path: 'rangos', component: RangosComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Rangos', icono: 'bi bi-table',
-      principal: 'Rangos', accion: '', enlace: 'rangos'
+      titulo: 'Rangos', icono: 'bi bi-calendar3-range',
+      accion: 'Lista', enlace: 'rangos'
     }
   },
 
@@ -264,8 +261,8 @@ const childrenRoutes: Routes = [
     path: 'grados', component: GradosComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Grados', icono: 'bi bi-table',
-      principal: 'Grados', accion: '', enlace: 'grados'
+      titulo: 'Grados', icono: 'bi bi-layout-text-sidebar',
+      accion: 'Lista', enlace: 'grados'
     }
   },
 
@@ -273,8 +270,8 @@ const childrenRoutes: Routes = [
     path: 'secciones', component: SeccionesComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Secciones', icono: 'bi bi-table',
-      principal: 'Secciones', accion: '', enlace: 'secciones'
+      titulo: 'Secciones', icono: 'bi bi-layout-text-sidebar-reverse',
+      accion: 'Lista', enlace: 'secciones'
     }
   },
 
@@ -282,32 +279,32 @@ const childrenRoutes: Routes = [
     path: 'programaciones', component: ProgramacionesComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Programaciones', icono: 'bi bi-table',
-      principal: 'Programaciones', accion: '', enlace: 'programaciones'
+      titulo: 'Programaciones', icono: 'bi bi-pc-display-horizontal',
+      accion: 'Lista', enlace: 'programaciones'
     }
   },
   {
     path: 'programaciones/crear', component: CrearProgramacionComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Crear Programacion', icono: 'bi bi-file-earmark-text',
-      principal: 'Programaciones', accion: 'Crear', enlace: 'programaciones'
+      titulo: 'Programaciones', icono: 'bi bi-pc-display-horizontal',
+      accion: 'Crear', enlace: 'programaciones'
     }
   },
   {
     path: 'programaciones/editar/:id', component: EditarProgramacionComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Editar Programacion', icono: 'bi bi-card-checklist',
-      principal: 'Programaciones', accion: 'Editar', enlace: 'programaciones'
+      titulo: 'Programaciones', icono: 'bi bi-pc-display-horizontal',
+      accion: 'Editar', enlace: 'programaciones'
     }
   },
   {
     path: 'programaciones/docente', component: ListaDocenteComponent,
     canActivate: [DocenteGuard],
     data: {
-      titulo: 'Tabla Programaciones', icono: 'bi bi-table',
-      principal: 'Programaciones', accion: '', enlace: 'programaciones/docente'
+      titulo: 'Programaciones', icono: 'bi bi-pc-display-horizontal',
+      accion: 'Lista', enlace: 'programaciones/docente'
     }
   },
 
@@ -316,8 +313,8 @@ const childrenRoutes: Routes = [
     path: 'matriculas', component: MatriculasComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Alumnos matriculados', icono: 'bi bi-table',
-      principal: 'Matriculas', accion: '', enlace: 'matriculas'
+      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
+     accion: 'Lista', enlace: 'matriculas'
     }
   },
 
@@ -325,8 +322,8 @@ const childrenRoutes: Routes = [
     path: 'matriculas/crear', component: CrearMatriculaComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Crear Matricula', icono: 'bi bi-card-checklist',
-      principal: 'Matriculas', accion: 'Crear', enlace: 'matriculas'
+      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
+      accion: 'Crear', enlace: 'matriculas'
     }
   },
 
@@ -335,8 +332,8 @@ const childrenRoutes: Routes = [
     path: 'matriculas/alumno', component: ListaMatriculaAlumnoComponent,
     canActivate: [AlumnoGuard],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-table',
-      principal: 'Matriculas', accion: '', enlace: 'matriculas/alumno'
+      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
+      accion: 'Lista', enlace: 'matriculas/alumno'
     }
   },
 
@@ -345,8 +342,8 @@ const childrenRoutes: Routes = [
     canActivate: [AlumnoGuard, IsMatriculaGuard],
     canLoad: [IsMatriculaGuard],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-table',
-      principal: 'Matriculas', accion: 'Notas', enlace: 'matriculas/alumno'
+      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
+      accion: 'Consultar notas', enlace: 'matriculas/alumno'
     }
   },
 
@@ -355,8 +352,8 @@ const childrenRoutes: Routes = [
     canActivate: [AlumnoGuard, IsMatriculaGuard],
     canLoad: [IsMatriculaGuard],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-table',
-      principal: 'Matriculas', accion: 'Asistencias', enlace: 'matriculas/alumno'
+      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
+      accion: 'Consultar asistencias', enlace: 'matriculas/alumno'
     }
   },
 
@@ -365,16 +362,16 @@ const childrenRoutes: Routes = [
     path: 'matriculas/apoderado', component: ListaMatriculaApoderadoComponent,
     canActivate: [ApoderadoGuard],
     data: {
-      titulo: 'Tabla Matriculas', icono: 'bi bi-table',
-      principal: 'Matriculas', accion: '', enlace: 'matriculas/apoderado'
+      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
+      accion: 'Lista', enlace: 'matriculas/apoderado'
     }
   },
   {
     path: 'matriculas/apoderado/notas/:id', component: VerNotaApoderadoComponent,
     canActivate: [ApoderadoGuard, IsMatriculaApoderadoGuard],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-table',
-      principal: 'Matriculas', accion: 'Notas', enlace: 'matriculas/apoderado'
+      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
+      accion: 'Consultar notas', enlace: 'matriculas/apoderado'
     }
   },
 
@@ -383,8 +380,8 @@ const childrenRoutes: Routes = [
     canActivate: [ApoderadoGuard, IsMatriculaApoderadoGuard],
     canLoad: [],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-table',
-      principal: 'Matriculas', accion: 'Asistencias', enlace: 'matriculas/apoderado'
+      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
+      accion: 'Consultar asistencias', enlace: 'matriculas/apoderado'
     }
   },
 
@@ -392,8 +389,8 @@ const childrenRoutes: Routes = [
     path: 'notas', component: NotasComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Notas', icono: 'bi bi-table',
-      principal: 'Notas', accion: '', enlace: 'notas'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Lista', enlace: 'notas'
     }
   },
 
@@ -402,24 +399,24 @@ const childrenRoutes: Routes = [
     path: 'notas/crear/:id', component: CrearComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Crear Notas', icono: 'bi bi-file-earmark-text',
-      principal: 'Notas', accion: 'Crear', enlace: 'notas'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Crear', enlace: 'notas'
     }
   },
   {
     path: 'notas/editar/:id', component: EditarComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Editar Notas', icono: 'bi bi-pencil-fill',
-      principal: 'Notas', accion: 'Editar', enlace: 'notas'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Editar', enlace: 'notas'
     }
   },
   {
     path: 'notas/eliminar/:id', component: EliminarComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Eliminar Notas', icono: 'bi bi-trash-fill',
-      principal: 'Notas', accion: 'Eliminar', enlace: 'notas'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Eliminar', enlace: 'notas'
     }
   },
 
@@ -427,38 +424,35 @@ const childrenRoutes: Routes = [
     path: 'notas/docente', component: NotaDocenteComponent,
     canActivate: [DocenteGuard],
     data: {
-      titulo: 'Tabla Notas', icono: 'bi bi-table',
-      principal: 'Notas', accion: '', enlace: 'notas/docente'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Lista', enlace: 'notas/docente'
     }
   },
-
   {
     path: 'notas/docente/crear/:id', component: CrearNotaDocenteComponent,
     canActivate: [DocenteGuard, IsProgramacionGuard],
     canLoad: [IsProgramacionGuard],
     data: {
-      titulo: 'Crear Notas', icono: 'bi bi-file-earmark-check-fill',
-      principal: 'Notas', accion: 'Crear', enlace: 'notas/docente'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Crear', enlace: 'notas/docente'
     }
   },
-
   {
     path: 'notas/docente/editar/:id', component: EditarNotaDocenteComponent,
     canActivate: [DocenteGuard, IsProgramacionGuard],
     canLoad: [IsProgramacionGuard],
     data: {
-      titulo: 'Editar Notas', icono: 'bi bi-pencil-fill',
-      principal: 'Notas', accion: 'Editar', enlace: 'notas/docente'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Editar', enlace: 'notas/docente'
     }
   },
-
   {
     path: 'notas/docente/eliminar/:id', component: EliminarNotaDocenteComponent,
     canActivate: [DocenteGuard, IsProgramacionGuard],
     canLoad: [IsProgramacionGuard],
     data: {
-      titulo: 'Eliminar Notas', icono: 'bi bi-trash-fill',
-      principal: 'Notas', accion: 'Eliminar', enlace: 'notas/docente'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Eliminar', enlace: 'notas/docente'
     }
   },
 
@@ -466,24 +460,24 @@ const childrenRoutes: Routes = [
     path: 'aulas', component: AulasComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Aulas', icono: 'bi bi-table',
-      principal: 'Aulas', accion: '', enlace: 'aulas'
+      titulo: 'Aulas', icono: 'bi bi-door-closed',
+      accion: 'Lista', enlace: 'aulas'
     }
   },
   {
     path: 'aulas/crear', component: CrearAulaComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Crear Aula', icono: 'bi bi-file-earmark-text',
-      principal: 'Aulas', accion: 'Crear', enlace: 'aulas'
+      titulo: 'Aulas', icono: 'bi bi-door-closed',
+      accion: 'Crear', enlace: 'aulas'
     }
   },
   {
     path: 'aulas/editar/:id', component: EditarAulaComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Editar Aula', icono: 'bi bi-pencil-fill',
-      principal: 'Aulas', accion: 'Editar', enlace: 'aulas'
+      titulo: 'Aulas', icono: 'bi bi-door-closed',
+      accion: 'Editar', enlace: 'aulas'
     }
   },
 
@@ -492,32 +486,32 @@ const childrenRoutes: Routes = [
     path: 'asistencias', component: AsistenciasComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Asistencias', icono: 'bi bi-table',
-      principal: 'Asistencias', accion: '', enlace: 'asistencias'
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Lista', enlace: 'asistencias'
     }
   },
   {
     path: 'asistencias/crear/:id', component: CrearAsistenciaComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Asistencias', icono: 'bi bi-file-earmark-text',
-      principal: 'Asistencias', accion: 'Crear', enlace: 'asistencias'
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Crear', enlace: 'asistencias'
     }
   },
   {
     path: 'asistencias/editar/:id', component: EditarAsistenciaComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Asistencias', icono: 'bi bi-pencil-fill',
-      principal: 'Asistencias', accion: 'Editar', enlace: 'asistencias'
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Editar', enlace: 'asistencias'
     }
   },
   {
     path: 'asistencias/eliminar/:id', component: EliminarAsistenciaComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Asistencias', icono: 'bi bi-trash-fill',
-      principal: 'Asistencias', accion: 'Eliminar', enlace: 'asistencias'
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Eliminar', enlace: 'asistencias'
     }
   },
 
@@ -526,8 +520,8 @@ const childrenRoutes: Routes = [
     path: 'asistencias/docente', component: ListaAsistenciaDocenteComponent,
     canActivate: [DocenteGuard],
     data: {
-      titulo: 'Tabla Asistencias', icono: 'bi bi-table',
-      principal: 'Asistencias', accion: '', enlace: 'asistencias/docente'
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Lista', enlace: 'asistencias/docente'
     }
   },
   {
@@ -535,8 +529,8 @@ const childrenRoutes: Routes = [
     canActivate: [DocenteGuard, IsProgramacionGuard],
     canLoad: [IsProgramacionGuard],
     data: {
-      titulo: 'Crear Asistencias', icono: 'bi bi-file-earmark-check-fill',
-      principal: 'Asistencias', accion: 'Crear', enlace: 'asistencias/docente'
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Crear', enlace: 'asistencias/docente'
     }
   },
   {
@@ -544,8 +538,8 @@ const childrenRoutes: Routes = [
     canActivate: [DocenteGuard, IsProgramacionGuard],
     canLoad: [IsProgramacionGuard],
     data: {
-      titulo: 'Editar Asistencias', icono: 'bi bi-pencil-fill',
-      principal: 'Asistencias', accion: 'Editar', enlace: 'asistencias/docente'
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Editar', enlace: 'asistencias/docente'
     }
   },
   {
@@ -553,10 +547,12 @@ const childrenRoutes: Routes = [
     canActivate: [DocenteGuard, IsProgramacionGuard],
     canLoad: [IsProgramacionGuard],
     data: {
-      titulo: 'Eliminar Asistencias', icono: 'bi bi-trash-fill',
-      principal: 'Asistencias', accion: 'Eliminar', enlace: 'asistencias/docente'
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Eliminar', enlace: 'asistencias/docente'
     }
   },
+
+  
   {
     path: 'reportes', component: ReportesComponent,
     canActivate: [AdminGuard],
@@ -570,8 +566,8 @@ const childrenRoutes: Routes = [
     path: 'materiales', component: MaterialesComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Materiales', icono: 'bi bi-table',
-      principal: 'Materiales', accion: '', enlace: 'materiales'
+      titulo: 'Materiales', icono: 'bi bi-folder2',
+      accion: 'Lista', enlace: 'materiales'
     }
   },
 
@@ -580,8 +576,8 @@ const childrenRoutes: Routes = [
     path: 'materiales/docente', component: ListaMaterialDocenteComponent,
     canActivate: [DocenteGuard],
     data: {
-      titulo: 'Tabla Materiales', icono: 'bi bi-table',
-      principal: 'Materiales', accion: '', enlace: 'materiales/docente'
+      titulo: 'Materiales', icono: 'bi bi-folder2',
+      accion: 'Lista', enlace: 'materiales/docente'
     }
   },
   {
@@ -589,8 +585,8 @@ const childrenRoutes: Routes = [
     canActivate: [DocenteGuard, IsProgramacionGuard],
     canLoad: [IsProgramacionGuard],
     data: {
-      titulo: 'Lista', icono: 'bi bi-book',
-      principal: 'Materiales', accion: 'Lista', enlace: 'materiales/docente'
+      titulo: 'Materiales', icono: 'bi bi-folder2',
+      accion: 'Lista', enlace: 'materiales/docente'
     }
   },
 
@@ -599,8 +595,8 @@ const childrenRoutes: Routes = [
     path: 'materiales/alumno', component: ListaMaterialAlumnoComponent,
     canActivate: [AlumnoGuard],
     data: {
-      titulo: 'Materiales', icono: 'bi bi-table',
-      principal: 'Materiales', accion: '', enlace: 'materiales/alumno'
+      titulo: 'Materiales', icono: 'bi bi-folder2',
+      accion: 'Lista', enlace: 'materiales/alumno'
     }
   },
   {
@@ -608,16 +604,16 @@ const childrenRoutes: Routes = [
     canActivate: [AlumnoGuard, IsProgramacionAlumnoGuard],
     canLoad: [IsProgramacionAlumnoGuard],
     data: {
-      titulo: 'Lista', icono: 'bi bi-book',
-      principal: 'Materiales', accion: 'Lista', enlace: 'materiales/alumno'
+      titulo: 'Materiales', icono: 'bi bi-folder2',
+      accion: 'Consultar', enlace: 'materiales/alumno'
     }
   },
   {
     path: 'materiales/:id', component: MaterialComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Materiales', icono: 'bi bi-book',
-      principal: 'Materiales', accion: 'Lista', enlace: 'materiales'
+      titulo: 'Materiales', icono: 'bi bi-folder2',
+      accion: 'Lista', enlace: 'materiales'
     }
   },
 
@@ -702,8 +698,8 @@ const childrenRoutes: Routes = [
     path: 'horarios', component: HorariosComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Tabla Horarios', icono: 'bi bi-table',
-      principal: 'Horarios', accion: '', enlace: 'horarios'
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Lista', enlace: 'horarios'
     }
   },
 
@@ -711,8 +707,8 @@ const childrenRoutes: Routes = [
     path: 'horarios/crear', component: CrearHorarioComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Crear Horarios', icono: 'bi bi-file-earmark-text',
-      principal: 'Horarios', accion: 'Crear', enlace: 'horarios'
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Crear', enlace: 'horarios'
     }
   },
 
@@ -720,40 +716,40 @@ const childrenRoutes: Routes = [
     path: 'horarios/editar/:id', component: EditarHorarioComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Editar Horarios', icono: 'bi bi-pencil-fill',
-      principal: 'Horarios', accion: 'Editar', enlace: 'horarios'
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Editar', enlace: 'horarios'
     }
   },
   {
     path: 'horarios/eliminar/:id', component: EliminarHorarioComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Eliminar Horarios', icono: 'bi bi-trash-fill',
-      principal: 'Horarios', accion: 'Eliminar', enlace: 'horarios'
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Eliminar', enlace: 'horarios'
     }
   },
   {
     path: 'horarios/consultar/:id', component: ConsultaHorarioComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Consultar Horarios', icono: 'bi bi-calendar2',
-      principal: 'Horarios', accion: 'Consultar', enlace: 'horarios'
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Consultar', enlace: 'horarios'
     }
   },
   {
     path: 'horarios/alumno', component: HorarioAlumnoComponent,
     canActivate: [AlumnoGuard],
     data: {
-      titulo: 'Consultar Horarios', icono: 'bi bi-calendar2',
-      principal: 'Horarios', accion: 'Consultar', enlace: 'horarios'
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Consultar', enlace: 'horarios'
     }
   },
   {
     path: 'horarios/apoderado', component: HorarioApoderadoComponent,
     canActivate: [ApoderadoGuard],
     data: {
-      titulo: 'Consultar Horarios', icono: 'bi bi-calendar2',
-      principal: 'Horarios', accion: 'Consultar', enlace: 'horarios'
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Consultar', enlace: 'horarios'
     }
   },
 
@@ -761,8 +757,8 @@ const childrenRoutes: Routes = [
     path: 'horarios/docente', component: HorarioDocenteComponent,
     canActivate: [DocenteGuard],
     data: {
-      titulo: 'Consultar Horarios', icono: 'bi bi-calendar2',
-      principal: 'Horarios', accion: 'Consultar', enlace: 'horarios'
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Consultar', enlace: 'horarios'
     }
   },
 

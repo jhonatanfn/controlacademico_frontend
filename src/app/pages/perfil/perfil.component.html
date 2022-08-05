@@ -1,10 +1,10 @@
 <div class="row mb-5">
     <div class="col-12 col-lg-5">
         <div class="card contenido-principal">
+            <div class="card-header">
+                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
             <div class="card-body">
-                 <!--Encabezado-->
-                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
-                 <!--Formulario-->
                  <div class="row acerca-de d-flex align-items-start px-3">
                     <div class="col-12 col-lg-12 foto text-center">
                         <img  *ngIf="!imgTemp" [src]="usuario.persona.img! | imagen" class="rounded-circle mb-3 mt-1" alt="">
@@ -17,8 +17,8 @@
                         <button class="btn btn-primary" type="button" 
                                 [disabled]="!imagenSubir"    
                                 (click)="subirImagen()">
-                            <i class="bi bi-cloud-arrow-up"></i>
-                            Actualizar imagen
+                            <i class="bi bi-hdd"></i>
+                            Actualizar
                         </button>
                     </div>
                  </div>
@@ -28,10 +28,10 @@
     </div>
     <div class="col-12 col-lg-7">
         <div class="card contenido-principal">
-            <div class="card-body">
-                <!--Encabezado-->
+            <div class="card-header">
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-                <!--Formulario-->
+            </div>
+            <div class="card-body">
                 <div class="row acerca-de d-flex align-items-start px-3">
                     <div class="col-12 col-lg-12 info">
                         <form action="" [formGroup]="perfilForm" (ngSubmit)="actualizarPefil()" autocomplete="off">
@@ -73,8 +73,8 @@
                             </div>
                             <div class="d-grid gap-2 col-12 mx-auto">
                                 <button class="btn btn-primary" type="submit">
-                                    <i class="bi bi-cloud-arrow-up"></i>
-                                    Actualizar perfil
+                                    <i class="bi bi-hdd"></i>
+                                    Actualizar
                                 </button>
                             </div>
                         </form>
@@ -86,11 +86,10 @@
 
     <div class="col-12 col-lg-7">
         <div class="card contenido-principal">
-            <div class="card-body">
-                <!--Encabezado-->
+            <div class="card-header">
                 <app-headertable [titulo]="titulo4" [icono]="icono4"></app-headertable>
-                <!--Formulario-->
-
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <form [formGroup]="datosForm" (ngSubmit)="actualizarDatos()" autocomplete="off">
@@ -184,29 +183,25 @@
 
                             <div class="d-grid gap-2 col-12 mx-auto">
                                 <button class="btn btn-primary" type="submit">
-                                    <i class="bi bi-cloud-arrow-up"></i>
-                                    Actualizar datos
+                                    <i class="bi bi-hdd"></i>
+                                    Actualizar
                                 </button>
                             </div>
-
                         </form>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
 
     <div class="col-12 col-lg-5">
         <div class="card contenido-principal">
-            <div class="card-body">
-                <!--Encabezado-->
+            <div class="card-header">
                 <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
-                <!--Formulario-->
+            </div>
+            <div class="card-body">
                 <div class="row acerca-de d-flex align-items-start px-3">
                     <div class="col-12 col-lg-12 info">
-                       
                         <form  [formGroup]="passForm" (submit)="actualizarPassword()">
                             <div class="mb-3">
                                 <label for="exampleFormControlInput3" class="form-label">Password</label>
@@ -244,8 +239,8 @@
                             </div>
                             <div class="d-grid gap-2 col-12 mx-auto">
                                 <button class="btn btn-primary" type="submit" >
-                                    <i class="bi bi-cloud-arrow-up"></i>
-                                    Actualizar password
+                                    <i class="bi bi-hdd"></i>
+                                    Actualizar
                                 </button>
                             </div>
                         </form>
@@ -254,7 +249,6 @@
             </div>
         </div>
     </div>
-   
 </div>
 
 

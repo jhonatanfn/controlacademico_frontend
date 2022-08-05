@@ -1,10 +1,10 @@
 <div class="row">
     <div class="col-12 col-lg-12">
         <div class="card contenido-principal">
-            <div class="card-body">
-                <!--Encabezado-->
+            <div class="card-header">
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-                <!-- Bucador y boto nuevo-->
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-lg-12">
                         <div class="d-flex align-items-start mb-2 buscador">
@@ -19,8 +19,9 @@
                                 <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                                     aria-describedby="buscar-algo" (keyup)="buscarAula(txtTermino.value)" #txtTermino>
                             </div>
-                            <a routerLink="crear" type="button" class="btn btn-outline-primary">
-                                Crear
+                            <a routerLink="crear" type="button" class="d-flex btn btn-primary">
+                                <i class="bi bi-plus-square me-2"></i>
+                                Nuevo
                             </a>
                         </div>
                     </div>
@@ -62,24 +63,24 @@
                                 <td>
                                     <div class="btn-group text-center">
                                         <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                                            title="Consultar" class="btn btn-outline-info me-1"
+                                            title="Consultar" class="btn btn-info me-1"
                                             [routerLink]="['consultar', aula.id]">
                                             <span>
                                                 <i class="bi bi-calendar2"></i>
                                             </span>
                                         </button>
                                         <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                                            title="Editar" class="btn btn-outline-primary me-1"
+                                            title="Editar" class="btn btn-success me-1"
                                             [routerLink]="['editar', aula.id]">
                                             <span>
-                                                <i class="bi bi-pencil-fill"></i>
+                                                <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
                                         <button type="button" data-bs-toggle="tooltip" data-bs-placement="top"
-                                            title="Eliminar" class="btn btn-outline-danger"
+                                            title="Eliminar" class="btn btn-danger"
                                             [routerLink]="['eliminar', aula.id]">
                                             <span>
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-x-circle"></i>
                                             </span>
                                         </button>
                                     </div>

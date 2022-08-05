@@ -1,10 +1,20 @@
 
-.imagen-fondo{
-
-    width: 100%;
-    height: 400px;
+.contenedor .icono{
+    font-size: 3.5rem;
+}
+.contenedor .piepagina i{
+    font-size: 1.5rem;
+}
+.contenedor .carta{
+    border: 1px solid rgb(204, 198, 198);
+}
+.contenedor .tarjeta{
+    background-color: rgba(229, 234, 238, 0.897);
 }
 
+.contenedor .imagen-fondo{
+    object-fit: cover;
+}
 .pie{
     background-color:  #fff;
     border: 1px solid rgb(214, 209, 209);

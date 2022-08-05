@@ -1,18 +1,36 @@
-<header class="fixed-top py-0">
+<header class="fixed-top shadow py-0">
     <div class="container-fluid">
-
-        <div class="row caja-nueva">
-            <div class="col-12 d-flex justify-content-start align-items-center">
-                <a  class="navbar-brand">
-                    <img [src]="institucion.img! | imginstitucion" alt="" 
-                    class="imagen-logo-fila">
+        <div class="d-flex justify-content-between align-items-center caja-nueva">
+            <div class="d-flex justify-content-start align-items-center">
+                <a class="navbar-brand">
+                    <img [src]="institucion.img! | imginstitucion" alt="imagen logo" class="img-fluid imagen-logo-fila">
                 </a>
                 <small class="titulo-logo-fila">{{institucion.nombre | uppercase}}</small>
             </div>
+            <nav class="dropdown botones d-none d-md-block">
+                <a href="#" class="dropdown-toggle perfil enlace1 text-center" type="button" id="dropdown-1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <img [src]="usuario.persona.img! | imagen" alt="imagen usuario">{{usuario.nombre}}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dropdown-2">
+                    <li>
+                        <div class="d-flex flex-column align-items-center">
+                            <img [src]="usuario.persona.img! | imagen" alt="imagen usuario" 
+                            class="img-fluid imagen-persona">
+                            <h6 class="dropdown-header">{{usuario.role.nombre}}</h6>
+                        </div>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a routerLinkActive="active" routerLink="perfil" class="dropdown-item">
+                            <i class="bi bi-postcard me-2"></i>Perfil</a></li>
+                    <li><a (click)="logout()" class="dropdown-item cursor">
+                            <i class="bi bi-door-open me-2"></i>Cerrar Sesión</a></li>
+                </ul>
+            </nav>
         </div>
-
-
-        <div class="row d-flex justify-content-between align-items-center g-0">
+        <div class="row d-flex justify-content-between align-items-center g-0 menu">
             <nav class="menu col-12 col-lg-10 navbar navbar-expand-lg navbar-light order-1 
             order-lg-1">
                 <div class="container-fluid">
@@ -22,28 +40,28 @@
                     </button>
                     <div class="collapse navbar-collapse" id="menu">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                             <li class="nav-item">
                                 <a routerLinkActive="active" routerLink="" class="nav-link" aria-current="page">
+                                    <i class="bi bi-speedometer"></i>
                                     Inicio
                                 </a>
                             </li>
                             <li class="nav-item dropdown" *ngFor="let item of menuItems">
-
                                 <a *ngIf="item.url !==''" routerLinkActive="active" routerLink="{{item.url}}"
                                     class="nav-link" aria-current="page">
+                                    <i class="{{item.icono}}"></i>
                                     {{item.titulo}}
                                 </a>
-
                                 <a *ngIf="item.url ===''" routerLinkActive="active" href="#"
                                     class="nav-link {{item.toggle}}" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false" id="dropdown-menu">
+                                    <i class="{{item.icono}}"></i>
                                     {{item.titulo}}
                                 </a>
-
                                 <ul *ngIf="item.submenu.length>0" class="dropdown-menu" aria-labelledby="dropdown-menu">
                                     <li *ngFor="let subitem of item.submenu">
                                         <a routerLinkActive="active" routerLink="{{subitem.url}}" class="dropdown-item">
+                                            <i class="{{subitem.icono}}"></i>
                                             {{ subitem.titulo }}
                                         </a>
                                     </li>
@@ -52,6 +70,7 @@
                             <li class="nav-item dropdown d-block d-lg-none">
                                 <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false" id="dropdown-menu">
+                                    <i class="bi bi-person"></i>
                                     Perfil
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdown-menu">
@@ -61,33 +80,14 @@
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a routerLinkActive="active" routerLink="perfil"
-                                            class="dropdown-item">Perfil</a></li>
-                                    <li><a (click)="logout()" class="dropdown-item cursor">Cerrar Sesión</a></li>
+                                    <li><a routerLinkActive="active" routerLink="perfil" class="dropdown-item"><i
+                                                class="bi bi-postcard me-2"></i>Perfil</a></li>
+                                    <li><a (click)="logout()" class="dropdown-item cursor"><i
+                                                class="bi bi-door-open me-2"></i>Cerrar Sesión</a></li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
-                </div>
-            </nav>
-            <nav class="botones col-auto col-lg-2  
-            justify-content-end order-2 order-lg-2  d-none d-lg-block ">
-
-                <div class="dropdown">
-                    <a href="#" class="dropdown-toggle perfil enlace1 text-center" type="button" id="dropdown-1"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img [src]="usuario.persona.img! | imagen" alt="">{{usuario.nombre}}
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdown-2">
-                        <li>
-							<h6 class="dropdown-header">{{usuario.role.nombre}}</h6>
-						</li>
-						<li>
-							<hr class="dropdown-divider">
-						</li>
-                        <li><a routerLinkActive="active" routerLink="perfil" class="dropdown-item">Perfil</a></li>
-                        <li><a (click)="logout()" class="dropdown-item cursor">Cerrar Sesión</a></li>
-                    </ul>
                 </div>
             </nav>
         </div>

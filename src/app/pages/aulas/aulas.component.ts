@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Aula } from 'src/app/models/aula.model';
 import { AulaService } from 'src/app/services/aula.service';
-import { MenuService } from 'src/app/services/menu.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,20 +12,15 @@ export class AulasComponent implements OnInit {
 
   public aulas:Aula[]=[];
   public cargando:boolean= true;
-  public titulo:string='';
-  public icono:string='';
+  public titulo:string='Tabla Aulas';
+  public icono:string='bi bi-table';
   public desde:number=0;
   public totalRegistros:number=0;
   public numeropaginas=0;
   public ds:boolean= true;
   public da:boolean=true;
 
-  constructor(private menuService:MenuService,private aulaService:AulaService) {
-    this.menuService.getTituloRuta()
-    .subscribe(({titulo,icono})=>{
-      this.titulo=titulo;
-      this.icono=icono;
-    });
+  constructor(private aulaService:AulaService) {
   }
 
   ngOnInit(): void {

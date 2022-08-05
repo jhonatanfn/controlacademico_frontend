@@ -8,7 +8,6 @@ import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { AsistenciaService } from 'src/app/services/asistencia.service';
 import { MatriculaService } from 'src/app/services/matricula.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import Swal from 'sweetalert2';
 
@@ -19,10 +18,10 @@ import Swal from 'sweetalert2';
 })
 export class CrearAsistenciaComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
-  public titulo2: string = 'Alumnos';
-  public icono2: string = 'bi bi-people-fill';
+  public titulo: string = 'Crear Asistencias';
+  public icono: string = 'bi bi-plus-square';
+  public titulo2: string = 'Tabla Alumnos';
+  public icono2: string = 'bi bi-table';
   public titulo3: string = 'Resumen';
   public icono3: string = 'bi bi-card-checklist';
   public asisForm!: FormGroup;
@@ -42,18 +41,11 @@ export class CrearAsistenciaComponent implements OnInit {
 
   public cargando:boolean= false;
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     private matriculaService: MatriculaService,
     private asistenciaService: AsistenciaService, private route: ActivatedRoute,
     private programacionService:ProgramacionService) {
 
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
-
-      
     this.programacionService.obtener( Number(this.route.snapshot.paramMap.get('id')) )
     .subscribe({
       next: ({ok,programacion})=>{

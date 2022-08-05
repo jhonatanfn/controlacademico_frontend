@@ -1,4 +1,3 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,7 +9,6 @@ import { Subarea } from 'src/app/models/subarea.model';
 import { AulaService } from 'src/app/services/aula.service';
 import { HoraService } from 'src/app/services/hora.service';
 import { HorarioService } from 'src/app/services/horario.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import { SubareaService } from 'src/app/services/subarea.service';
@@ -24,8 +22,8 @@ import Swal from 'sweetalert2';
 })
 export class CrearHorarioComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Crear Horarios';
+  public icono: string = 'bi bi-plus-square';
   public titulo2: string = 'Horarios';
   public icono2: string = 'bi bi-calendar-check';
   public horarioForm!: FormGroup;
@@ -43,19 +41,11 @@ export class CrearHorarioComponent implements OnInit {
   public programaciones: Programacion[] = [];
   public message: string = "No hay horario";
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     private periodoService: PeriodoService, private aulaService: AulaService,
     private subareaService: SubareaService, private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
     private programacionService: ProgramacionService,private router:Router) {
-
-    this.menuService.getTituloRuta()
-      .subscribe({
-        next: ({ titulo, icono }) => {
-          this.titulo = titulo;
-          this.icono = icono;
-        }
-      });
 
     if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
       this.dias = this.horarioService.dias;

@@ -1,12 +1,10 @@
 <div class="row">
-
     <div class="col-12 col-lg-12">
         <div class="card contenido-principal">
-            <div class="card-body">
-                <!--Encabezado-->
+            <div class="card-header">
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-                <!-- Bucador y boto nuevo-->
-
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-md-6 mb-1">
                         <div class="mb-3">
@@ -30,9 +28,7 @@
                             </option>
                         </select>
                     </div>
-                   
                 </div>
-
 
                 <div class="d-flex align-items-start mb-2 buscador">
                     <div class="input-group me-1">
@@ -46,8 +42,9 @@
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                             aria-describedby="buscar-algo" (keyup)="buscarMatriculas(txtTermino.value)" #txtTermino>
                     </div>
-                    <a routerLink="crear" type="button" class="btn btn-outline-primary">Crear</a>
-
+                    <a routerLink="crear" type="button" class="d-flex btn btn-primary">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo</a>
                 </div>
 
                 <!--Alerta-->
@@ -93,19 +90,19 @@
 
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-outline-primary me-1"
+                                        <button type="button" class="btn btn-success me-1"
                                         data-bs-placement="top"
                                         title="Editar" >
                                             <span>
-                                                <i class="bi bi-pencil-fill"></i>
+                                                <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger"
+                                        <button type="button" class="btn btn-danger"
                                         data-bs-placement="top"
                                         title="Eliminar" 
                                             (click)="eliminarMatricula(matricula)">
                                             <span>
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-x-circle"></i>
                                             </span>
                                         </button>
                                     </div>

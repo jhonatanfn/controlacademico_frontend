@@ -1,11 +1,12 @@
 <div class="row">
     <div class="col-12 col-lg-12">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <!--Encabezado-->
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
                 <!-- Bucador y boto nuevo-->
-
                 <div class="row">
                     <div class="col-12 col-lg-2">
                         <div class="mb-3">
@@ -33,7 +34,9 @@
                                     aria-label="Buscar" aria-describedby="buscar-algo"
                                     (keyup)="buscarMatriculas(txtnombre.value)" #txtnombre>
                             </div>
-                            <a type="button" class="btn btn-outline-primary" routerLink="crear">Crear</a>
+                            <a type="button" class="d-flex btn btn-primary" routerLink="crear">
+                                <i class="bi bi-plus-square me-2"></i>
+                                Nuevo</a>
                         </div>
                     </div>
                 </div>
@@ -78,20 +81,20 @@
                                 <td>{{programacion.numeromat}} de {{programacion.numeromaxmat}}</td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-outline-primary me-1"
+                                        <button type="button" class="btn btn-success me-1"
                                         data-bs-placement="top"
                                         title="Editar" 
                                             [routerLink]="['editar',programacion.id]">
                                             <span>
-                                                <i class="bi bi-pencil-fill"></i>
+                                                <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger"
+                                        <button type="button" class="btn btn-danger"
                                         data-bs-placement="top"
                                         title="Eliminar" 
                                             (click)="eliminarProgramacion(programacion)">
                                             <span>
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-x-circle"></i>
                                             </span>
                                         </button>
                                     </div>

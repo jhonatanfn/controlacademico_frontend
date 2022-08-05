@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Nivel } from 'src/app/models/nivel.model';
 import { Rango } from 'src/app/models/rango.model';
-import { MenuService } from 'src/app/services/menu.service';
 import { RangoService } from 'src/app/services/rango.service';
 import Swal from 'sweetalert2';
 
@@ -15,8 +13,8 @@ export class RangosComponent implements OnInit {
 
   public rangos: Rango[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Rangos';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public numeropaginas = 0;
@@ -40,16 +38,9 @@ export class RangosComponent implements OnInit {
     { id: 8, nombre: "VERDE", alias: "success" }
   ];
 
-  constructor(private menuService: MenuService,
+  constructor(
     private rangoService: RangoService,
     private fb: FormBuilder) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
-
   }
 
   ngOnInit(): void {
@@ -60,8 +51,8 @@ export class RangosComponent implements OnInit {
       inicio: ['', [Validators.required, Validators.min(0), Validators.max(20)]],
       fin: ['', [Validators.required, Validators.min(0), Validators.max(20)]],
       situacion: ['', Validators.required],
-      color: ['',Validators.required],
-      alias:['']
+      color: ['', Validators.required],
+      alias: ['']
     });
   }
 
@@ -149,11 +140,11 @@ export class RangosComponent implements OnInit {
     this.titulorango = "Crear Rango";
   }
 
-  obtenerColor(rgb:string){
-    let retorno="";
-    this.colores.forEach(color=>{
-      if(color.nombre===rgb){
-        retorno= color.alias;
+  obtenerColor(rgb: string) {
+    let retorno = "";
+    this.colores.forEach(color => {
+      if (color.nombre === rgb) {
+        retorno = color.alias;
       }
     });
     return retorno;

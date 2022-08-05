@@ -4,7 +4,6 @@ import { Matricula } from 'src/app/models/matricula.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { MatriculaService } from 'src/app/services/matricula.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -17,8 +16,8 @@ import Swal from 'sweetalert2';
 })
 export class NotaDocenteComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Notas';
+  public icono: string = 'bi bi-table';
   public cargando: boolean = true;
   public programaciones: Programacion[] = [];
   public desde: number = 0;
@@ -28,21 +27,13 @@ export class NotaDocenteComponent implements OnInit {
   public da: boolean = true;
   public docente!: Docente;
   public matriculas:Matricula[]=[];
-
   public periodoseleccionado:any="";
   public periodos:Periodo[]=[];
 
   constructor(private usuarioService: UsuarioService,
-    private menuService: MenuService,
     private programacionService: ProgramacionService,
     private matriculaService:MatriculaService,
     private periodoService:PeriodoService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-    });
 
     this.periodoService.todo().subscribe({
         next: ({ok,periodos})=>{

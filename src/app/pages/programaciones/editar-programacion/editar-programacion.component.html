@@ -1,37 +1,10 @@
 <div class="row">
-
-    <!--
     <div class="col-12 col-lg-6">
         <div class="card contenido-principal">
-            <div class="card-body">
-                <app-headertable [titulo]="titulo1" [icono]="icono1"></app-headertable>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card w-100">
-                            <div class="card-body">
-                                <h6 class="card-title">Periodo:</h6>
-                                <p class="card-text"> {{ programacionForm.controls['periodo'].value }}</p>
-                                <h6 class="card-title">Aula:</h6>
-                                <p class="card-text">{{ programacionForm.controls['aula'].value }}</p>
-                                <h6 class="card-title">Area:</h6>
-                                <p class="card-text"> {{ programacionForm.controls['area'].value }}</p>
-                                <h6 class="card-title">Subarea:</h6>
-                                <p class="card-text">  {{ programacionForm.controls['subarea'].value }}</p>
-                                <h6 class="card-title">Docente:</h6>
-                                <p class="card-text"> {{ programacionForm.controls['docente'].value }}</p>
-                            </div>
-                        </div> 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-
-    <div class="col-12 col-lg-6">
-        <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <form [formGroup]="programacionForm" (submit)="actualizar()" autocomplete="off">
@@ -141,7 +114,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-hdd"></i>
+                                Actualizar</button>
                         </form>
                     </div>
                 </div>

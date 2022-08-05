@@ -1,9 +1,11 @@
 <div class="row">
     <div class="col-12 col-lg-6">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <!--Encabezado-->
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <form [formGroup]="aulaForm" (submit)="actualizarAula()" autocomplete="off">
@@ -57,11 +59,9 @@
 
                                     <div class="mb-3">
                                         <label for="nombre" class="form-label">Nombre</label>
-                                        <input type="text" class="form-control" formControlName="nombre" 
-                                        id="nombre"
+                                        <input type="text" class="form-control" formControlName="nombre" id="nombre"
                                             aria-describedby="nombre">
-                                        <div id="nombre" class="form-text text-danger" 
-                                        *ngIf="campoRequerido('nombre')">
+                                        <div id="nombre" class="form-text text-danger" *ngIf="campoRequerido('nombre')">
                                             El campo nombre es requerido
                                         </div>
                                         <div id="nombre" class="form-text text-danger"
@@ -69,7 +69,9 @@
                                             El campo nombre debe tener como maximo 40 caracteres
                                         </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-hdd"></i>
+                                        Actualizar</button>
                                 </div>
                             </div>
                         </form>
@@ -79,5 +81,3 @@
         </div>
     </div>
 </div>
-
-

@@ -26,7 +26,7 @@ import Swal from 'sweetalert2';
 export class CrearProgramacionComponent implements OnInit {
 
   public titulo1:string="Crear Programación";
-  public icono1:string="bi bi-file-earmark-text";
+  public icono1:string="bi bi-plus-square";
   public titulo2:string="Listado";
   public icono2:string="bi bi-justify";
 

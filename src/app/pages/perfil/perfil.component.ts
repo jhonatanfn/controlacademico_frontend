@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Usuario } from 'src/app/models/usuario.model';
-import { MenuService } from 'src/app/services/menu.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 import { PersonaService } from 'src/app/services/persona.service';
@@ -13,8 +12,8 @@ import { PersonaService } from 'src/app/services/persona.service';
 })
 export class PerfilComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Datos de Usuario';
+  public icono: string = 'bi bi-person';
   public titulo2: string = 'Imagen de Perfil';
   public icono2: string = 'bi bi-person-circle';
   public titulo3: string = 'Cambiar password';
@@ -35,12 +34,8 @@ export class PerfilComponent implements OnInit {
   public imagenSubir!: File;
   public imgTemp: any = null;
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     private usuarioService: UsuarioService, private personaService: PersonaService) {
-    this.menuService.getTituloRuta().subscribe(({ titulo, icono }) => {
-      this.titulo = titulo;
-      this.icono = icono;
-    });
   }
 
   ngOnInit(): void {

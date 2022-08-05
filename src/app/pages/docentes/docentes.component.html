@@ -1,9 +1,11 @@
 <div class="row">
     <div class="col-12 col-lg-12">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <!--Encabezado-->
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
                 <!-- Bucador y boto nuevo-->
                 <div class="row">
                     <div class="col-12">
@@ -16,16 +18,14 @@
                                             d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                                     </svg>
                                 </span>
-                                <input type="search" class="form-control" 
-                                    placeholder="Buscar" 
-                                    aria-label="Buscar"
-                                    aria-describedby="buscar-algo" 
+                                <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                                    aria-describedby="buscar-algo"
                                     onkeyup="javascript:this.value=this.value.toUpperCase();"
-                                    (keyup)="buscarDocente(txtTermino.value)"
-                                    #txtTermino>
+                                    (keyup)="buscarDocente(txtTermino.value)" #txtTermino>
                             </div>
-                            <a routerLink="crear" type="button" class="btn btn-outline-primary">
-                                Crear
+                            <a routerLink="crear" type="button" class="d-flex btn btn-primary">
+                                <i class="bi bi-plus-square me-2"></i>
+                                Nuevo
                             </a>
                         </div>
                     </div>
@@ -50,36 +50,34 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="w70">N°</th>
-                                <th scope="col" class="w70">Documento</th>
+                                <th scope="col" class="w70">DNI</th>
                                 <th scope="col">Apellido Paterno</th>
                                 <th scope="col">Apellido Materno</th>
-                                <th scope="col">Nombres</th>                              
+                                <th scope="col">Nombres</th>
                                 <th scope="col" class="w100"></th>
                             </tr>
-                        </thead>                      
+                        </thead>
                         <tbody>
                             <tr *ngFor="let docente of docentes; let i=index">
                                 <th>{{desde+i+1}}</th>
                                 <td>{{docente.persona?.numero}}</td>
                                 <td>{{docente.persona?.apellidopaterno | uppercase}}</td>
                                 <td>{{docente.persona?.apellidomaterno | uppercase}}</td>
-                                <td>{{docente.persona?.nombres | uppercase}}</td>                               
+                                <td>{{docente.persona?.nombres | uppercase}}</td>
                                 <td>
                                     <div class="btn-group text-center">
                                         <button [ngClass]="{ isDisabled: !docente.estado }" type="button"
-                                        data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Editar"
-                                            class="btn btn-outline-primary me-1" [routerLink]="['editar', docente.id]">
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"
+                                            class="btn btn-success me-1" [routerLink]="['editar', docente.id]">
                                             <span>
-                                                <i class="bi bi-pencil-fill"></i>
+                                                <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
                                         <button [ngClass]="{ isDisabled: !docente.estado }" type="button"
-                                        data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Eliminar"
-                                            class="btn btn-outline-danger" (click)="eliminarDocente(docente)">
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar"
+                                            class="btn btn-danger" (click)="eliminarDocente(docente)">
                                             <span>
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-x-circle"></i>
                                             </span>
                                         </button>
                                     </div>

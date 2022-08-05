@@ -23,8 +23,8 @@ export class UsuariosComponent implements OnInit {
   public usuarios: Usuario[] = [];
   public usuariosTemp: Usuario[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Usuarios';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public ds: boolean = true;
@@ -52,14 +52,8 @@ export class UsuariosComponent implements OnInit {
 
   public rolseleccionado: any="";
 
-  constructor(public usuarioServices: UsuarioService, private menuService: MenuService,
-    private fb: FormBuilder, private roleService: RoleService,
-    private personaService: PersonaService) {
-
-    this.menuService.getTituloRuta().subscribe(({ titulo, icono }) => {
-      this.titulo = titulo;
-      this.icono = icono;
-    });
+  constructor(public usuarioServices: UsuarioService,private fb: FormBuilder, 
+    private roleService: RoleService, private personaService: PersonaService) {
 
     this.roleService.listar().subscribe(({ ok, roles }) => {
       if (ok) {

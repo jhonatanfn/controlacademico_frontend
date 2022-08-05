@@ -10,7 +10,6 @@ import { Programacion } from 'src/app/models/programacion.model';
 import { CicloService } from 'src/app/services/ciclo.service';
 import { EvaluacionService } from 'src/app/services/evaluacion.service';
 import { MatriculaService } from 'src/app/services/matricula.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { NotaService } from 'src/app/services/nota.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import Swal from 'sweetalert2';
@@ -22,10 +21,10 @@ import Swal from 'sweetalert2';
 })
 export class CrearComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
-  public titulo2: string = 'Alumnos';
-  public icono2: string = 'bi bi-people-fill';
+  public titulo: string = 'Crear Notas';
+  public icono: string = 'bi bi-plus-square';
+  public titulo2: string = 'Tabla Alumnos';
+  public icono2: string = 'bi bi-table';
   public titulo3: string = 'Resumen';
   public icono3: string = 'bi bi-card-checklist';
   public notaForm!: FormGroup;
@@ -44,17 +43,11 @@ export class CrearComponent implements OnInit {
   public docentenombre:string="";
   public cargando:boolean=  false;
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,private cicloService: CicloService,
+  constructor(private fb: FormBuilder,private cicloService: CicloService,
     private evaluacionService: EvaluacionService, private matriculaService: MatriculaService,
     private notaService: NotaService, private route: ActivatedRoute,
     private programacionService:ProgramacionService) {
 
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-    });
-    
     this.cicloService.listar().subscribe(({ ok, ciclos }) => {
       if (ok) {
         this.ciclos = ciclos;

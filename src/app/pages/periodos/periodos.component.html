@@ -1,9 +1,11 @@
 <div class="row">
     <div class="col-12 col-lg-12">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <!--Encabezado-->
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
                 <!-- Bucador y boto nuevo-->
                 <div class="d-flex align-items-start mb-2 buscador">
                     <div class="input-group me-1">
@@ -17,8 +19,11 @@
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                             aria-describedby="buscar-algo" (keyup)="buscarPeriodo(txtTermino.value)" #txtTermino>
                     </div>
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#crear"
-                        (click)="crearPeriodo()">Crear</button>
+                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearPeriodo()">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo
+                    </button>
                 </div>
 
                 <!--Alerta-->
@@ -50,17 +55,17 @@
                                 <td>{{periodo.nombre | uppercase}}</td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-outline-primary me-1"
-                                            data-bs-toggle="modal" data-bs-target="#crear" data-bs-placement="top"
-                                            title="Editar" (click)="editarPeriodo(periodo)">
+                                        <button type="button" class="btn btn-success me-1" data-bs-toggle="modal"
+                                            data-bs-target="#crear" data-bs-placement="top" title="Editar"
+                                            (click)="editarPeriodo(periodo)">
                                             <span>
-                                                <i class="bi bi-pencil-fill"></i>
+                                                <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger" data-bs-placement="top"
+                                        <button type="button" class="btn btn-danger" data-bs-placement="top"
                                             title="Eliminar" (click)="eliminarPeriodo(periodo)">
                                             <span>
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-x-circle"></i>
                                             </span>
                                         </button>
                                     </div>
@@ -103,9 +108,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        #closebutton>Cancelar</button>
-                    <button type="submit" class="btn btn-primary">{{boton}}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                        <i class="bi bi-x-lg"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-hdd"></i>
+                        {{boton}}
+                    </button>
                 </div>
             </form>
         </div>

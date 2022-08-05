@@ -1,12 +1,13 @@
 <div class="row">
     <div class="col-12 col-lg-5">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="mb-3">
-
                             <div class="mb-3">
                                 <ng-select [(ngModel)]="selectedAlumno" (change)="alumnoSeleccionado()"
                                     placeholder="Buscar alumno">
@@ -36,7 +37,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -46,8 +46,10 @@
 
     <div class="col-12 col-lg-7">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <form [formGroup]="matriculaForm" (submit)="generarMatricula()">
@@ -96,7 +98,7 @@
                                     <button type="button" class="btn btn-primary btn-sm me-2" 
                                     [disabled]="programaciones.length==0"
                                         (click)="guardarMatricula()">
-                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        <i class="bi bi-hdd"></i>
                                         Guardar
                                     </button>
                                     <button type="button" class="btn btn-success btn-sm me-2"
@@ -110,16 +112,13 @@
                     </div>
 
                     <div class="col-12 mt-2">
-
                         <div class="row">
                             <div class="col-12">
                                 <div class="alert alert-primary" role="alert" *ngIf="programaciones.length==0">
                                     No hay registros.
                                 </div>
                             </div>
-
                             <div class="col-12" *ngIf="programaciones.length>0">
-
                                 <div class="table-responsive mb-1">
                                     <table class="table table-bordered table-hover">
                                         <thead>

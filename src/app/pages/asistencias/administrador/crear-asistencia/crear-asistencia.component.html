@@ -1,16 +1,16 @@
 <div class="row">
     <div class="col-12 col-lg-4">
-
         <div class="row">
             <div class="col-12">
                 <div class="card contenido-principal">
-                    <div class="card-body">
+                    <div class="card-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <form [formGroup]="asisForm" (submit)="guardarAsistencias()">
                                     <div class="row">
-
                                         <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="fecha" class="form-label">Fecha</label>
@@ -25,10 +25,9 @@
                                     </div>
 
                                     <button type="submit" class="btn btn-primary me-2" [disabled]="datos.length==0">
-                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        <i class="bi bi-hdd"></i>
                                         Guardar
                                     </button>
-
                                 </form>
                             </div>
                         </div>
@@ -37,8 +36,10 @@
             </div>
             <div class="col-12">
                 <div class="card contenido-principal">
-                    <div class="card-body">
+                    <div class="card-header">
                         <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card w-100">
@@ -61,13 +62,14 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="col-12 col-lg-8">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="mb-1" *ngIf="cargando">

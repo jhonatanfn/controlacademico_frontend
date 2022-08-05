@@ -8,7 +8,6 @@ import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { CicloService } from 'src/app/services/ciclo.service';
 import { EvaluacionService } from 'src/app/services/evaluacion.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { NotaService } from 'src/app/services/nota.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import Swal from 'sweetalert2';
@@ -20,10 +19,10 @@ import Swal from 'sweetalert2';
 })
 export class EditarComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
-  public titulo2: string = 'Alumnos';
-  public icono2: string = 'bi bi-people-fill';
+  public titulo: string = 'Editar Notas';
+  public icono: string = ' bi bi-pen';
+  public titulo2: string = 'Tabla Alumnos';
+  public icono2: string = 'bi bi-table';
   public titulo3: string = 'Resumen';
   public icono3: string = 'bi bi-card-checklist';
   public notaForm!: FormGroup;
@@ -34,23 +33,17 @@ export class EditarComponent implements OnInit {
   public matriculas: Matricula[] = [];
   public datos: any[] = [];
   public formSubmitted: boolean = false;
-  public cargando:boolean= false;
+  public cargando: boolean = false;
 
-  public periodonombre:string="";
-  public aulanombre:string="";
-  public subareanombre:string="";
-  public areanombre:string="";
-  public docentenombre:string="";
+  public periodonombre: string = "";
+  public aulanombre: string = "";
+  public subareanombre: string = "";
+  public areanombre: string = "";
+  public docentenombre: string = "";
 
-  constructor(private menuService: MenuService, private fb: FormBuilder, private cicloService: CicloService,
+  constructor(private fb: FormBuilder, private cicloService: CicloService,
     private evaluacionService: EvaluacionService, private notaService: NotaService,
-    private route: ActivatedRoute,private programacionService:ProgramacionService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
+    private route: ActivatedRoute, private programacionService: ProgramacionService) {
 
     this.cicloService.listar().subscribe(({ ok, ciclos }) => {
       if (ok) {
@@ -63,20 +56,20 @@ export class EditarComponent implements OnInit {
       }
     });
 
-    this.programacionService.obtener( Number(this.route.snapshot.paramMap.get('id')) )
-    .subscribe({
-      next: ({ok,programacion})=>{
-        if(ok){
-          this.periodonombre= programacion.periodo?.nombre || "";
-          this.aulanombre= programacion.aula?.nombre || "";
-          this.subareanombre= programacion.subarea?.nombre || "";
-          this.docentenombre= programacion.docente?.persona?.apellidopaterno+" "+
-          programacion.docente?.persona?.apellidomaterno+" "+
-          programacion.docente?.persona?.nombres;
-          this.areanombre= programacion.subarea?.area.nombre || "";
+    this.programacionService.obtener(Number(this.route.snapshot.paramMap.get('id')))
+      .subscribe({
+        next: ({ ok, programacion }) => {
+          if (ok) {
+            this.periodonombre = programacion.periodo?.nombre || "";
+            this.aulanombre = programacion.aula?.nombre || "";
+            this.subareanombre = programacion.subarea?.nombre || "";
+            this.docentenombre = programacion.docente?.persona?.apellidopaterno + " " +
+              programacion.docente?.persona?.apellidomaterno + " " +
+              programacion.docente?.persona?.nombres;
+            this.areanombre = programacion.subarea?.area.nombre || "";
+          }
         }
-      }
-    });
+      });
 
   }
 
@@ -84,7 +77,7 @@ export class EditarComponent implements OnInit {
     this.notaForm = this.fb.group({
       cicloId: ['', Validators.required],
       evaluacionId: ['', Validators.required],
-      fecha: ['',Validators.required]
+      fecha: ['', Validators.required]
     });
   }
   campoRequerido(campo: string) {
@@ -98,17 +91,17 @@ export class EditarComponent implements OnInit {
   buscarMatriculas() {
     this.formSubmitted = true;
     if (this.notaForm.valid) {
-      this.cargando= true;
+      this.cargando = true;
       this.notaService.notasProgramacionFechaEvaluacionCiclo(
         Number(this.route.snapshot.paramMap.get('id')),
-        this.notaForm.controls['fecha'].value, 
+        this.notaForm.controls['fecha'].value,
         Number(this.notaForm.get('evaluacionId')?.value),
         Number(this.notaForm.get('cicloId')?.value))
 
         .subscribe(({ ok, notas }) => {
           if (ok) {
             this.datos = notas;
-            this.cargando= false;
+            this.cargando = false;
           }
         });
 

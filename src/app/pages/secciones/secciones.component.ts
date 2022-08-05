@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Seccion } from 'src/app/models/seccion.model';
-import { MenuService } from 'src/app/services/menu.service';
 import { SeccionService } from 'src/app/services/seccion.service';
 import Swal from 'sweetalert2';
 
@@ -14,8 +13,8 @@ export class SeccionesComponent implements OnInit {
 
   public secciones:Seccion[]=[];
   public cargando:boolean= true;
-  public titulo:string='';
-  public icono:string='';
+  public titulo:string='Tabla Secciones';
+  public icono:string='bi bi-table';
   public desde:number=0;
   public totalRegistros:number=0;
   public numeropaginas=0;
@@ -30,15 +29,9 @@ export class SeccionesComponent implements OnInit {
 
   @ViewChild('closebutton') closebutton:any;
 
-  constructor(private menuService:MenuService,
+  constructor(
     private seccionService:SeccionService,
     private fb:FormBuilder) {
-
-    this.menuService.getTituloRuta()
-    .subscribe(({titulo,icono})=>{
-      this.titulo=titulo;
-      this.icono=icono;
-    });
   }
 
   ngOnInit(): void {

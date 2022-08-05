@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Nivel } from 'src/app/models/nivel.model';
-import { MenuService } from 'src/app/services/menu.service';
 import { NivelService } from 'src/app/services/nivel.service';
 import Swal from 'sweetalert2';
 
@@ -14,8 +13,8 @@ export class NivelesComponent implements OnInit {
 
   public niveles:Nivel[]=[];
   public cargando:boolean= true;
-  public titulo:string='';
-  public icono:string='';
+  public titulo:string='Tabla Niveles';
+  public icono:string='bi bi-table';
   public desde:number=0;
   public totalRegistros:number=0;
   public numeropaginas=0;
@@ -30,16 +29,8 @@ export class NivelesComponent implements OnInit {
 
   @ViewChild('closebutton') closebutton:any;
 
-  constructor(private menuService:MenuService,
-    private nivelService:NivelService,
+  constructor(private nivelService:NivelService,
     private fb:FormBuilder) {
-
-    this.menuService.getTituloRuta()
-    .subscribe(({titulo,icono})=>{
-      this.titulo=titulo;
-      this.icono=icono;
-    });
-
   }
 
   ngOnInit(): void {
@@ -109,7 +100,7 @@ export class NivelesComponent implements OnInit {
     this.nivelForm.controls['nombre'].setValue('');
     this.boton="Guardar";
     this.isSave= true;
-    this.titulonivel="Crear Nivel";
+    this.titulonivel="Nuevo Nivel";
   }
   
   guardarNivel(){

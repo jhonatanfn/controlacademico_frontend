@@ -8,19 +8,21 @@ import { MenuService } from '../services/menu.service';
 })
 export class PagesComponent implements OnInit {
 
-  public principal:string="";
-  public accion:string="";
-  public enlace:string="";
+  public icono: string = "";
+  public accion: string = "";
+  public enlace: string = "";
+  public titulo: string = "";
 
-  constructor(private menuService:MenuService) {
-    this.menuService.cargarMenu(); 
+  constructor(private menuService: MenuService) {
+    this.menuService.cargarMenu();
 
     this.menuService.getTituloRuta()
-    .subscribe(({principal,accion,enlace})=>{
-      this.principal=principal;
-      this.accion=accion;
-      this.enlace=enlace;
-    });
+      .subscribe(({ accion, enlace, titulo, icono }) => {
+        this.icono = icono;
+        this.accion = accion;
+        this.enlace = enlace;
+        this.titulo = titulo;
+      });
 
   }
 

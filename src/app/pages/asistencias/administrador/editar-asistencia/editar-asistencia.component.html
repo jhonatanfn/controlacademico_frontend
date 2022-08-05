@@ -1,16 +1,16 @@
 <div class="row">
     <div class="col-12 col-lg-4">
-
         <div class="row">
             <div class="col-12">
                 <div class="card contenido-principal">
-                    <div class="card-body">
+                    <div class="card-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <form [formGroup]="asisForm" (submit)="buscarMatriculas()">
                                     <div class="row">
-        
                                         <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="fechaIn" class="form-label">Fecha</label>
@@ -26,11 +26,10 @@
                                     *ngIf="datos.length>0">
                                     <button type="button" class="btn btn-primary"
                                         (click)="actualizarAsistencias()">
-                                        <i class="bi bi-cloud-arrow-up"></i>
+                                        <i class="bi bi-hdd"></i>
                                         Actualizar
                                     </button>
                                     </div>
-                                   
                                 </form>
                             </div>
                         </div>
@@ -40,8 +39,10 @@
             <div class="col-12">
                 
                 <div class="card contenido-principal">
-                    <div class="card-body">
+                    <div class="card-header">
                         <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card w-100">
@@ -69,11 +70,12 @@
 
     <div class="col-12 col-lg-8">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        
                          <!--Alerta-->
                         <div class="mb-1" *ngIf="cargando">
                             <div class="alert alert-info text-center" role="alert">
@@ -83,16 +85,6 @@
                                 <p>Por favor espera</p>
                             </div>
                         </div>
-                        <!--
-                        <div class="d-lg-flex d-flex-column justify-content-end mt-1" 
-                        *ngIf="datos.length>0">
-                        <button type="button" class="btn btn-primary"
-                            (click)="actualizarAsistencias()">
-                            <i class="bi bi-arrow-down-circle"></i>
-                            Actualizar
-                        </button>
-                        </div>
-                        -->
                         <div class="table-responsive mt-1" *ngIf="!cargando">
                             <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
                                 No hay registros.

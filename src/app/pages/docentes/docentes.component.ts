@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Docente } from 'src/app/models/docente.model';
 import { DocenteService } from 'src/app/services/docente.service';
-import { MenuService } from 'src/app/services/menu.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,21 +12,14 @@ export class DocentesComponent implements OnInit {
 
   public docentes: Docente[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo:string="Tabla Docentes";
+  public icono:string="bi bi-table";
   public desde: number = 0;
   public totalRegistros: number = 0;
   public ds: boolean = true;
   public da: boolean = true;
 
-  constructor(private menuService: MenuService,
-    private docenteService: DocenteService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
+  constructor(private docenteService: DocenteService) {
   }
   ngOnInit(): void {
     this.listarDocentes();
@@ -126,7 +118,6 @@ export class DocentesComponent implements OnInit {
   }
 
   buscarDocente(termino: string) {
-
     if (termino.length == 0) {
       this.listarDocentes();
     } else {
@@ -138,8 +129,5 @@ export class DocentesComponent implements OnInit {
           this.controlBotonesPaginacion();
         });
     }
- 
-    
   }
-
 }

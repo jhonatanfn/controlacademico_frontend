@@ -25,7 +25,7 @@ export class EditarProgramacionComponent implements OnInit, AfterContentChecked 
   public titulo1: string = "Detalle Programación";
   public icono1: string = "bi bi-plus-square-fill";
   public titulo2: string = "Editar Programación";
-  public icono2: string = "bi bi-pencil-fill";
+  public icono2: string = "bi bi-pen";
   public programacionForm!: FormGroup;
   public formSubmitted: boolean = false;
 

@@ -3,9 +3,6 @@ import { Aula } from 'src/app/models/aula.model';
 import { Horario } from 'src/app/models/horario.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { AulaService } from 'src/app/services/aula.service';
-import { HorarioService } from 'src/app/services/horario.service';
-import { MenuService } from 'src/app/services/menu.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-horarios',
@@ -16,8 +13,8 @@ export class HorariosComponent implements OnInit {
 
   public horarios: Horario[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Horarios';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public ds: boolean = true;
@@ -26,14 +23,8 @@ export class HorariosComponent implements OnInit {
   public periodos: Periodo[] = [];
   public aulas: Aula[] = [];
 
-  constructor(private menuService: MenuService,
-    private horarioService: HorarioService,
+  constructor(
     private aulaService: AulaService) {
-
-    this.menuService.getTituloRuta().subscribe(({ titulo, icono }) => {
-      this.titulo = titulo;
-      this.icono = icono;
-    });
   }
 
   ngOnInit(): void {

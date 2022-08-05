@@ -1,9 +1,10 @@
 <div class="row">
     <div class="col-12 col-lg-4">
         <div class="card contenido-principal">
-            <div class="card-body">
-                <!--Encabezado-->
+            <div class="card-header">
                 <app-headertable [titulo]="titulo1" [icono]="icono1"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <form [formGroup]="programacionForm" (submit)="agregarProgramacion2()">
@@ -14,8 +15,8 @@
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="periodoId">
                                             <option value="">Seleccionar periodo</option>
-                                            <option *ngFor="let periodo of periodos" 
-                                            [value]="[periodo.id,periodo.nombre]">
+                                            <option *ngFor="let periodo of periodos"
+                                                [value]="[periodo.id,periodo.nombre]">
                                                 {{periodo.nombre}}
                                             </option>
                                         </select>
@@ -31,13 +32,11 @@
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="aulaId">
                                             <option value="">Seleccionar Aula</option>
-                                            <option *ngFor="let aula of aulas" 
-                                            [value]="[aula.id,aula.nombre]">
+                                            <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre]">
                                                 {{aula.nombre}}
                                             </option>
                                         </select>
-                                        <div *ngIf="campoRequerido('aulaId')" id="aulaId"
-                                            class="form-text text-danger">
+                                        <div *ngIf="campoRequerido('aulaId')" id="aulaId" class="form-text text-danger">
                                             El Aula es requerida
                                         </div>
                                     </div>
@@ -51,8 +50,7 @@
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="areaId" (change)="listarSubareas()">
                                             <option value="">Seleccionar area</option>
-                                            <option *ngFor="let area of areas" 
-                                            [value]="[area.id,area.nombre]">
+                                            <option *ngFor="let area of areas" [value]="[area.id,area.nombre]">
                                                 {{area.nombre}}
                                             </option>
                                         </select>
@@ -67,8 +65,8 @@
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="subareaId">
                                             <option value="">Seleccionar subarea</option>
-                                            <option *ngFor="let subarea of subareas" 
-                                            [value]="[subarea.id,subarea.nombre]">
+                                            <option *ngFor="let subarea of subareas"
+                                                [value]="[subarea.id,subarea.nombre]">
                                                 {{subarea.nombre}}
                                             </option>
                                         </select>
@@ -84,8 +82,8 @@
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="docenteId">
                                             <option value="">Seleccionar docente</option>
-                                            <option *ngFor="let docente of docentes" 
-                                            [value]="[docente.id,docente.persona?.nombres,docente.persona?.apellidopaterno,docente.persona?.apellidomaterno]">
+                                            <option *ngFor="let docente of docentes"
+                                                [value]="[docente.id,docente.persona?.nombres,docente.persona?.apellidopaterno,docente.persona?.apellidomaterno]">
                                                 {{docente.persona?.nombres}}
                                                 {{docente.persona?.apellidopaterno}}
                                                 {{docente.persona?.apellidomaterno}}
@@ -99,7 +97,10 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Agregar</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-arrow-right-square"></i>
+                                Agregar
+                            </button>
 
                         </form>
                     </div>
@@ -110,14 +111,15 @@
 
     <div class="col-12 col-lg-8">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <div class="alert alert-primary" role="alert" 
-                        *ngIf="programaciones.length==0">
+                        <div class="alert alert-primary" role="alert" *ngIf="programaciones.length==0">
                             No hay registros.
-                          </div>
+                        </div>
                     </div>
                     <div class="col-12">
 
@@ -134,18 +136,18 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let p of programaciones">
-                                       
+
                                         <td>{{p.periodoNombre}}</td>
                                         <td>{{p.subareaNombre}}</td>
                                         <td>{{p.aulaNombre}}</td>
-                                        <td>{{p.docenteNombres}} 
+                                        <td>{{p.docenteNombres}}
                                             {{p.docenteApellidoP}}
                                             {{p.docenteApellidoM}}
                                         </td>
                                         <td>
                                             <div class="btn-group text-center">
-                                                <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                (click)="eliminarProgramacion(p)">
+                                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    (click)="eliminarProgramacion(p)">
                                                     <span>
                                                         <i class="bi bi-trash-fill"></i>
                                                     </span>
@@ -157,9 +159,10 @@
                             </table>
                         </div>
 
-                        <button type="button" class="btn btn-primary" 
-                        *ngIf="programaciones.length>0"
-                        (click)="guardar()" >Guardar</button>
+                        <button type="button" class="btn btn-primary" *ngIf="programaciones.length>0"
+                            (click)="guardar()">
+                            <i class="bi bi-hdd"></i>
+                            Guardar</button>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { Aula } from 'src/app/models/aula.model';
 import { Hora } from 'src/app/models/hora.model';
@@ -12,11 +12,9 @@ import { AulaService } from 'src/app/services/aula.service';
 import { HoraService } from 'src/app/services/hora.service';
 import { HorarioService } from 'src/app/services/horario.service';
 import { InstitucionService } from 'src/app/services/institucion.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { SubareaService } from 'src/app/services/subarea.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import Swal from 'sweetalert2';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -28,8 +26,8 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 })
 export class ConsultaHorarioComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Consultar Horarios';
+  public icono: string = 'bi bi-calendar2';
   public titulo2: string = 'Horarios';
   public icono2: string = 'bi bi-calendar-check';
   public titulo3: string = 'Resumen';
@@ -54,19 +52,12 @@ export class ConsultaHorarioComponent implements OnInit {
   public gradonombre: string = "";
   public seccionnombre: string = "";
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
+  constructor( private fb: FormBuilder,
     private periodoService: PeriodoService, private aulaService: AulaService,
     private subareaService: SubareaService, private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
     private route: ActivatedRoute, private institucionService: InstitucionService) {
 
-    this.menuService.getTituloRuta()
-      .subscribe({
-        next: ({ titulo, icono }) => {
-          this.titulo = titulo;
-          this.icono = icono;
-        }
-      });
 
     if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
       this.dias = this.horarioService.dias;

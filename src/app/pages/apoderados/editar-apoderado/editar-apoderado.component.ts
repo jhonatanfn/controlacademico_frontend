@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Apoderado } from 'src/app/models/apoderado.model';
 import { Tipodocumento } from 'src/app/models/tipodocumento.model';
 import { ApoderadoService } from 'src/app/services/apoderado.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { TipodocumentoService } from 'src/app/services/tipodocumento.service';
 import Swal from 'sweetalert2';
@@ -16,25 +15,18 @@ import Swal from 'sweetalert2';
 })
 export class EditarApoderadoComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Editar Apoderado';
+  public icono: string = 'bi bi-pen';
   public tipos: Tipodocumento[] = [];
   public apoderadoForm!: FormGroup;
   public formSubmitted: boolean = false;
   public apoderado!: Apoderado;
 
-  constructor(private menuService: MenuService,
+  constructor(
     private tipodocuementoService: TipodocumentoService,
     private fb: FormBuilder, private personaService: PersonaService,
     private apoderadoService: ApoderadoService,
     private route: ActivatedRoute) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
-
     this.tipodocuementoService.listar()
       .subscribe(({ tipodocumentos }) => {
         this.tipos = tipodocumentos;

@@ -18,8 +18,8 @@ import Swal from 'sweetalert2';
 })
 export class CrearDocenteComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Nuevo Docente';
+  public icono: string = 'bi bi-plus-square';
   public titulo2: string = 'Datos de usuario';
   public icono2: string = 'bi bi-person-check-fill';
   public tipos: Tipodocumento[] = [];
@@ -28,17 +28,10 @@ export class CrearDocenteComponent implements OnInit {
   public usuarios:Usuario[]=[];
   public repetido:boolean=  false;
 
-  constructor(private menuService: MenuService,
-    private tipodocuementoService: TipodocumentoService,
+  constructor(private tipodocuementoService: TipodocumentoService,
     private fb: FormBuilder, private personaService: PersonaService,
     private docenteService: DocenteService, private usuarioService:UsuarioService,
     private router:Router) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
 
     this.tipodocuementoService.listar()
       .subscribe(({ tipodocumentos }) => {

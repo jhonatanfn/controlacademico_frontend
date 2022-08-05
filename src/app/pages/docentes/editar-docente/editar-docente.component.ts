@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Docente } from 'src/app/models/docente.model';
-import { Persona } from 'src/app/models/persona.model';
 import { Tipodocumento } from 'src/app/models/tipodocumento.model';
 import { DocenteService } from 'src/app/services/docente.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { TipodocumentoService } from 'src/app/services/tipodocumento.service';
 import Swal from 'sweetalert2';
@@ -17,24 +15,18 @@ import Swal from 'sweetalert2';
 })
 export class EditarDocenteComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Editar Docente';
+  public icono: string = 'bi bi-pen';
   public tipos: Tipodocumento[] = [];
   public docenteForm!: FormGroup;
   public formSubmitted: boolean = false;
   public docente!: Docente;
 
-  constructor(private menuService: MenuService,
+  constructor(
     private tipodocuementoService: TipodocumentoService,
     private fb: FormBuilder, private personaService: PersonaService,
     private docenteService: DocenteService,
     private route: ActivatedRoute) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-    });
 
     this.tipodocuementoService.listar()
       .subscribe(({ tipodocumentos }) => {

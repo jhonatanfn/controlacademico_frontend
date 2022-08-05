@@ -13,20 +13,15 @@ export class AlumnosComponent implements OnInit {
 
   public alumnos: Alumno[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Alumnos';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public numeropaginas = 0;
   public ds: boolean = true;
   public da: boolean = true;
 
-  constructor(private menuService: MenuService, private alumnoService: AlumnoService) {
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
+  constructor(private alumnoService: AlumnoService) {
   }
 
   ngOnInit(): void {

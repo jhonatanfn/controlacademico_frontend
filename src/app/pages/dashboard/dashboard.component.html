@@ -1,15 +1,31 @@
-<div class="row">
-    <div class="col-12 col-lg-12">
-
-        <img src="../../../assets/img/fondo.png"  class="imagen-fondo" alt="">
-
+<div class="row contenedor">
+    
+    <div class="col-12">
+        <img src="../../../assets/img/fondo.JPG"  class="img-fluid imagen-fondo" alt="imagen fondo">
     </div>
+    
+    
     <!--
-    <div class="col-12 col-lg-12 mt-2">
-        <footer class="pie">
-            <h6><strong>Desarrollado por: </strong>Ing. Jhonatan Flores Nuñez</h6>
-            <p><strong> Celular: </strong>948813747</p>
-        </footer>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4" 
+            *ngFor="let item of menus">
+                <div class="card text-center carta">
+                    <div class="card-body">
+                        <span class="icono">
+                            <i class="{{item.icono}}"></i>
+                        </span>
+                    </div>
+                    <div class="card-footer text-muted tarjeta">
+                        <a routerLink="{{item.url}}" class="d-flex justify-content-between align-items-center 
+                        text-decoration-none text-dark piepagina">
+                            <h3 class="fs-5 fw-bold">{{item.titulo}}</h3>
+                            <i class="bi bi-folder2-open"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     -->
 </div>

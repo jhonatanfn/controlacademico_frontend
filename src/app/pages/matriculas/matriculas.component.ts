@@ -17,8 +17,8 @@ export class MatriculasComponent implements OnInit {
 
   public matriculas: Matricula[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Matriculas';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public numeropaginas = 0;
@@ -30,7 +30,7 @@ export class MatriculasComponent implements OnInit {
   public areaseleccionada: any = "";
   public subareaseleccionada:any="";
 
-  constructor(private menuService: MenuService, private matriculaService: MatriculaService,
+  constructor(private matriculaService: MatriculaService,
     private areaService: AreaService, private subareaService: SubareaService) {
 
     this.areaService.todo().subscribe({
@@ -40,13 +40,6 @@ export class MatriculasComponent implements OnInit {
         }
       }
     });
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
-
   }
 
   ngOnInit(): void {

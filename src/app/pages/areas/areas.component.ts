@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Area } from 'src/app/models/area.model';
 import { AreaService } from 'src/app/services/area.service';
-import { MenuService } from 'src/app/services/menu.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,8 +13,8 @@ export class AreasComponent implements OnInit {
 
   public areas: Area[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Areas';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public numeropaginas = 0;
@@ -30,23 +29,15 @@ export class AreasComponent implements OnInit {
 
   public imagenSubir!: File;
   public imgTemp: any = null;
-  public area:Area={
-    nombre:"",
-    img:""
+  public area: Area = {
+    nombre: "",
+    img: ""
   };
 
   @ViewChild('closebutton') closebutton: any;
   @ViewChild('closebutton2') closebutton2: any;
 
-  constructor(private menuService: MenuService,
-    private areaService: AreaService,
-    private fb: FormBuilder) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-    });
+  constructor(private areaService: AreaService, private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -127,56 +118,56 @@ export class AreasComponent implements OnInit {
     if (this.areaForm.valid) {
       if (this.isSave) {
         this.areaService.crear(this.areaForm.value)
-        .subscribe({
-          next: ({ok,msg})=>{
-            if(ok){
-              this.closebutton.nativeElement.click();
-              this.listarAreas();
+          .subscribe({
+            next: ({ ok, msg }) => {
+              if (ok) {
+                this.closebutton.nativeElement.click();
+                this.listarAreas();
+                Swal.fire({
+                  position: 'top-end',
+                  icon: 'success',
+                  title: msg,
+                  showConfirmButton: false,
+                  timer: 1000
+                })
+              }
+            },
+            error: (error) => {
               Swal.fire({
                 position: 'top-end',
-                icon: 'success',
-                title: msg,
+                icon: 'error',
+                title: "Se produjo un error. Hable con el administrador",
                 showConfirmButton: false,
-                timer: 1000
+                timer: 1500
               })
             }
-          },
-          error: (error)=>{
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: "Se produjo un error. Hable con el administrador",
-              showConfirmButton: false,
-              timer: 1500
-            })
-          }
-        })
+          })
       } else {
         this.areaService.actualizar(this.areaForm.get('areaId')?.value, this.areaForm.value)
-        .subscribe({
-          next: ({ok,msg})=>{
-            if(ok){
-              this.closebutton.nativeElement.click();
-              this.listarAreas();
+          .subscribe({
+            next: ({ ok, msg }) => {
+              if (ok) {
+                this.closebutton.nativeElement.click();
+                this.listarAreas();
+                Swal.fire({
+                  position: 'top-end',
+                  icon: 'success',
+                  title: msg,
+                  showConfirmButton: false,
+                  timer: 1000
+                })
+              }
+            },
+            error: (error) => {
               Swal.fire({
                 position: 'top-end',
-                icon: 'success',
-                title: msg,
+                icon: 'error',
+                title: "Se produjo un error. Hable con el administrador",
                 showConfirmButton: false,
                 timer: 1000
               })
             }
-          }, 
-          error: (error)=>{
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: "Se produjo un error. Hable con el administrador",
-              showConfirmButton: false,
-              timer: 1000
-            })
-          }
-        })
+          })
       }
     }
   }
@@ -184,46 +175,46 @@ export class AreasComponent implements OnInit {
   eliminarArea(area: Area) {
 
     this.areaService.tieneSubareas(area.id!)
-    .subscribe({
-      next: ({ok,msg})=>{
-        if(ok){
-          Swal.fire({
-            position: 'top-end',
-            icon: 'info',
-            title: msg,
-            showConfirmButton: false,
-            timer: 1000
-          })
-        }else{
-          Swal.fire({
-            title: 'Borrar Area',
-            text: "Desea borrar a: " + area.nombre,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Cancelar',
-            confirmButtonText: 'Borrar'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.areaService.borrar(area.id!)
-                .subscribe(({ ok, msg }) => {
-                  if (ok) {
-                    this.listarAreas();
-                    Swal.fire({
-                      position: 'top-end',
-                      icon: 'success',
-                      title: msg,
-                      showConfirmButton: false,
-                      timer: 1000
-                    })
-                  }
-                })
-            }
-          })
+      .subscribe({
+        next: ({ ok, msg }) => {
+          if (ok) {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'info',
+              title: msg,
+              showConfirmButton: false,
+              timer: 1000
+            })
+          } else {
+            Swal.fire({
+              title: 'Borrar Area',
+              text: "Desea borrar a: " + area.nombre,
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Borrar'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.areaService.borrar(area.id!)
+                  .subscribe(({ ok, msg }) => {
+                    if (ok) {
+                      this.listarAreas();
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1000
+                      })
+                    }
+                  })
+              }
+            })
+          }
         }
-      }
-    })
+      })
   }
 
   editarArea(area: Area) {
@@ -234,17 +225,17 @@ export class AreasComponent implements OnInit {
     this.tituloarea = "Editar Area";
   }
 
-  buscarArea(termino:string){
-    if(termino.length==0){
+  buscarArea(termino: string) {
+    if (termino.length == 0) {
       this.listarAreas();
-    }else{
+    } else {
       this.areaService.buscarPorNombre(termino)
-      .subscribe((resp:Area[])=>{
-        this.areas=resp;
-        this.totalRegistros=resp.length;
-        this.cargando= false;
-        this.controlBotonesPaginacion();
-      });
+        .subscribe((resp: Area[]) => {
+          this.areas = resp;
+          this.totalRegistros = resp.length;
+          this.cargando = false;
+          this.controlBotonesPaginacion();
+        });
     }
   }
 
@@ -262,15 +253,15 @@ export class AreasComponent implements OnInit {
     return true;
   }
 
-  cambiarImagenArea(area:Area){
-    this.area= area;
+  cambiarImagenArea(area: Area) {
+    this.area = area;
   }
 
-  actualizarImagenArea(){
+  actualizarImagenArea() {
     this.areaService.actualizarImagen(this.imagenSubir, Number(this.area.id)).then(img => {
       this.closebutton2.nativeElement.click();
-      if(img){
-        this.imgTemp= null;
+      if (img) {
+        this.imgTemp = null;
         Swal.fire({
           position: 'top-end',
           icon: 'success',

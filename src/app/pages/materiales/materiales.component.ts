@@ -14,8 +14,8 @@ import { ProgramacionService } from 'src/app/services/programacion.service';
 })
 export class MaterialesComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Materiales';
+  public icono: string = 'bi bi-table';
   public cargando: boolean = true;
   public programaciones: Programacion[] = [];
   public desde: number = 0;
@@ -28,15 +28,10 @@ export class MaterialesComponent implements OnInit {
   public periodoseleccionado: any = "";
   public periodos: Periodo[] = [];
 
-  constructor(private menuService: MenuService,
+  constructor(
     private programacionService: ProgramacionService,
     private periodoService: PeriodoService) {
 
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
     this.periodoService.todo().subscribe({
       next: ({ ok, periodos }) => {
         if (ok) {

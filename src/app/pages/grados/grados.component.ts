@@ -14,8 +14,8 @@ export class GradosComponent implements OnInit {
 
   public grados:Grado[]=[];
   public cargando:boolean= true;
-  public titulo:string='';
-  public icono:string='';
+  public titulo:string='Tabla Grados';
+  public icono:string='bi bi-table';
   public desde:number=0;
   public totalRegistros:number=0;
   public numeropaginas=0;
@@ -30,15 +30,7 @@ export class GradosComponent implements OnInit {
 
   @ViewChild('closebutton') closebutton:any;
 
-  constructor(private menuService:MenuService,
-    private gradoService:GradoService,
-    private fb:FormBuilder) {
-
-    this.menuService.getTituloRuta()
-    .subscribe(({titulo,icono})=>{
-      this.titulo=titulo;
-      this.icono=icono;
-    });
+  constructor(private gradoService:GradoService, private fb:FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -110,7 +102,7 @@ export class GradosComponent implements OnInit {
     this.gradoForm.controls['nombre'].setValue('');
     this.boton="Guardar";
     this.isSave= true;
-    this.titulogrado="Crear Grado";
+    this.titulogrado="Nuevo Grado";
   }
 
   guardarGrado(){

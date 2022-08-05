@@ -1,9 +1,11 @@
 <div class="row">
     <div class="col-12 col-lg-12">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <!--Encabezado-->
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
                 <!-- Bucador y boto nuevo-->
                 <div class="d-flex align-items-start mb-2 buscador">
                     <div class="input-group me-1">
@@ -15,14 +17,10 @@
                             </svg>
                         </span>
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
-                            aria-describedby="buscar-algo" 
-                            (keyup)="buscarNivel(txtTermino.value)"
-                            #txtTermino
-                            >
+                            aria-describedby="buscar-algo" (keyup)="buscarNivel(txtTermino.value)" #txtTermino>
                     </div>
-                    <button type="button" class="btn btn-outline-primary" 
-                    data-bs-toggle="modal" data-bs-target="#crear"
-                        (click)="crearNivel()">Crear</button>
+                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearNivel()"><i class="bi bi-plus-square me-2"></i>Nuevo</button>
                 </div>
 
                 <!--Alerta-->
@@ -54,19 +52,17 @@
                                 <td>{{nivel.nombre | uppercase}}</td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-outline-primary me-1"
-                                            data-bs-toggle="modal" data-bs-target="#crear" 
-                                            data-bs-placement="top" title="Editar"
+                                        <button type="button" class="btn btn-success me-1" data-bs-toggle="modal"
+                                            data-bs-target="#crear" data-bs-placement="top" title="Editar"
                                             (click)="editarNivel(nivel)">
                                             <span>
-                                                <i class="bi bi-pencil-fill"></i>
+                                                <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger"
-                                        data-bs-placement="top" title="Eliminar"
-                                            (click)="eliminarNivel(nivel)">
+                                        <button type="button" class="btn btn-danger" data-bs-placement="top"
+                                            title="Eliminar" (click)="eliminarNivel(nivel)">
                                             <span>
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-x-circle"></i>
                                             </span>
                                         </button>
                                     </div>
@@ -109,9 +105,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        #closebutton>Cancelar</button>
-                    <button type="submit" class="btn btn-primary">{{boton}}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                        <i class="bi bi-x-lg"></i>
+                        Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-hdd"></i>
+                        {{boton}}</button>
                 </div>
             </form>
         </div>

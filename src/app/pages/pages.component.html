@@ -1,25 +1,28 @@
 <app-header></app-header>
 <div class="container-fluid">
-    <div class="row justify-content-center justify-content-md-between">
-        <main class="col-12 ">
+    <div class="row justify-content-center">
+        <main class="col-12">
             <div class="mb-2">
-                <ul class="breadcrumb">
-                    <li><a [routerLink]="enlace">{{principal}}</a></li>
-                    <li>{{accion}}</li>
-                </ul>
+
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center 
+                bgcontenedor">
+                    <h4 class="m-0 text-capitalize">
+                        <i class="{{icono}}"></i>
+                        {{titulo}}
+                    </h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item me-1"><a [routerLink]="enlace"
+                                    class="text-decoration-none text-dark fw-bold text-capitalize">{{titulo}}</a>
+                            </li>
+                            <li class="breadcrumb-item text-capitalize active" 
+                            aria-current="page">{{accion}}</li>
+                        </ol>
+                    </nav>
+                </div>
+
                 <router-outlet></router-outlet>
             </div>
         </main>
     </div>
 </div>
-<!--
-        <main>
-            <div class="container container-lg mb-5">
-                <ul class="breadcrumb">
-                    <li><a [routerLink]="enlace" >{{principal}}</a></li>
-                    <li>{{accion}}</li>
-                </ul>
-                <router-outlet></router-outlet>
-            </div>
-        </main>
-    -->

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Docente } from 'src/app/models/docente.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -17,8 +16,8 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
 
   public programaciones: Programacion[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Asistencias';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public numeropaginas = 0;
@@ -29,16 +28,10 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
   public periodoseleccionado: any = "";
   public periodos: Periodo[] = [];
 
-  constructor(private menuService: MenuService,
+  constructor(
     private programacionService: ProgramacionService,
     private usuarioService: UsuarioService,
     private periodoService: PeriodoService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
 
     this.periodoService.todo().subscribe({
       next: ({ ok, periodos }) => {

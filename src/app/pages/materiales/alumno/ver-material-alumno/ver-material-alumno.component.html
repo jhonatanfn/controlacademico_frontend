@@ -2,8 +2,10 @@
     
     <div class="col-12 col-lg-3">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="card w-100">
@@ -28,8 +30,10 @@
     
     <div class="col-12 col-lg-9">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="d-flex align-items-start mb-2 buscador">
                     <div class="input-group me-1">
                         <span class="input-group-text" id="buscar-algo">
@@ -83,11 +87,11 @@
                                 </td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-outline-primary me-1"
+                                        <button type="button" class="btn btn-primary me-1"
                                             data-bs-toggle="modal" data-bs-target="#detalle"
                                             (click)="detalleMaterial(material)">
                                             <span>
-                                                <i class="bi bi-file-pdf-fill"></i>
+                                                <i class="bi bi-file-pdf"></i>
                                             </span>
                                         </button>
                                     </div>
@@ -136,7 +140,9 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Cerrar</button>
             </div>
         </div>
     </div>

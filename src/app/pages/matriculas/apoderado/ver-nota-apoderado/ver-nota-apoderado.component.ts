@@ -27,8 +27,8 @@ export class VerNotaApoderadoComponent implements OnInit {
 
   public titulo1: string = 'Buscar Notas';
   public icono1: string = 'bi bi-search';
-  public titulo2: string = 'Lista de Notas';
-  public icono2: string = 'bi bi-file-earmark-ruled';
+  public titulo2: string = 'Tabla Notas';
+  public icono2: string = 'bi bi-table';
   public titulo3: string = 'Resumen';
   public icono3: string = 'bi bi-card-checklist';
   public notaForm!: FormGroup;

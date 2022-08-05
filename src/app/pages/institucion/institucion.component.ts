@@ -11,10 +11,10 @@ import { InstitucionService } from 'src/app/services/institucion.service';
 })
 export class InstitucionComponent implements OnInit {
 
-  public titulo2: string = 'Imagen de la Institución';
+  public titulo2: string = 'Logo de la Institución';
   public icono2: string = 'bi bi-image';
-  public titulo4: string = 'Datos de la Institución';
-  public icono4: string = 'bi bi-house-door-fill';
+  public titulo4: string = 'Actualizar Datos';
+  public icono4: string = 'bi bi-pen';
   public institucion: Institucion = {
     nombre: "", direccion: "", telefono: "", email: "", img: ""
   };

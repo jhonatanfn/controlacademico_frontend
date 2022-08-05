@@ -1,13 +1,14 @@
 body{
-    background-image: url(../img/fondo.jpg);
+    background-image: url(../img/fondo.JPG);
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
 }
 .flex-container{
-    height: 665px;
     display: flex;
-    flex-direction:row-reverse;
+    height: 665px;
+    justify-content: start;
+    flex-direction:row;
 }
 
 .flex-container .caja-principal{
@@ -16,7 +17,6 @@ body{
     width: 400px;
     height: auto;
     border-radius: 2px;
-   
 }
 .flex-container .logo{
     width: 100px;

@@ -1,9 +1,10 @@
 <div class="row">
     <div class="col-12 col-lg-12">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-lg-2">
                         <div class="mb-3">
@@ -75,26 +76,26 @@
                                 <td>{{programacion.numeromat}}</td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-outline-primary me-1"
+                                        <button type="button" class="btn btn-primary me-1"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Crear"
                                             [routerLink]="['crear',programacion.id]">
                                             <span>
-                                                <i class="bi bi-file-earmark-text-fill"></i>
+                                                <i class="bi bi-plus-square"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-outline-success me-1"
+                                        <button type="button" class="btn btn-success me-1"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"
                                             [routerLink]="['editar',programacion.id]">
                                             <span>
-                                                <i class="bi bi-pencil-fill"></i>
+                                                <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
 
-                                        <button type="button" class="btn btn-outline-danger me-1"
+                                        <button type="button" class="btn btn-danger me-1"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar"
                                             [routerLink]="['eliminar',programacion.id]">
                                             <span>
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-x-circle"></i>
                                             </span>
                                         </button>
                                     </div>

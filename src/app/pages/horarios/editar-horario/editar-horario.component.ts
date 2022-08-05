@@ -9,7 +9,6 @@ import { Subarea } from 'src/app/models/subarea.model';
 import { AulaService } from 'src/app/services/aula.service';
 import { HoraService } from 'src/app/services/hora.service';
 import { HorarioService } from 'src/app/services/horario.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import { SubareaService } from 'src/app/services/subarea.service';
@@ -23,8 +22,8 @@ import Swal from 'sweetalert2';
 })
 export class EditarHorarioComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Editar Horarios';
+  public icono: string = 'bi bi-pen';
   public titulo2: string = 'Horarios';
   public icono2: string = 'bi bi-calendar-check';
   public titulo3: string = 'Resumen';
@@ -49,20 +48,13 @@ export class EditarHorarioComponent implements OnInit {
   public gradonombre: string = "";
   public seccionnombre: string = "";
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     private periodoService: PeriodoService, private aulaService: AulaService,
     private subareaService: SubareaService, private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
     private programacionService: ProgramacionService, private router: Router,
     private route: ActivatedRoute) {
 
-    this.menuService.getTituloRuta()
-      .subscribe({
-        next: ({ titulo, icono }) => {
-          this.titulo = titulo;
-          this.icono = icono;
-        }
-      });
 
     if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
       this.dias = this.horarioService.dias;

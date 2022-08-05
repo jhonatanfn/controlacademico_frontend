@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Apoderado } from 'src/app/models/apoderado.model';
 import { ApoderadoService } from 'src/app/services/apoderado.service';
-import { MenuService } from 'src/app/services/menu.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,8 +12,8 @@ export class ApoderadosComponent implements OnInit {
 
   public apoderados:Apoderado[]=[];
   public cargando:boolean= true;
-  public titulo:string='';
-  public icono:string='';
+  public titulo:string='Tabla Apoderados';
+  public icono:string='bi bi-table';
   public desde:number=0;
   public totalRegistros:number=0;
   public numeropaginas=0;
@@ -22,13 +21,7 @@ export class ApoderadosComponent implements OnInit {
   public da:boolean=true;
 
 
-  constructor(private menuService:MenuService,private apoderadoService:ApoderadoService
-   ) {
-    this.menuService.getTituloRuta()
-    .subscribe(({titulo,icono})=>{
-      this.titulo=titulo;
-      this.icono=icono;
-    });
+  constructor(private apoderadoService:ApoderadoService) {
   }
 
   ngOnInit(): void {

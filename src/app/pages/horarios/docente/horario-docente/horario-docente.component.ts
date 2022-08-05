@@ -7,19 +7,14 @@ import { Institucion } from 'src/app/models/institucion.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { Subarea } from 'src/app/models/subarea.model';
-import { AulaService } from 'src/app/services/aula.service';
 import { HoraService } from 'src/app/services/hora.service';
 import { HorarioService } from 'src/app/services/horario.service';
 import { InstitucionService } from 'src/app/services/institucion.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
-import { SubareaService } from 'src/app/services/subarea.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import Swal from 'sweetalert2';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Alumno } from 'src/app/models/alumno.model';
-import { MatriculaService } from 'src/app/services/matricula.service';
 import { Docente } from 'src/app/models/docente.model';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
@@ -30,8 +25,8 @@ import { Docente } from 'src/app/models/docente.model';
 })
 export class HorarioDocenteComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Consultar Horarios';
+  public icono: string = 'bi bi-search';
   public titulo2: string = 'Horarios';
   public icono2: string = 'bi bi-calendar-check';
   public titulo3: string = 'Resumen';
@@ -61,19 +56,11 @@ export class HorarioDocenteComponent implements OnInit {
   public alumno!: Alumno;
   public docente!: Docente;
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
-    private periodoService: PeriodoService, private aulaService: AulaService,
-    private subareaService: SubareaService, private usuarioService: UsuarioService,
+  constructor(private fb: FormBuilder,
+    private periodoService: PeriodoService,
+    private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
-    private institucionService: InstitucionService, private matriculaService: MatriculaService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe({
-        next: ({ titulo, icono }) => {
-          this.titulo = titulo;
-          this.icono = icono;
-        }
-      });
+    private institucionService: InstitucionService) {
 
     if (this.usuarioService.usuario.role.nombre === "DOCENTE") {
       this.dias = this.horarioService.dias;

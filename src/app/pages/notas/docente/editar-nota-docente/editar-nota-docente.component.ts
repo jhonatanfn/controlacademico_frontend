@@ -8,7 +8,6 @@ import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { CicloService } from 'src/app/services/ciclo.service';
 import { EvaluacionService } from 'src/app/services/evaluacion.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { NotaService } from 'src/app/services/nota.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import Swal from 'sweetalert2';
@@ -20,10 +19,10 @@ import Swal from 'sweetalert2';
 })
 export class EditarNotaDocenteComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
-  public titulo2: string = 'Alumnos';
-  public icono2: string = 'bi bi-people-fill';
+  public titulo: string = 'Editar Notas';
+  public icono: string = 'bi bi-pen';
+  public titulo2: string = 'Tabla Alumnos';
+  public icono2: string = 'bi bi-table';
   public titulo3: string = 'Resumen';
   public icono3: string = 'bi bi-card-checklist';
   public notaForm!: FormGroup;
@@ -41,15 +40,9 @@ export class EditarNotaDocenteComponent implements OnInit {
   public areanombre:string="";
   public docentenombre:string="";
 
-  constructor(private menuService: MenuService, private fb: FormBuilder, private cicloService: CicloService,
+  constructor( private fb: FormBuilder, private cicloService: CicloService,
     private evaluacionService: EvaluacionService, private notaService: NotaService,
     private route: ActivatedRoute, private programacionService:ProgramacionService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
 
     this.cicloService.listar().subscribe(({ ok, ciclos }) => {
       if (ok) {

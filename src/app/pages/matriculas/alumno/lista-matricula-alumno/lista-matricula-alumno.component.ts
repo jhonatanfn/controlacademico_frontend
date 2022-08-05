@@ -3,7 +3,6 @@ import { Alumno } from 'src/app/models/alumno.model';
 import { Matricula } from 'src/app/models/matricula.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { MatriculaService } from 'src/app/services/matricula.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
@@ -17,28 +16,21 @@ export class ListaMatriculaAlumnoComponent implements OnInit {
 
   public matriculas: Matricula[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Matriculas';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public numeropaginas = 0;
   public ds: boolean = true;
   public da: boolean = true;
   public alumno!: Alumno;
-
   public periodoseleccionado: any = "";
   public periodos: Periodo[] = [];
 
-  constructor(private menuService: MenuService,
+  constructor(
     private matriculaService: MatriculaService,
     private usuarioService: UsuarioService,
     private periodoService: PeriodoService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
 
     this.periodoService.todo().subscribe({
       next: ({ ok, periodos }) => {

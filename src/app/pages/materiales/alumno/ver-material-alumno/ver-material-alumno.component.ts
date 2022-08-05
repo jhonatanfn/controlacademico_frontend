@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Material } from 'src/app/models/material.model';
 import { MaterialService } from 'src/app/services/material.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import Swal from 'sweetalert2';
 
@@ -13,8 +12,8 @@ import Swal from 'sweetalert2';
 })
 export class VerMaterialAlumnoComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Lista Materiales';
+  public icono: string = 'bi bi-list';
   public titulo3: string = 'Detalle';
   public icono3: string = 'bi bi-card-checklist';
   public cargando: boolean = true;
@@ -34,14 +33,8 @@ export class VerMaterialAlumnoComponent implements OnInit {
   public totalmateriales: number = 0;
   public archivoAux: string = "";
 
-  constructor(private menuService: MenuService, private materialService:MaterialService,
+  constructor(private materialService:MaterialService,
     private route: ActivatedRoute,private programacionService: ProgramacionService) { 
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-    });
 
     this.programacionService.obtener(Number(this.route.snapshot.paramMap.get('id')))
       .subscribe({

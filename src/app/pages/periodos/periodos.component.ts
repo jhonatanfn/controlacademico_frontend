@@ -15,8 +15,8 @@ export class PeriodosComponent implements OnInit {
 
   public periodos: Periodo[] = [];
   public cargando: boolean = true;
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Tabla Periodos';
+  public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
   public numeropaginas = 0;
@@ -29,15 +29,7 @@ export class PeriodosComponent implements OnInit {
   public tituloperiodo: string = "";
   @ViewChild('closebutton') closebutton: any;
 
-  constructor(private menuService: MenuService,
-    private periodoService: PeriodoService,
-    private fb: FormBuilder) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
+  constructor(private periodoService: PeriodoService, private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -107,7 +99,7 @@ export class PeriodosComponent implements OnInit {
     this.periodoForm.controls['nombre'].setValue('');
     this.boton = "Guardar";
     this.isSave = true;
-    this.tituloperiodo = "Crear Periodo";
+    this.tituloperiodo = "Nuevo Periodo";
   }
 
   guardarPeriodo() {

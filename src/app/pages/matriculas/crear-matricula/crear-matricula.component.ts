@@ -29,7 +29,7 @@ export class CrearMatriculaComponent implements OnInit {
   public titulo2: string = "Programaciones";
   public icono2: string = "bi bi-table";
   public titulo3: string = "Buscar Alumno";
-  public icono3: string = "bi bi-person-fill";
+  public icono3: string = "bi bi-search";
   public matriculaForm!: FormGroup;
   public formSubmitted: boolean = false;
   public periodos: Periodo[] = [];

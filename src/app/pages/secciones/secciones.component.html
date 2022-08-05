@@ -1,26 +1,28 @@
 <div class="row">
     <div class="col-12 col-lg-12">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <!--Encabezado-->
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
                 <!-- Bucador y boto nuevo-->
                 <div class="d-flex align-items-start mb-2 buscador">
                     <div class="input-group me-1">
                         <span class="input-group-text" id="buscar-algo">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                             </svg>
                         </span>
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
-                            aria-describedby="buscar-algo" 
-                            (keyup)="buscarSeccion(txtTermino.value)"
-                            #txtTermino
-                            >
+                            aria-describedby="buscar-algo" (keyup)="buscarSeccion(txtTermino.value)" #txtTermino>
                     </div>
-                    <button type="button" class="btn btn-outline-primary" 
-                    data-bs-toggle="modal" data-bs-target="#crear"
-                    (click)="crearSeccion()">Crear</button>
+                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearSeccion()">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo</button>
                 </div>
 
                 <!--Alerta-->
@@ -52,21 +54,17 @@
                                 <td>{{seccion.nombre | uppercase}}</td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-outline-primary me-1" 
-                                        data-bs-toggle="modal" data-bs-target="#crear" 
-                                        data-bs-placement="top"
-                                            title="Editar"
-                                        (click)="editarSeccion(seccion)">
+                                        <button type="button" class="btn btn-success me-1" data-bs-toggle="modal"
+                                            data-bs-target="#crear" data-bs-placement="top" title="Editar"
+                                            (click)="editarSeccion(seccion)">
                                             <span>
-                                                <i class="bi bi-pencil-fill"></i>
+                                                <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger" 
-                                        data-bs-placement="top"
-                                            title="Eliminar"
-                                        (click)="eliminarSeccion(seccion)">
+                                        <button type="button" class="btn btn-danger" data-bs-placement="top"
+                                            title="Eliminar" (click)="eliminarSeccion(seccion)">
                                             <span>
-                                                <i class="bi bi-trash-fill"></i>
+                                                <i class="bi bi-x-circle"></i>
                                             </span>
                                         </button>
                                     </div>
@@ -76,8 +74,10 @@
                     </table>
                 </div>
                 <div class="d-flex align-items-start" *ngIf="!cargando">
-                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-secondary  btn-sm me-2">Anterior</button>
-                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-secondary  btn-sm">Siguiente</button>
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
+                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
+                        class="btn btn-secondary  btn-sm">Siguiente</button>
                 </div>
             </div>
         </div>
@@ -109,14 +109,14 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        #closebutton>Cancelar</button>
-                    <button type="submit" class="btn btn-primary">{{boton}}</button>
+                        #closebutton>
+                        <i class="bi bi-x-lg"></i>
+                        Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-hdd"></i>
+                        {{boton}}</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-
-
-

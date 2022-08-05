@@ -6,7 +6,6 @@ import { Apoderado } from 'src/app/models/apoderado.model';
 import { Tipodocumento } from 'src/app/models/tipodocumento.model';
 import { AlumnoService } from 'src/app/services/alumno.service';
 import { ApoderadoService } from 'src/app/services/apoderado.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { TipodocumentoService } from 'src/app/services/tipodocumento.service';
 import Swal from 'sweetalert2';
@@ -18,10 +17,10 @@ import Swal from 'sweetalert2';
 })
 export class EditarAlumnoComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Editar Alumno';
+  public icono: string = 'bi bi-pen';
   public titulo2: string = 'Buscar Apoderado';
-  public icono2: string = 'bi bi-person';
+  public icono2: string = 'bi bi-search';
   public tipos: Tipodocumento[] = [];
   public alumnoForm!: FormGroup;
   public formSubmitted: boolean = false;
@@ -36,18 +35,12 @@ export class EditarAlumnoComponent implements OnInit {
   public apoderado_apellidopaterno: string = "";
   public apoderado_apellidomaterno: string = "";
 
-  constructor(private menuService: MenuService,
+  constructor(
     private tipodocuementoService: TipodocumentoService,
     private fb: FormBuilder, private personaService: PersonaService,
     private alumnoService: AlumnoService,
     private apoderadoService: ApoderadoService,
     private route: ActivatedRoute) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
 
     this.tipodocuementoService.listar()
       .subscribe(({ tipodocumentos }) => {

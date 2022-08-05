@@ -1,16 +1,16 @@
 <div class="row">
     <div class="col-12 col-lg-4">
-
         <div class="row">
             <div class="col-12">
                 <div class="card contenido-principal">
-                    <div class="card-body">
+                    <div class="card-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <form [formGroup]="notaForm" (submit)="guardarNotas()">
                                     <div class="row">
-
                                         <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="cicloId" class="form-label">Ciclo</label>
@@ -45,12 +45,11 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <button type="submit" class="btn btn-primary me-2" [disabled]="datos.length==0">
-                                        <i class="bi bi-cloud-arrow-up"></i>
+                                    <button type="submit" class="d-flex btn btn-primary me-2"
+                                        [disabled]="datos.length==0">
+                                        <i class="bi bi-hdd me-2"></i>
                                         Guardar
                                     </button>
-
                                 </form>
                             </div>
                         </div>
@@ -59,8 +58,10 @@
             </div>
             <div class="col-12">
                 <div class="card contenido-principal">
-                    <div class="card-body">
+                    <div class="card-header">
                         <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card w-100">
@@ -87,8 +88,10 @@
 
     <div class="col-12 col-lg-8">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="mb-1" *ngIf="cargando">
@@ -99,7 +102,6 @@
                                 <p>Por favor espera</p>
                             </div>
                         </div>
-                        
                         <div class="table-responsive" *ngIf="!cargando">
                             <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
                                 No hay registros.
@@ -120,7 +122,6 @@
                                             {{dato.matricula?.alumno?.persona?.apellidomaterno | uppercase}}
                                             {{dato.matricula?.alumno?.persona?.nombres | uppercase}}
                                         </td>
-
                                         <td>
                                             <input (keypress)="numberOnly($event)"
                                                 oninput="if(this.value > 20 || this.value.length>2) this.value = 0;"

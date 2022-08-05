@@ -5,7 +5,6 @@ import { Nivel } from 'src/app/models/nivel.model';
 import { Seccion } from 'src/app/models/seccion.model';
 import { AulaService } from 'src/app/services/aula.service';
 import { GradoService } from 'src/app/services/grado.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { NivelService } from 'src/app/services/nivel.service';
 import { SeccionService } from 'src/app/services/seccion.service';
 import Swal from 'sweetalert2';
@@ -17,23 +16,17 @@ import Swal from 'sweetalert2';
 })
 export class CrearAulaComponent implements OnInit {
 
-  public titulo: string = "";
-  public icono: string = "";
+  public titulo: string = "Crear Aula";
+  public icono: string = "bi bi-plus-square";
   public niveles: Nivel[] = [];
   public grados: Grado[] = [];
   public secciones: Seccion[] = [];
   public aulaForm!: FormGroup;
   public formSubmitted: boolean = false;
 
-  constructor(private menuService: MenuService, private nivelService: NivelService,
+  constructor(private nivelService: NivelService,
     private gradoService: GradoService, private seccionService: SeccionService,
     private fb: FormBuilder, private aulaService: AulaService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
 
     this.nivelService.todo()
       .subscribe(({ niveles }) => {

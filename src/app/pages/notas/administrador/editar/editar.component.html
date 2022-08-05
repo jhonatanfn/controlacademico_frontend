@@ -1,25 +1,24 @@
 <div class="row">
     <div class="col-12 col-lg-4">
-
         <div class="row">
             <div class="col-12">
                 <div class="card contenido-principal">
-                    <div class="card-body">
+                    <div class="card-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <form [formGroup]="notaForm">
                                     <div class="row">
-                                    
                                         <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="cicloId" class="form-label">Ciclo</label>
                                                 <select class="form-select" aria-label="Default select example"
                                                     formControlName="cicloId" (change)="buscarMatriculas()">
                                                     <option value="">Seleccionar ciclo</option>
-                                                    <option *ngFor="let ciclo of ciclos" 
-                                                    [value]="ciclo.id">
-                                                        {{ciclo.nombre}} 
+                                                    <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
+                                                        {{ciclo.nombre}}
                                                     </option>
                                                 </select>
                                                 <div *ngIf="campoRequerido('cicloId')" id="periodoId"
@@ -34,9 +33,9 @@
                                                 <select class="form-select" aria-label="Default select example"
                                                     formControlName="evaluacionId" (change)="buscarMatriculas()">
                                                     <option value="">Seleccionar evaluacion</option>
-                                                    <option *ngFor="let evaluacion of evaluaciones" 
-                                                    [value]="evaluacion.id">
-                                                        {{evaluacion.nombre}} 
+                                                    <option *ngFor="let evaluacion of evaluaciones"
+                                                        [value]="evaluacion.id">
+                                                        {{evaluacion.nombre}}
                                                     </option>
                                                 </select>
                                                 <div *ngIf="campoRequerido('evaluacionId')" id="evaluacionId"
@@ -48,27 +47,26 @@
                                         <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="fechaIn" class="form-label">Fecha</label>
-                                                <input type="date" class="form-control"
-                                                formControlName="fecha"
-                                                (change)="buscarMatriculas()">
+                                                <input type="date" class="form-control" formControlName="fecha"
+                                                    (change)="buscarMatriculas()">
                                                 <div *ngIf="campoRequerido('fecha')" id="fecha"
                                                     class="form-text text-danger">
                                                     La fecha es requerida
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
-                                    
+
                                     <!--
                                     <button type="submit" class="btn btn-primary me-2">Buscar</button>
                                     -->
-                                    <button type="button" class="btn btn-primary me-2" 
-                                    (click)="actualizarNotas()" [disabled]="datos.length==0">
-                                    <i class="bi bi-cloud-arrow-up"></i>
-                                    Actualizar
+                                    <button type="button" class="btn btn-primary me-2" (click)="actualizarNotas()"
+                                        [disabled]="datos.length==0">
+                                        <i class="bi bi-hdd"></i>
+                                        Actualizar
                                     </button>
-                                    
+
                                 </form>
                             </div>
                         </div>
@@ -76,10 +74,12 @@
                 </div>
             </div>
             <div class="col-12">
-                
+
                 <div class="card contenido-principal">
-                    <div class="card-body">
+                    <div class="card-header">
                         <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card w-100">
@@ -100,20 +100,19 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
-
-
     </div>
 
     <div class="col-12 col-lg-8">
         <div class="card contenido-principal">
-            <div class="card-body">
+            <div class="card-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                         <div class="mb-1" *ngIf="cargando">
+                        <div class="mb-1" *ngIf="cargando">
                             <div class="alert alert-info text-center" role="alert">
                                 <h6 class="alert-heading">Cargando...</h6>
                                 <div class="spinner-border" role="status">
@@ -138,19 +137,16 @@
                                 <tbody>
                                     <tr *ngFor="let dato of datos; let i= index">
                                         <th>{{i+1}}</th>
-                                        <td>{{dato.matricula?.alumno?.persona?.apellidopaterno | uppercase}} 
+                                        <td>{{dato.matricula?.alumno?.persona?.apellidopaterno | uppercase}}
                                             {{dato.matricula?.alumno?.persona?.apellidomaterno | uppercase}}
                                             {{dato.matricula?.alumno?.persona?.nombres | uppercase}}
                                         </td>
                                         <td>{{dato.evaluacion.nombre | uppercase}}</td>
                                         <td>{{dato.fecha | date:'dd/MM/yyyy' }}</td>
                                         <td>
-                                            <input 
-                                            (keypress)="numberOnly($event)"
-                                            oninput="if(this.value > 20 || this.value.length>2) this.value = 0;"
-                                            type="text" 
-                                            [(ngModel)]="dato.valor"  
-                                            class="form-control">    
+                                            <input (keypress)="numberOnly($event)"
+                                                oninput="if(this.value > 20 || this.value.length>2) this.value = 0;"
+                                                type="text" [(ngModel)]="dato.valor" class="form-control">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -162,5 +158,3 @@
         </div>
     </div>
 </div>
-
-

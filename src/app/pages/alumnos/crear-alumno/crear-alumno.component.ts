@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Alumno } from 'src/app/models/alumno.model';
 import { Apoderado } from 'src/app/models/apoderado.model';
 import { Tipodocumento } from 'src/app/models/tipodocumento.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { AlumnoService } from 'src/app/services/alumno.service';
 import { ApoderadoService } from 'src/app/services/apoderado.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { TipodocumentoService } from 'src/app/services/tipodocumento.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -20,10 +18,10 @@ import Swal from 'sweetalert2';
 })
 export class CrearAlumnoComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
+  public titulo: string = 'Nuevo Alumno';
+  public icono: string = 'bi bi-plus-square';
   public titulo2: string = 'Buscar Apoderado';
-  public icono2: string = 'bi bi-person';
+  public icono2: string = 'bi bi-search';
   public tipos: Tipodocumento[] = [];
   public alumnoForm!: FormGroup;
   public formSubmitted: boolean = false;
@@ -37,21 +35,15 @@ export class CrearAlumnoComponent implements OnInit {
   public apoderado_nombres: string = "";
   public apoderado_apellidopaterno: string = "";
   public apoderado_apellidomaterno: string = "";
-  public usuarios:Usuario[]=[];
-  public repetido:boolean=  false;
+  public usuarios: Usuario[] = [];
+  public repetido: boolean = false;
 
-  constructor(private menuService: MenuService,
+  constructor(
     private tipodocuementoService: TipodocumentoService,
     private fb: FormBuilder, private personaService: PersonaService,
     private alumnoService: AlumnoService,
     private apoderadoService: ApoderadoService,
-    private router:Router,private usuarioService:UsuarioService) {
-
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
+    private router: Router, private usuarioService: UsuarioService) {
 
     this.tipodocuementoService.listar()
       .subscribe(({ tipodocumentos }) => {
@@ -76,12 +68,12 @@ export class CrearAlumnoComponent implements OnInit {
     });
 
     this.usuarioService.todo().subscribe({
-      next: ({ok,usuarios})=>{
-        if(ok){
-          this.usuarios= usuarios;
+      next: ({ ok, usuarios }) => {
+        if (ok) {
+          this.usuarios = usuarios;
         }
       },
-      error: (error)=>{
+      error: (error) => {
         Swal.fire({
           position: 'top-end',
           icon: 'error',
@@ -149,8 +141,8 @@ export class CrearAlumnoComponent implements OnInit {
     }
   }
 
-  campoEmail(campo: string){
-   
+  campoEmail(campo: string) {
+
     if (this.alumnoForm.get(campo)?.getError('pattern') && this.formSubmitted) {
       return true;
     } else {
@@ -158,25 +150,25 @@ export class CrearAlumnoComponent implements OnInit {
     }
   }
 
-  emailRepetido(campo:string){
-    
-    if(this.alumnoForm.get('emailusuario')?.value ===""){
+  emailRepetido(campo: string) {
+
+    if (this.alumnoForm.get('emailusuario')?.value === "") {
       return;
     }
-    this.repetido= false;
-    if(!this.alumnoForm.get(campo)?.getError('required') && 
-      !this.alumnoForm.get(campo)?.getError('pattern') && this.formSubmitted){
+    this.repetido = false;
+    if (!this.alumnoForm.get(campo)?.getError('required') &&
+      !this.alumnoForm.get(campo)?.getError('pattern') && this.formSubmitted) {
 
-        this.usuarios.forEach(usuario=>{
-          if(usuario.email===this.alumnoForm.get('emailusuario')?.value){
-            this.repetido=true;
-          }
-        });
-      }
-      if(this.repetido){
-        return this.repetido; 
-      }
+      this.usuarios.forEach(usuario => {
+        if (usuario.email === this.alumnoForm.get('emailusuario')?.value) {
+          this.repetido = true;
+        }
+      });
+    }
+    if (this.repetido) {
       return this.repetido;
+    }
+    return this.repetido;
   }
 
   apoderadoSeleccionado() {
@@ -193,10 +185,10 @@ export class CrearAlumnoComponent implements OnInit {
       this.alumnoForm.controls['apoderadoId'].setValue('');
     }
   }
-  
+
   guardarAlumno() {
     this.formSubmitted = true;
-    if (this.alumnoForm.valid  /* && !this.repetido */ ) {
+    if (this.alumnoForm.valid  /* && !this.repetido */) {
       Swal.fire({
         title: 'Guardar',
         text: "¿Desea crear el alumno?",
@@ -211,11 +203,11 @@ export class CrearAlumnoComponent implements OnInit {
           this.personaService.crear(this.alumnoForm.value)
             .subscribe(({ ok, persona }) => {
               if (ok) {
-                let alumnoObj:any={
-                  personaId:persona.id,
+                let alumnoObj: any = {
+                  personaId: persona.id,
                   nombreusuario: (this.alumnoForm.get('nombres')?.value).toLowerCase(),
                   //emailusuario: this.alumnoForm.get('emailusuario')?.value,
-                  apoderadoId:this.alumnoForm.get('apoderadoId')?.value
+                  apoderadoId: this.alumnoForm.get('apoderadoId')?.value
                 }
                 this.alumnoService.crear(alumnoObj)
                   .subscribe({
