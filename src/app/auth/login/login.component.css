@@ -19,6 +19,14 @@
     width: 170px;
     height: 170px;
 }
+.w200{
+    width: 10rem;
+}
+
+.rent{
+    display: block;
+    width: 50rem;
+}
 
 /* --- MEDIAQUERIES ---  */
 

@@ -57,6 +57,16 @@ export class AulaService {
     return this.http.get<crudAula>(base,this.headers);
   }
 
+  existeAula(nivelId:number,gradoId:number,seccionId:number){
+    const base= `${base_url}/aulas/existeaula/${nivelId}/${gradoId}/${seccionId}`;
+    return this.http.get<crudAula>(base,this.headers);
+  }
+
+  existeAulaEditar(nivelId:number,gradoId:number,seccionId:number, idAula:number){
+    const base= `${base_url}/aulas/existeaulaeditar/${nivelId}/${gradoId}/${seccionId}/${idAula}`;
+    return this.http.get<crudAula>(base,this.headers);
+  }
+
   buscarPorNombre(termino:string){
     const base=`${base_url}/aulas/busqueda/${termino}`;
     return this.http.get<any[]>(base,this.headers)
@@ -78,7 +88,7 @@ export class AulaService {
   }
   private transformar(busquedas:any[]):Aula[]{
     return busquedas.map(
-      aula=>new Aula(aula.nombre,aula.nivel,aula.grado,aula.seccion,aula.id)
+      aula=>new Aula(aula.nombre,aula.nivel,aula.grado,aula.seccion,aula.tipovalor,aula.id)
     );
   }
 

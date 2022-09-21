@@ -12,7 +12,6 @@ import { AulaService } from 'src/app/services/aula.service';
 import { DocenteService } from 'src/app/services/docente.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
-import { SubareaService } from 'src/app/services/subarea.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -22,28 +21,25 @@ import Swal from 'sweetalert2';
 })
 export class EditarProgramacionComponent implements OnInit, AfterContentChecked {
 
-  public titulo1: string = "Detalle Programación";
+  public titulo1: string = "Detalle Asignación";
   public icono1: string = "bi bi-plus-square-fill";
-  public titulo2: string = "Editar Programación";
+  public titulo2: string = "Editar Asignación";
   public icono2: string = "bi bi-pen";
   public programacionForm!: FormGroup;
   public formSubmitted: boolean = false;
-
   public periodos: Periodo[] = [];
   public areas: Area[] = [];
-  public subareas: Subarea[] = [];
   public docentes: Docente[] = [];
   public programaciones: Programacion[] = [];
   public aulas: Aula[] = [];
-
   public existe: boolean = false;
-  public numeromat:number=0;
+  public numeromat: number = 0;
+  public programacionideditar: number = 0;
 
   constructor(private fb: FormBuilder,
     private programacionService: ProgramacionService,
     private periodoService: PeriodoService,
     private areaService: AreaService,
-    private subareaService: SubareaService,
     private docenteService: DocenteService,
     private aulaService: AulaService,
     private route: ActivatedRoute,
@@ -64,24 +60,17 @@ export class EditarProgramacionComponent implements OnInit, AfterContentChecked 
 
     this.programacionService.obtener(Number(this.route.snapshot.paramMap.get('id')))
       .subscribe(({ ok, programacion }) => {
-
         if (ok) {
           this.programacionForm.controls['periodoId'].setValue(programacion.periodoId);
           this.programacionForm.controls['aulaId'].setValue(programacion.aulaId);
-          this.programacionForm.controls['areaId'].setValue(programacion.subarea?.area.id);
-          this.programacionForm.controls['subareaId'].setValue(programacion.subareaId);
+          this.programacionForm.controls['areaId'].setValue(programacion.area?.id);
           this.programacionForm.controls['docenteId'].setValue(programacion.docenteId);
-          this.programacionForm.controls['id'].setValue(programacion.id);
           this.programacionForm.controls['numeromaxmat'].setValue(programacion.numeromaxmat);
           this.programacionForm.controls['numeromat'].setValue(programacion.numeromat);
-          this.numeromat= Number(programacion.numeromat);
+          this.programacionForm.controls['id'].setValue(programacion.id);
+          this.numeromat = Number(programacion.numeromat);
+          this.programacionideditar = Number(programacion.id);
         }
-        const id = this.programacionForm.get('areaId')?.value;
-        this.subareas = [];
-        this.subareaService.porArea(id).subscribe(({ subareas }) => {
-          this.subareas = subareas;
-        });
-
       });
   }
 
@@ -90,30 +79,15 @@ export class EditarProgramacionComponent implements OnInit, AfterContentChecked 
       periodoId: ['', Validators.required],
       aulaId: ['', Validators.required],
       areaId: ['', Validators.required],
-      subareaId: ['', Validators.required],
       docenteId: ['', Validators.required],
       numeromaxmat: ['', Validators.required],
       numeromat: [''],
       id: ['']
     });
   }
-
   ngAfterContentChecked(): void {
     this.changeDedectionRef.detectChanges();
   }
-
-  listarSubareas() {
-    const id = this.programacionForm.get('areaId')?.value;
-    this.subareas = [];
-    this.programacionForm.controls['subareaId'].setValue('');
-    if (id === "") {
-      return;
-    }
-    this.subareaService.porArea(id).subscribe(({ subareas }) => {
-      this.subareas = subareas;
-    });
-  }
-
   campoRequerido(campo: string) {
     if (this.programacionForm.get(campo)?.getError('required') && this.formSubmitted) {
       return true;
@@ -122,9 +96,9 @@ export class EditarProgramacionComponent implements OnInit, AfterContentChecked 
     }
   }
   campoNumeros() {
-    if(this.programacionForm.get('numeromaxmat')?.value>=0){
+    if (this.programacionForm.get('numeromaxmat')?.value >= 0) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
@@ -143,103 +117,65 @@ export class EditarProgramacionComponent implements OnInit, AfterContentChecked 
   }
 
   actualizar() {
+
     this.formSubmitted = true;
-
-    if (this.programacionForm.valid && !this.numeroPermitido()) {
-      this.programacionService.obtener(Number(this.route.snapshot.paramMap.get('id')))
-        .subscribe({
-          next: ({ ok, programacion }) => {
-            if (ok) {
-              if (programacion.periodoId === Number(this.programacionForm.get('periodoId')?.value) &&
-                programacion.aulaId === Number(this.programacionForm.get('aulaId')?.value) &&
-                programacion.subareaId === Number(this.programacionForm.get('subareaId')?.value)) {
-                //actualizar registro
-                Swal.fire({
-                  title: 'Actualizar',
-                  text: "¿Desea actualizar la programación?",
-                  icon: 'question',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  cancelButtonText: 'Cancelar',
-                  confirmButtonText: 'Guardar'
-                }).then((result) => {
-                  if (result.isConfirmed) {
-
-                    this.programacionService.actualizar(this.programacionForm.get('id')?.value,
-                      this.programacionForm.value)
-                      .subscribe(({ ok, msg }) => {
-                        if (ok) {
-                          Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: msg,
-                            showConfirmButton: false,
-                            timer: 1000
-                          })
-                        }
-                      });
-                  }
-                })
-              } else {
-                this.programacionService.existeProgramacion(Number(this.programacionForm.get('periodoId')?.value),
-                  Number(this.programacionForm.get('aulaId')?.value),
-                  Number(this.programacionForm.get('subareaId')?.value))
+    if (this.programacionForm.valid) {
+      this.programacionService.existeProgramacionEditar(
+        Number(this.programacionForm.get('periodoId')?.value),
+        Number(this.programacionForm.get('aulaId')?.value),
+        Number(this.programacionForm.get('areaId')?.value),
+        this.programacionideditar
+      ).subscribe({
+        next: ({ ok, msg }) => {
+          if (ok) {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'info',
+              title: msg,
+              showConfirmButton: false,
+              timer: 1000
+            });
+          } else {
+            Swal.fire({
+              title: 'Actualizar',
+              text: "¿Desea actualizar la asignación?",
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Actualizar'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.programacionService.actualizar(this.programacionForm.get('id')?.value,
+                  this.programacionForm.value)
                   .subscribe({
                     next: ({ ok, msg }) => {
-                      if (!ok) {
-                        //actualizar registro
-                        Swal.fire({
-                          title: 'Actualizar',
-                          text: "¿Desea actualizar la programación?",
-                          icon: 'question',
-                          showCancelButton: true,
-                          confirmButtonColor: '#3085d6',
-                          cancelButtonColor: '#d33',
-                          cancelButtonText: 'Cancelar',
-                          confirmButtonText: 'Guardar'
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-
-                            this.programacionService.actualizar(this.programacionForm.get('id')?.value,
-                              this.programacionForm.value)
-                              .subscribe(({ ok, msg }) => {
-                                if (ok) {
-                                  Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: msg,
-                                    showConfirmButton: false,
-                                    timer: 1000
-                                  })
-                                }
-                              });
-                          }
-                        })
-                      } else {
+                      if (ok) {
                         Swal.fire({
                           position: 'top-end',
                           icon: 'success',
                           title: msg,
                           showConfirmButton: false,
                           timer: 1000
-                        })
+                        });
                       }
+                    },
+                    error: (error)=>{
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: error.error.msg,
+                        showConfirmButton: false,
+                        timer: 1000
+                      });
                     }
-                  })
+                  });
               }
-            }
-          },
-          error: (error) => {
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: "Se produjo un error. Hable con el administrador",
-              showConfirmButton: false,
-              timer: 1000
-            })
+            });
           }
-        })
+        }
+      })
     }
   }
 

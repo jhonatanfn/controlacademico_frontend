@@ -94,11 +94,11 @@ export class NotasComponent implements OnInit {
   }
 
   buscarNotas(nombre: string) {
-
+    
     if (nombre.length == 0) {
       this.listarProgramaciones();
     } else {
-      this.programacionService.buscarPorDocente(nombre).subscribe((resp: Programacion[]) => {
+      this.programacionService.busqueda(nombre).subscribe((resp: Programacion[]) => {
         this.programaciones = resp;
         this.totalRegistros = resp.length;
         this.numeropaginas = Math.ceil(this.totalRegistros / 5);
@@ -107,5 +107,4 @@ export class NotasComponent implements OnInit {
       });
     }
   }
-
 }

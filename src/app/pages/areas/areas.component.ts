@@ -20,19 +20,18 @@ export class AreasComponent implements OnInit {
   public numeropaginas = 0;
   public ds: boolean = true;
   public da: boolean = true;
-
   public areaForm!: FormGroup;
   public formSubmitted: boolean = false;
   public boton: string = "";
   public isSave: boolean = true;
   public tituloarea: string = "";
-
   public imagenSubir!: File;
   public imgTemp: any = null;
   public area: Area = {
     nombre: "",
     img: ""
   };
+  public nombrerepetido:boolean= false;
 
   @ViewChild('closebutton') closebutton: any;
   @ViewChild('closebutton2') closebutton2: any;
@@ -43,8 +42,8 @@ export class AreasComponent implements OnInit {
   ngOnInit(): void {
     this.listarAreas();
     this.areaForm = this.fb.group({
-      areaId: [''],
-      nombre: ['', [Validators.required, Validators.maxLength(30)]]
+      nombre: ['', [Validators.required, Validators.maxLength(50)]],
+      id: [''],
     });
   }
 
@@ -107,74 +106,121 @@ export class AreasComponent implements OnInit {
   crearArea() {
     this.formSubmitted = false;
     this.areaForm.controls['nombre'].setValue('');
+    this.areaForm.controls['id'].setValue('');
     this.boton = "Guardar";
     this.isSave = true;
     this.tituloarea = "Crear Area";
+    this.nombrerepetido= false;
   }
 
   guardarArea() {
-
     this.formSubmitted = true;
+    this.nombrerepetido= false;
     if (this.areaForm.valid) {
       if (this.isSave) {
-        this.areaService.crear(this.areaForm.value)
-          .subscribe({
-            next: ({ ok, msg }) => {
-              if (ok) {
-                this.closebutton.nativeElement.click();
-                this.listarAreas();
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'success',
-                  title: msg,
-                  showConfirmButton: false,
-                  timer: 1000
-                })
-              }
-            },
-            error: (error) => {
+        this.areaService.existeNombreArea((this.areaForm.get('nombre')?.value).trim()).subscribe({
+          next: ({ok})=>{
+            if(ok){
+              this.nombrerepetido= true;
+            }else{
               Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: "Se produjo un error. Hable con el administrador",
-                showConfirmButton: false,
-                timer: 1500
-              })
+                title: 'Guardar',
+                text: "¿Desea crear el area?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Guardar'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.areaService.crear(this.areaForm.value)
+                    .subscribe({
+                      next: ({ ok, msg }) => {
+                        if (ok) {
+                          this.closebutton.nativeElement.click();
+                          this.listarAreas();
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: msg,
+                            showConfirmButton: false,
+                            timer: 1000
+                          });
+                        }
+                      },
+                      error: (error) => {
+                        Swal.fire({
+                          position: 'top-end',
+                          icon: 'error',
+                          title: "Se produjo un error. Hable con el administrador",
+                          showConfirmButton: false,
+                          timer: 1500
+                        })
+                      }
+                    });
+                }
+              });
             }
-          })
+          }
+        });
+
       } else {
-        this.areaService.actualizar(this.areaForm.get('areaId')?.value, this.areaForm.value)
-          .subscribe({
-            next: ({ ok, msg }) => {
-              if (ok) {
-                this.closebutton.nativeElement.click();
-                this.listarAreas();
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'success',
-                  title: msg,
-                  showConfirmButton: false,
-                  timer: 1000
-                })
-              }
-            },
-            error: (error) => {
+
+        this.areaService.existeNombreAreaEditar(this.areaForm.get('id')?.value,
+        (this.areaForm.get('nombre')?.value).trim()).subscribe({
+          next: ({ok})=>{
+            if(ok){
+              this.nombrerepetido= true;
+            }else{
               Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: "Se produjo un error. Hable con el administrador",
-                showConfirmButton: false,
-                timer: 1000
-              })
+                title: 'Actualizar',
+                text: "¿Desea actualizar el area?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Actualizar'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.areaService.actualizar(this.areaForm.get('id')?.value, this.areaForm.value)
+                    .subscribe({
+                      next: ({ ok, msg }) => {
+                        if (ok) {
+                          this.closebutton.nativeElement.click();
+                          this.listarAreas();
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: msg,
+                            showConfirmButton: false,
+                            timer: 1000
+                          });
+                        }
+                      },
+                      error: (error) => {
+                        Swal.fire({
+                          position: 'top-end',
+                          icon: 'error',
+                          title: "Se produjo un error. Hable con el administrador",
+                          showConfirmButton: false,
+                          timer: 1000
+                        })
+                      }
+                    });
+                }
+              });
             }
-          })
+          }
+        });
       }
     }
   }
 
   eliminarArea(area: Area) {
 
-    this.areaService.tieneSubareas(area.id!)
+    this.areaService.tieneCompetencias(area.id!)
       .subscribe({
         next: ({ ok, msg }) => {
           if (ok) {
@@ -218,11 +264,12 @@ export class AreasComponent implements OnInit {
   }
 
   editarArea(area: Area) {
-    this.areaForm.controls['areaId'].setValue(area.id);
+    this.areaForm.controls['id'].setValue(area.id);
     this.areaForm.controls['nombre'].setValue(area.nombre.toUpperCase());
     this.boton = "Actualizar";
     this.isSave = false;
     this.tituloarea = "Editar Area";
+    this.nombrerepetido= false;
   }
 
   buscarArea(termino: string) {

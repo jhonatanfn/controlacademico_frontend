@@ -70,5 +70,13 @@ export class SeccionService {
     const base= `${base_url}/secciones/tieneaulas/${seccionId}`;
     return this.http.get<crudSeccion>(base,this.headers);
   }
+  existeNombreSeccion(seccionNombre:string){
+    const base= `${base_url}/secciones/nombrerepetido/${seccionNombre}`;
+    return this.http.get<crudSeccion>(base,this.headers);
+  }
+  existeNombreSeccionEditar(seccionId:number,seccionNombre:string){
+    const base= `${base_url}/secciones/nombrerepetidoeditar/${seccionId}/${seccionNombre}`;
+    return this.http.get<crudSeccion>(base,this.headers);
+  }
 
 }

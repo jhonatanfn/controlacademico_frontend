@@ -45,7 +45,9 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="w70">N°</th>
-                                <th scope="col">Nombre</th>
+                                <th scope="col" class="w500">Nombre</th>
+                                <th scope="col">Fecha Inicial</th>
+                                <th scope="col">Fecha Final</th>
                                 <th scope="col" class="w100"></th>
                             </tr>
                         </thead>
@@ -53,6 +55,8 @@
                             <tr *ngFor="let periodo of periodos; let i=index">
                                 <th>{{desde+i+1}}</th>
                                 <td>{{periodo.nombre | uppercase}}</td>
+                                <td>{{periodo.fechainicial | date:'dd/MM/yyyy'}}</td>
+                                <td>{{periodo.fechafinal | date:'dd/MM/yyyy'}}</td>
                                 <td>
                                     <div class="btn-group text-center">
                                         <button type="button" class="btn btn-success me-1" data-bs-toggle="modal"
@@ -106,6 +110,26 @@
                             El campo nombre debe tener como maximo 30 caracteres
                         </div>
                     </div>
+
+                    <div class="mb-3">
+                        <label for="fechainicial" class="form-label">Fecha Inicial</label>
+                        <input type="date" class="form-control" formControlName="fechainicial">
+                        <div *ngIf="campoRequerido('fechainicial')" id="fechainicial"
+                            class="form-text text-danger">
+                            La Fecha Inicial es requerida
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fechafinal" class="form-label">Fecha Final</label>
+                        <input type="date" class="form-control" formControlName="fechafinal">
+                        <div *ngIf="campoRequerido('fechafinal')" id="fechafinal"
+                            class="form-text text-danger">
+                            La Fecha Final es requerida
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>

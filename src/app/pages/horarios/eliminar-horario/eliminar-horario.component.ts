@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Area } from 'src/app/models/area.model';
 import { Aula } from 'src/app/models/aula.model';
 import { Hora } from 'src/app/models/hora.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { Subarea } from 'src/app/models/subarea.model';
+import { AreaService } from 'src/app/services/area.service';
 import { AulaService } from 'src/app/services/aula.service';
 import { HoraService } from 'src/app/services/hora.service';
 import { HorarioService } from 'src/app/services/horario.service';
@@ -30,7 +32,7 @@ export class EliminarHorarioComponent implements OnInit {
   public horarioForm!: FormGroup;
   public periodos: Periodo[] = [];
   public aulas: Aula[] = [];
-  public subareas: Subarea[] = [];
+  public areas: Area[] = [];
   public dias: any[] = [];
   public horas: Hora[] = [];
   public formSubmitted: boolean = false;
@@ -49,7 +51,7 @@ export class EliminarHorarioComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private periodoService: PeriodoService, private aulaService: AulaService,
-    private subareaService: SubareaService, private usuarioService: UsuarioService,
+    private areaService: AreaService, private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
     private router: Router, private route: ActivatedRoute) {
 
@@ -69,10 +71,10 @@ export class EliminarHorarioComponent implements OnInit {
           }
         }
       });
-      this.subareaService.todo().subscribe({
-        next: ({ ok, subareas }) => {
+      this.areaService.todo().subscribe({
+        next: ({ ok, areas }) => {
           if (ok) {
-            this.subareas = subareas;
+            this.areas = areas;
           }
         }
       });
@@ -136,7 +138,7 @@ export class EliminarHorarioComponent implements OnInit {
                     id: resultado.id,
                     dia: objd,
                     hora: objh,
-                    subareaId: resultado.subareaId,
+                    areaId: resultado.areaId,
                     programacionId: resultado.programacionId,
                     programacion: resultado.programacion
                   }
@@ -168,7 +170,7 @@ export class EliminarHorarioComponent implements OnInit {
   obtenerObjetoHorario(vector: any[], dia: string, hora: number) {
     let retorno = {
       id: 0,
-      subareaId: 0,
+      areaId: 0,
       programacionId: 0,
       programacion: ""
     };
@@ -176,7 +178,7 @@ export class EliminarHorarioComponent implements OnInit {
       if (item.dia === dia && item.horaId === hora) {
         retorno = {
           id: item.id,
-          subareaId: item.programacion.subarea.id,
+          areaId: item.programacion.area.id,
           programacionId: item.programacion.id,
           programacion: item.programacion
         }

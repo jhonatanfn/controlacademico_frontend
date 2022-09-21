@@ -29,8 +29,7 @@ export class IsProgramacionGuard implements CanActivate {
         })
       }
     });
-    return true;
-    
+    return true; 
       
   }
 

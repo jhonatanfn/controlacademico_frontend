@@ -1,0 +1,227 @@
+<div class="row">
+    <div class="col-12 col-lg-4 mb-3 mb-lg-0">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo1" [icono]="icono1"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <form [formGroup]="notaForm" (submit)="buscarNotas()">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="cicloId" class="form-label">Ciclo</label>
+                                                <select class="form-select" aria-label="Seleccionar Ciclo"
+                                                    formControlName="cicloId">
+                                                    <option value="">Seleccionar ciclo</option>
+                                                    <option *ngFor="let ciclo of ciclos"
+                                                        [value]="[ciclo.id,ciclo.nombre]">
+                                                        {{ciclo.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('cicloId')" id="periodoId"
+                                                    class="form-text text-danger">
+                                                    La ciclo es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-12">
+                                            <div class="mb-3">
+                                                <label for="evaluacionId" class="form-label">Evaluacion</label>
+                                                <select class="form-select" aria-label="Seleccionar Evaluacion"
+                                                    formControlName="evaluacionId">
+                                                    <option value="">Seleccionar evaluacion</option>
+                                                    <option *ngFor="let evaluacion of evaluaciones"
+                                                        [value]="[evaluacion.id,evaluacion.nombre]">
+                                                        {{evaluacion.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('evaluacionId')" id="evaluacionId"
+                                                    class="form-text text-danger">
+                                                    La evaluacion es requerida
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary me-2">
+                                        <i class="bi bi-search"></i>
+                                        Buscar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="notas.length>0">
+                <div class="card card-color-primary contenido-principal">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-primary" role="alert" *ngIf="notas.length==0">
+                                    No hay resumen.
+                                </div>
+                                <div class="card w-100" *ngIf="notas.length>0">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Periodo:</h6>
+                                        <p class="card-text"> {{ periodonombre }}</p>
+                                        <h6 class="card-title">Aula:</h6>
+                                        <p class="card-text">{{ aulanombre }}</p>
+                                        <h6 class="card-title">Area:</h6>
+                                        <p class="card-text"> {{ areanombre }}</p>
+                                        <h6 class="card-title">Docente:</h6>
+                                        <p class="card-text"> {{ docentenombre }}</p>
+                                        <h6 class="card-title">Alumno:</h6>
+                                        <p class="card-text"> {{ alumnonombre }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-8">
+
+        <div class="row">
+            <div class="col-12 mb-3">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <div class="d-flex flex-column flex-sm-row justify-content-sm-between gap-3">
+                            <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                            <div class="d-flex justify-content-start gap-2" *ngIf="notas.length>0">
+                                <button type="button" class="btn btn-primary btn-sm" (click)="generatePDF('OPEN')"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Imprimir PDF">
+                                    <i class="bi bi-printer"></i>
+                                    Imprimir
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="generatePDF('DOWNLOAD')"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Descargar PDF">
+                                    <i class="bi bi-arrow-down-circle"></i>
+                                    Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="mb-1" *ngIf="cargando">
+                                    <div class="alert alert-info text-center" role="alert">
+                                        <h6 class="alert-heading">Cargando...</h6>
+                                        <div class="spinner-border" role="status">
+                                        </div>
+                                        <p>Por favor espera</p>
+                                    </div>
+                                </div>
+                                <div class="table-responsive" *ngIf="!cargando">
+                                    <div class="alert alert-primary" role="alert" *ngIf="notas.length==0">
+                                        No hay registros.
+                                    </div>
+                                    <table class="table table-bordered table-hover" *ngIf="notas.length>0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">N°</th>
+                                                <th scope="col">Area</th>
+                                                <th scope="col">Competencia</th>
+                                                <th scope="col">Ciclo</th>
+                                                <th scope="col">Evaluación</th>
+                                                <th scope="col">Fecha</th>
+                                                <th scope="col" class="w70">Nota</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let nota of notas; let i=index">
+                                                <th>{{ i+1 }}</th>
+                                                <td>{{nota.competencia?.area?.nombre}}</td>
+                                                <td>{{nota.competencia?.descripcion}}</td>
+                                                <td>{{nota.ciclo?.nombre}}</td>
+                                                <td>{{nota.evaluacion?.nombre}}</td>
+                                                <td>{{nota.fecha | date:'dd/MM/yyyy'}}</td>
+                                                <td>{{nota.valor}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12" *ngIf="notas.length>0">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <div class="d-flex flex-column flex-sm-row justify-content-sm-between gap-3">
+                            <app-headertable [titulo]="titulo4" [icono]="icono4"></app-headertable>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover" *ngIf="tipovalor==1">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">N°</th>
+                                                <th scope="col">Escala</th>
+                                                <th scope="col">Total</th>
+                                                <th scope="col">Porcentaje</th>
+                                                <th scope="col">Situacion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of literal; let i=index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.rango.letra}}</td>
+                                                <td>{{item.total}}</td>
+                                                <td>{{item.porcentaje}} %</td>
+                                                <td>
+                                                    <span class="badge rounded-pill bg-{{item.rango.alias}}">
+                                                        {{item.rango.situacion}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-bordered table-hover" *ngIf="tipovalor==2">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">N°</th>
+                                                <th scope="col">Rango</th>
+                                                <th scope="col">Total</th>
+                                                <th scope="col">Porcentaje</th>
+                                                <th scope="col">Situacion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of vigesimal; let i=index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.rango.inicio}} - {{item.rango.fin}}</td>
+                                                <td>{{item.total}}</td>
+                                                <td>{{item.porcentaje}} %</td>
+                                                <td>
+                                                    <span class="badge rounded-pill bg-{{item.rango.alias}}">
+                                                        {{item.rango.situacion}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

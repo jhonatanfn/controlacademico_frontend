@@ -15,7 +15,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Alumno } from 'src/app/models/alumno.model';
-import { MatriculaService } from 'src/app/services/matricula.service';
+import { AulaService } from 'src/app/services/aula.service';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -29,7 +29,7 @@ export class HorarioAlumnoComponent implements OnInit {
   public icono: string = 'bi bi-search';
   public titulo2: string = 'Horarios';
   public icono2: string = 'bi bi-calendar-check';
-  public titulo3: string = 'Resumen';
+  public titulo3: string = 'Datos Horario';
   public icono3: string = 'bi bi-card-checklist';
   public horarioForm!: FormGroup;
   public periodos: Periodo[] = [];
@@ -59,11 +59,36 @@ export class HorarioAlumnoComponent implements OnInit {
     private periodoService: PeriodoService,
     private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
-    private institucionService: InstitucionService, private matriculaService:MatriculaService) {
+    private institucionService: InstitucionService,
+    private aulaService:AulaService) {
 
     if (this.usuarioService.usuario.role.nombre === "ALUMNO") {
+
       this.dias = this.horarioService.dias;
       this.institucion = this.institucionService.institucion;
+
+      this.periodoService.todo().subscribe({
+        next: ({ ok, periodos }) => {
+          if (ok) {
+            this.periodos = periodos;
+          }
+        }
+      });
+      this.horaService.todo().subscribe({
+        next: ({ ok, horas }) => {
+          if (ok) {
+            this.horas = horas;
+          }
+        }
+      });
+
+      this.aulaService.todo().subscribe({
+        next: ({ok,aulas})=>{
+          if(ok){
+            this.aulas= aulas;
+          }
+        }
+      });
 
       this.usuarioService.alumnoPorPersona().subscribe({
         next: ({ ok, alumno }) => {
@@ -71,6 +96,9 @@ export class HorarioAlumnoComponent implements OnInit {
             this.alumno = alumno;
             this.alumnonombre= alumno.persona?.nombres+' '+alumno.persona?.apellidopaterno+' '+
             alumno.persona?.apellidomaterno;
+
+
+            /*
             this.matriculaService.matriculasPorAlumnoReporte(Number(this.alumno.id))
               .subscribe({
                 next: ({ ok, matriculas }) => {
@@ -103,11 +131,14 @@ export class HorarioAlumnoComponent implements OnInit {
                     });
                   }
                 }
-              })
+              });
+              */
+
           }
         }
       });
     }
+
   }
 
   ngOnInit(): void {
@@ -153,7 +184,7 @@ export class HorarioAlumnoComponent implements OnInit {
                     id: resultado.id,
                     dia: objd,
                     hora: objh,
-                    subareaId: resultado.subareaId,
+                    areaId: resultado.areaId,
                     programacionId: resultado.programacionId,
                     programacion: resultado.programacion
                   }
@@ -186,7 +217,7 @@ export class HorarioAlumnoComponent implements OnInit {
   obtenerObjetoHorario(vector: any[], dia: string, hora: number) {
     let retorno = {
       id: 0,
-      subareaId: 0,
+      areaId: 0,
       programacionId: 0,
       programacion: ""
     };
@@ -194,7 +225,7 @@ export class HorarioAlumnoComponent implements OnInit {
       if (item.dia === dia && item.horaId === hora) {
         retorno = {
           id: item.id,
-          subareaId: item.programacion.subarea.id,
+          areaId: item.programacion.area.id,
           programacionId: item.programacion.id,
           programacion: item.programacion
         }
@@ -341,27 +372,25 @@ export class HorarioAlumnoComponent implements OnInit {
                       { text: intervalo.rango.inicio + '-' + intervalo.rango.fin, alignment: 'center' },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 1].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 1].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 2].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 2].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 3].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 3].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 4].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 4].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                   ]
                 )),
               ]
             }
           },
-
-
         ],
         styles: {
           header: {
@@ -376,7 +405,6 @@ export class HorarioAlumnoComponent implements OnInit {
           }
         }
       };
-
       if (accion === "OPEN") {
         pdfMake.createPdf(docDefinition).open();
       } else {
@@ -386,8 +414,6 @@ export class HorarioAlumnoComponent implements OnInit {
           pdfMake.createPdf(docDefinition).download(nombreArchivo);
         }
       }
-
     }
   }
-
 }

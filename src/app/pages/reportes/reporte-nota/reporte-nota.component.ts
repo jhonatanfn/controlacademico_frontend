@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChartData, ChartOptions } from 'chart.js';
 import { Ciclo } from 'src/app/models/ciclo.model';
 import { Evaluacion } from 'src/app/models/evaluacion.model';
 import { Periodo } from 'src/app/models/periodo.model';
@@ -7,9 +8,7 @@ import { Programacion } from 'src/app/models/programacion.model';
 import { CicloService } from 'src/app/services/ciclo.service';
 import { EvaluacionService } from 'src/app/services/evaluacion.service';
 import { MatriculaService } from 'src/app/services/matricula.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
-import Swal from 'sweetalert2';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -34,10 +33,10 @@ import { Rango } from 'src/app/models/rango.model';
 })
 export class ReporteNotaComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
-  public titulo2: string = 'Alumnos';
-  public icono2: string = 'bi bi-people-fill';
+  public titulo: string = 'Buscar';
+  public icono: string = 'bi bi-search';
+  public titulo2: string = 'Resultado';
+  public icono2: string = 'bi bi-pin-angle';
   public titulo3: string = 'Resumen';
   public icono3: string = 'bi bi-card-checklist';
   public repForm!: FormGroup;
@@ -67,8 +66,34 @@ export class ReporteNotaComponent implements OnInit {
   public cargando: boolean = false;
   public bandBoton: number = 0;
   public mensajeboton: string = "Convertir a Letras";
+  public salesData: ChartData<'line'> = {
+    labels: [],
+    datasets: [],
+  };
+  public chartOptions: ChartOptions = {
+    responsive: true,
+    animation:{
+      duration: 2000
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Estadísticas',
+      },
+    },
+  };
+  chartColors = {
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(231,233,237)'
+  };
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
+
+  constructor(private fb: FormBuilder,
     private cicloService: CicloService, private periodoService: PeriodoService,
     private matriculaService: MatriculaService,
     private evaluacionService: EvaluacionService, private institucionService: InstitucionService,
@@ -76,11 +101,6 @@ export class ReporteNotaComponent implements OnInit {
     private usuarioService: UsuarioService, private programacionService: ProgramacionService,
     private rangoService: RangoService) {
 
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
     this.periodoService.todo().subscribe(({ ok, periodos }) => {
       if (ok) {
         this.periodos = periodos;
@@ -105,6 +125,7 @@ export class ReporteNotaComponent implements OnInit {
 
     if (this.usuarioService.usuario.role.nombre === "DOCENTE") {
 
+/*
       this.usuarioService.docentePorPersona().subscribe({
         next: ({ ok, docente }) => {
           if (ok) {
@@ -140,6 +161,8 @@ export class ReporteNotaComponent implements OnInit {
           }
         }
       });
+*/
+
     }
 
     if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
@@ -311,6 +334,8 @@ export class ReporteNotaComponent implements OnInit {
 
 
   buscarNotas() {
+
+    /*
     this.formSubmitted = true;
 
     if (this.repForm.valid) {
@@ -336,10 +361,10 @@ export class ReporteNotaComponent implements OnInit {
                 matriculas.forEach(matricula => {
                   let vectorNotas = matricula.nota;
                   i = i + 1;
-                  /**CODIGO AGREGADO */
+                 
                   promT = this.promedioTotal(this.retornaPromedio(vectorNotas));
 
-                  /**CODIGO AGREGADO */
+                 
                   let retornoA = this.obtenerLetra(promT);
                   let detalle = {
                     indice: i,
@@ -379,10 +404,10 @@ export class ReporteNotaComponent implements OnInit {
                 matriculas.forEach(matricula => {
                   let vectorNotas = matricula.nota;
                   i = i + 1;
-                  /**CODIGO AGREGADO */
+                 
                   promT = this.promedioTotal(this.retornaPromedio(vectorNotas));
 
-                  /**CODIGO AGREGADO */
+                 
                   let retornoA = this.obtenerLetra(promT);
                   let detalle = {
                     indice: i,
@@ -419,7 +444,69 @@ export class ReporteNotaComponent implements OnInit {
       this.ciclonombre = arrciclos[1];
 
     }
+    */
   }
+
+  generarBarras(){
+
+    let etiquetas: any[] = [];
+    let datas: any[] = [];
+    let arrayLista:any[]=[];
+
+    this.rangos.forEach(rango => {
+      let label = rango.situacion;
+      let objeto = {
+        rango: rango,
+        total: 0,
+        porcentaje: 0
+      }
+      arrayLista.push(objeto);
+      etiquetas.push(label);
+    });
+
+    this.datos.forEach(dato => {
+        arrayLista.forEach(item => {
+          if (item.rango.inicio <= dato.promedioTotal && item.rango.fin >= dato.promedioTotal) {
+            item.total = item.total + 1;
+            item.porcentaje = Math.round((item.total / this.datos.length) * 100);
+          }
+      });
+    });
+
+    arrayLista.forEach(item=>{
+      let label = item.porcentaje;
+      datas.push(label);
+    });
+    this.salesData = {
+      labels: etiquetas,
+      datasets: [
+        { 
+          label: 'Porcentajes', 
+          backgroundColor: [
+            this.chartColors.red,
+            this.chartColors.yellow,
+            this.chartColors.blue,
+            this.chartColors.green
+          ],
+          hoverBackgroundColor:[
+            this.chartColors.red,
+            this.chartColors.yellow,
+            this.chartColors.blue,
+            this.chartColors.green
+          ],
+          hoverBorderColor:[
+            this.chartColors.red,
+            this.chartColors.yellow,
+            this.chartColors.blue,
+            this.chartColors.green
+          ],
+          hoverBorderWidth: 2,
+          data: datas, 
+          tension: 0.5 },
+      ],
+    }
+  }
+
 
   getBase64ImageFromURL(url: any) {
     return new Promise((resolve, reject) => {

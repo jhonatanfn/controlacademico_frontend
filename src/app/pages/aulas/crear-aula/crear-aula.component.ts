@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Grado } from 'src/app/models/grado.model';
 import { Nivel } from 'src/app/models/nivel.model';
 import { Seccion } from 'src/app/models/seccion.model';
@@ -23,10 +24,14 @@ export class CrearAulaComponent implements OnInit {
   public secciones: Seccion[] = [];
   public aulaForm!: FormGroup;
   public formSubmitted: boolean = false;
+  public tipovalores: any[] = [
+    { id: 1, nombre: "LITERAL" },
+    { id: 2, nombre: "VIGESIMAL" }
+  ];
 
   constructor(private nivelService: NivelService,
     private gradoService: GradoService, private seccionService: SeccionService,
-    private fb: FormBuilder, private aulaService: AulaService) {
+    private fb: FormBuilder, private aulaService: AulaService, private router: Router) {
 
     this.nivelService.todo()
       .subscribe(({ niveles }) => {
@@ -49,7 +54,8 @@ export class CrearAulaComponent implements OnInit {
       nombre: ['', [Validators.required, Validators.maxLength(40)]],
       nivelId: ['', Validators.required],
       gradoId: ['', Validators.required],
-      seccionId: ['', Validators.required]
+      seccionId: ['', Validators.required],
+      tipovalor: ['', Validators.required],
     });
   }
 
@@ -76,34 +82,50 @@ export class CrearAulaComponent implements OnInit {
   crearAula() {
     this.formSubmitted = true;
     if (this.aulaForm.valid) {
+      this.aulaService.existeAula(
+        this.aulaForm.get('nivelId')?.value,
+        this.aulaForm.get('gradoId')?.value,
+        this.aulaForm.get('seccionId')?.value).subscribe({
+          next: ({ ok, msg }) => {
+            if (ok) {
+              Swal.fire({
+                position: 'top-end',
+                icon: 'info',
+                title: msg,
+                showConfirmButton: false,
+                timer: 1000
+              });
+            } else {
+              Swal.fire({
+                title: 'Guardar',
+                text: "¿Desea crear el aula?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Guardar'
+              }).then((result) => {
+                if (result.isConfirmed) {
 
-      Swal.fire({
-        title: 'Guardar',
-        text: "¿Desea crear el aula?",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Guardar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-
-          this.aulaService.crear(this.aulaForm.value)
-            .subscribe(({ ok, msg }) => {
-              if (ok) {
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'success',
-                  title: msg,
-                  showConfirmButton: false,
-                  timer: 1500
-                })
-              }
-            });
-        }
-      })
+                  this.aulaService.crear(this.aulaForm.value)
+                    .subscribe(({ ok, msg }) => {
+                      if (ok) {
+                        this.router.navigateByUrl('dashboard/aulas');
+                        Swal.fire({
+                          position: 'top-end',
+                          icon: 'success',
+                          title: msg,
+                          showConfirmButton: false,
+                          timer: 1000
+                        })
+                      }
+                    });
+                }
+              });
+            }
+          }
+        });
     }
   }
-
 }

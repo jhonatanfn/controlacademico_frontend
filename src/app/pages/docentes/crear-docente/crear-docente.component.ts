@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators'
 import { Tipodocumento } from 'src/app/models/tipodocumento.model';
-import { Usuario } from 'src/app/models/usuario.model';
 import { DocenteService } from 'src/app/services/docente.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { TipodocumentoService } from 'src/app/services/tipodocumento.service';
-import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -25,98 +21,81 @@ export class CrearDocenteComponent implements OnInit {
   public tipos: Tipodocumento[] = [];
   public docenteForm!: FormGroup;
   public formSubmitted: boolean = false;
-  public usuarios:Usuario[]=[];
-  public repetido:boolean=  false;
+  public sexos: any = [
+    { id: 1, nombre: "MASCULINO" },
+    { id: 2, nombre: "FEMENINO" },
+  ];
+  public dnirepetido: boolean = false;
 
-  constructor(private tipodocuementoService: TipodocumentoService,
+  constructor(private tipodocumentoService: TipodocumentoService,
     private fb: FormBuilder, private personaService: PersonaService,
-    private docenteService: DocenteService, private usuarioService:UsuarioService,
-    private router:Router) {
-
-    this.tipodocuementoService.listar()
-      .subscribe(({ tipodocumentos }) => {
-        this.tipos = tipodocumentos;
-    });
-
-    this.usuarioService.todo().subscribe({
-      next: ({ok,usuarios})=>{
-        if(ok){
-          this.usuarios= usuarios;
+    private docenteService: DocenteService, private router: Router) {
+    this.tipodocumentoService.listar().subscribe({
+      next: ({ ok, tipodocumentos }) => {
+        if (ok) {
+          this.tipos = tipodocumentos;
+          this.docenteForm.controls['tipodocumentoId'].setValue(this.tipos[0].id);
         }
-      },
-      error: (error)=>{
-        Swal.fire({
-          position: 'top-end',
-          icon: 'error',
-          title: 'Se produjo un error. Hable con el administrador',
-          showConfirmButton: false,
-          timer: 1000
-        })
       }
     });
-
   }
 
   ngOnInit(): void {
     this.docenteForm = this.fb.group({
-      tipodocumentoId: ['', Validators.required],
-      numero: ['', [
-        Validators.required, 
-        Validators.maxLength(8), 
+      dni: ['', [
+        Validators.required,
+        Validators.maxLength(8),
         Validators.minLength(8),
         Validators.pattern(/^\d+$/)]
       ],
       nombres: ['', [Validators.required, Validators.maxLength(50)]],
       apellidopaterno: ['', [Validators.required, Validators.maxLength(20)]],
       apellidomaterno: ['', [Validators.required, Validators.maxLength(20)]],
-      direccion: [''],
+      sexo: ['', Validators.required],
+      tipodocumentoId: ['', Validators.required],
+      domicilio: [''],
       telefono: [''],
-      //nombreusuario:['',Validators.required],
-      //emailusuario:['',[Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]]
+      nacionalidad: [''],
+      distrito: [''],
+      fechanacimiento: ['', Validators.required],
+      correo: ['']
     });
   }
 
   campoRequerido(campo: string) {
-   
     if (this.docenteForm.get(campo)?.getError('required') && this.formSubmitted) {
       return true;
     } else {
       return false;
     }
   }
-  campoEmail(campo: string){
-   
+  campoEmail(campo: string) {
     if (this.docenteForm.get(campo)?.getError('pattern') && this.formSubmitted) {
       return true;
     } else {
       return false;
     }
   }
-
-  emailRepetido(campo:string){
-    
-    if(this.docenteForm.get('emailusuario')?.value ===""){
-      return;
-    }
-    this.repetido= false;
-    if(!this.docenteForm.get(campo)?.getError('required') && 
-      !this.docenteForm.get(campo)?.getError('pattern') && this.formSubmitted){
-
-        this.usuarios.forEach(usuario=>{
-          if(usuario.email===this.docenteForm.get('emailusuario')?.value){
-            this.repetido=true;
+  validaDNI() {
+    if ((this.docenteForm.get('dni')?.value).length == 8
+      && !this.docenteForm.get('dni')?.getError('required')
+      && !this.docenteForm.get('dni')?.getError('pattern')) {
+      this.docenteService.searchDNI(this.docenteForm.get('dni')?.value).subscribe({
+        next: ({ ok }) => {
+          if (ok) {
+            this.docenteForm.controls['dni'].setErrors({ error: true });
+            this.dnirepetido = true;
+          } else {
+            this.docenteForm.controls['dni'].setErrors(null);
+            this.dnirepetido = false;
           }
-        });
-      }
-      if(this.repetido){
-        return this.repetido; 
-      }
-      return this.repetido;
+        }
+      });
+    } else {
+      this.dnirepetido = false;
+    }
   }
-
-
   campoMaxLengh(campo: string, longitud: number) {
-
     if (this.docenteForm.get(campo)?.value === "") {
       return;
     }
@@ -127,7 +106,6 @@ export class CrearDocenteComponent implements OnInit {
       return false;
     }
   }
-
   campoMinLength(campo: string, longitud: number) {
     if (this.docenteForm.get(campo)?.value === "") {
       return;
@@ -139,19 +117,16 @@ export class CrearDocenteComponent implements OnInit {
       return false;
     }
   }
-
   campoNumeros(campo: string) {
-    if(this.docenteForm.controls[campo].getError('pattern') && this.formSubmitted){
+    if (this.docenteForm.controls[campo].getError('pattern') && this.formSubmitted) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
-
   guardarDocente() {
     this.formSubmitted = true;
-   
-    if (this.docenteForm.valid /*&& !this.repetido */) {
+    if (this.docenteForm.valid) {
       Swal.fire({
         title: 'Guardar',
         text: "¿Desea crear el docente?",
@@ -163,28 +138,29 @@ export class CrearDocenteComponent implements OnInit {
         confirmButtonText: 'Guardar'
       }).then((result) => {
         if (result.isConfirmed) {
-
           this.personaService.crear(this.docenteForm.value)
-            .subscribe(({ ok, persona }) => {
-              if (ok) {
-                let docenteObj:any={
-                  personaId:persona.id,
-                  nombreusuario: (this.docenteForm.get('nombres')?.value).toLowerCase(),
-                  //emailusuario: this.docenteForm.get('emailusuario')?.value
-                }
-                this.docenteService.crear(docenteObj)
-                  .subscribe(({ ok, msg }) => {
-                    if (ok) {
-                      this.router.navigateByUrl('dashboard/docentes');
-                      Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: msg,
-                        showConfirmButton: false,
-                        timer: 1000
-                      })
+            .subscribe({
+              next: ({ ok, persona }) => {
+                if (ok) {
+                  let docenteObj: any = {
+                    personaId: persona.id,
+                    nombreusuario: (this.docenteForm.get('nombres')?.value).toLowerCase(),
+                  }
+                  this.docenteService.crear(docenteObj).subscribe({
+                    next: ({ ok, msg }) => {
+                      if (ok) {
+                        this.router.navigateByUrl('dashboard/docentes');
+                        Swal.fire({
+                          position: 'top-end',
+                          icon: 'success',
+                          title: msg,
+                          showConfirmButton: false,
+                          timer: 1000
+                        });
+                      }
                     }
-                  })
+                  });
+                }
               }
             });
         }

@@ -1,37 +1,20 @@
 <div class="row">
     <div class="col-12 col-lg-12">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 col-md-6 mb-1">
-                        <div class="mb-3">
-                            <select class="form-select" aria-label="Default select example"
-                                [(ngModel)]="areaseleccionada" 
-                                (change)="subareasPorArea()">
-                                <option value="">Seleccionar area</option>
-                                <option *ngFor="let area of areas" [value]="area.id">
-                                    {{area.nombre}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 mb-1">
-                        <select class="form-select" aria-label="Default select example"
-                            [(ngModel)]="subareaseleccionada"
-                            (change)="listarMatriculas()">
-                            <option value="">Seleccionar subarea</option>
-                            <option *ngFor="let subarea of subareas" [value]="subarea.id">
-                                {{subarea.nombre}}
-                            </option>
-                        </select>
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center 
+                gap-2">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <a routerLink="crear" type="button" class="d-flex btn btn-primary">
+                            <i class="bi bi-plus-square me-2"></i>
+                            Nuevo</a>
                     </div>
                 </div>
-
+            </div>
+            <div class="card-body">
                 <div class="d-flex align-items-start mb-2 buscador">
-                    <div class="input-group me-1">
+                    <div class="input-group me-0">
                         <span class="input-group-text" id="buscar-algo">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-search" viewBox="0 0 16 16">
@@ -42,12 +25,7 @@
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                             aria-describedby="buscar-algo" (keyup)="buscarMatriculas(txtTermino.value)" #txtTermino>
                     </div>
-                    <a routerLink="crear" type="button" class="d-flex btn btn-primary">
-                        <i class="bi bi-plus-square me-2"></i>
-                        Nuevo</a>
                 </div>
-
-                <!--Alerta-->
                 <div class="mb-1" *ngIf="cargando">
                     <div class="alert alert-info text-center" role="alert">
                         <h6 class="alert-heading">Cargando...</h6>
@@ -57,7 +35,6 @@
                     </div>
                 </div>
 
-                <!--Tabla d contenido-->
                 <div class="table-responsive mb-1" *ngIf="!cargando">
                     <div class="alert alert-primary" role="alert" *ngIf="matriculas.length==0">
                         No hay registros.
@@ -66,41 +43,41 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="w70">N°</th>
-                                <th scope="col" class="w70">Periodo</th>
-                                <th scope="col">Alumno</th>
-                                <th scope="col">Aula</th>
-                                <th scope="col">Area</th>
-                                <th scope="col">Subarea</th>
-                                <th scope="col">Docente</th>
+                                <th scope="col" class="w70">DNI</th>
+                                <th scope="col">Apellidos y nombres</th>
+                                <th scope="col" class="w70">Fecha</th>
+                                <th scope="col">Hora</th>
                                 <th scope="col" class="w70"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let matricula of matriculas; let i=index">
-                                <th>{{ desde+i+1 }}</th>
-                                <td>{{matricula.programacion?.periodo?.nombre | uppercase}}</td>
-                                <td>{{matricula.alumno?.persona?.nombres | uppercase}}
+                                <th>{{desde+i+1}}</th>
+                                <td>{{matricula.alumno?.persona?.dni | uppercase}}</td>
+                                <td>
                                     {{matricula.alumno?.persona?.apellidopaterno | uppercase}}
                                     {{matricula.alumno?.persona?.apellidomaterno | uppercase}}
+                                    {{matricula.alumno?.persona?.nombres | uppercase}}
                                 </td>
-                                <td>{{matricula.programacion?.aula?.nombre | uppercase}}</td>
-                                <td>{{matricula.programacion?.subarea?.area?.nombre | uppercase}}</td>
-                                <td>{{matricula.programacion?.subarea?.nombre | uppercase}}</td>
-                                <td>{{matricula.programacion?.docente?.persona?.nombres | uppercase}}</td>
-
+                                <td>{{matricula.fecha | date:'dd/MM/yyyy'}}</td>
+                                <td>{{matricula.hora}}</td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-success me-1"
-                                        data-bs-placement="top"
-                                        title="Editar" >
+                                        <button type="button" class="btn btn-secondary me-1" data-bs-toggle="modal"
+                                            data-bs-target="#detalle" data-bs-placement="top"
+                                            (click)="detalleMatricula(matricula)" title="Detalle">
+                                            <span>
+                                                <i class="bi bi-file-earmark-ruled"></i>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-success me-1" data-bs-placement="top"
+                                            title="Editar">
                                             <span>
                                                 <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-danger"
-                                        data-bs-placement="top"
-                                        title="Eliminar" 
-                                            (click)="eliminarMatricula(matricula)">
+                                        <button type="button" class="btn btn-danger" data-bs-placement="top"
+                                            title="Eliminar" (click)="eliminarMatricula(matricula)">
                                             <span>
                                                 <i class="bi bi-x-circle"></i>
                                             </span>
@@ -111,12 +88,56 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-start" *ngIf="!cargando">
-                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
-                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
-                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
-                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                <div class="d-flex justify-content-between align-items-start" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Detalle Matricula</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between mb-2 mt-2">
+                        <img [src]="matricula.img | imagen" class="rounded-circle mt-4 border border-2 me-2" alt=""
+                            style="width: 95px; height: 95px;">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <h6 class="card-title">Periodo:</h6>
+                                <p class="card-text">{{matricula.periodonombre}}</p>
+                                <h6 class="card-title">Aula:</h6>
+                                <p class="card-text">{{matricula.aulanombre}}</p>
+                                <h6 class="card-title">DNI:</h6>
+                                <p class="card-text">{{matricula.dni}}</p>
+                                <h6 class="card-title">Nombres y Apellidos:</h6>
+                                <p class="card-text">{{matricula.nombres}} {{matricula.apellidos}}</p>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Cancelar</button>
+                <button type="submit" class="btn btn-primary" (click)="imprimirMatricula('OPEN')">
+                    <i class="bi bi-hdd"></i>
+                    Imprimir</button>
             </div>
         </div>
     </div>

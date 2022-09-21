@@ -9,13 +9,13 @@ import { Nota } from 'src/app/models/nota.model';
 import { CicloService } from 'src/app/services/ciclo.service';
 import { EvaluacionService } from 'src/app/services/evaluacion.service';
 import { InstitucionService } from 'src/app/services/institucion.service';
-import { MatriculaService } from 'src/app/services/matricula.service';
 import { NotaService } from 'src/app/services/nota.service';
 import Swal from 'sweetalert2';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Rango } from 'src/app/models/rango.model';
 import { RangoService } from 'src/app/services/rango.service';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -27,10 +27,12 @@ export class VerNotaApoderadoComponent implements OnInit {
 
   public titulo1: string = 'Buscar Notas';
   public icono1: string = 'bi bi-search';
-  public titulo2: string = 'Tabla Notas';
-  public icono2: string = 'bi bi-table';
-  public titulo3: string = 'Resumen';
+  public titulo2: string = 'Notas';
+  public icono2: string = 'bi bi-stickies';
+  public titulo3: string = 'Información del reporte';
   public icono3: string = 'bi bi-card-checklist';
+  public titulo4: string = 'Resumen';
+  public icono4: string = 'bi bi-paperclip';
   public notaForm!: FormGroup;
   public formSubmitted: boolean = false;
   public ciclos: Ciclo[] = [];
@@ -41,7 +43,7 @@ export class VerNotaApoderadoComponent implements OnInit {
   public cargando: boolean = false;
   public periodonombre: string = "";
   public aulanombre: string = "";
-  public subareanombre: string = "";
+  public areanombre: string = "";
   public ciclonombre: string = "";
   public docentenombre: string = "";
   public evaluacionnombre: string = "";
@@ -52,11 +54,14 @@ export class VerNotaApoderadoComponent implements OnInit {
   public institucion!: Institucion;
   public bandBoton: number = 0;
   public mensajeboton: string = "Convertir a Letras";
+  public tipovalor: number = 0;
+  public vigesimal: any[] = [];
+  public literal: any[] = [];
 
   constructor(private fb: FormBuilder, private cicloService: CicloService,
     private evaluacionService: EvaluacionService, private notaService: NotaService,
-    private route: ActivatedRoute, private matriculaService: MatriculaService,
-    private institucionService: InstitucionService,private rangoService:RangoService) {
+    private route: ActivatedRoute,private institucionService: InstitucionService,
+    private rangoService:RangoService, private matriculadetalleService:MatriculadetalleService) {
 
     this.cicloService.listar().subscribe(({ ok, ciclos }) => {
       if (ok) {
@@ -75,19 +80,20 @@ export class VerNotaApoderadoComponent implements OnInit {
       }
     });
 
-    this.matriculaService.obtener(Number(this.route.snapshot.paramMap.get('id')))
+    this.matriculadetalleService.obtener(Number(this.route.snapshot.paramMap.get('id')))
       .subscribe({
-        next: ({ ok, matricula }) => {
+        next: ({ ok, matriculadetalle }) => {
           if (ok) {
-            this.periodonombre = matricula.programacion?.periodo?.nombre!;
-            this.aulanombre = matricula.programacion?.aula?.nombre!;
-            this.subareanombre = matricula.programacion?.subarea?.nombre!;
-            this.docentenombre = matricula.programacion?.docente?.persona?.nombres! + ' ' +
-              matricula.programacion?.docente?.persona?.apellidopaterno! + ' ' +
-              matricula.programacion?.docente?.persona?.apellidomaterno!;
-            this.alumnonombre = matricula.alumno?.persona?.nombres + ' ' +
-              matricula.alumno?.persona?.apellidopaterno + ' ' +
-              matricula.alumno?.persona?.apellidomaterno;
+            this.periodonombre = matriculadetalle.programacion?.periodo?.nombre!;
+            this.aulanombre = matriculadetalle.programacion?.aula?.nombre!;
+            this.areanombre = matriculadetalle.programacion?.area?.nombre!;
+            this.docentenombre = matriculadetalle.programacion?.docente?.persona?.nombres! + ' ' +
+            matriculadetalle.programacion?.docente?.persona?.apellidopaterno! + ' ' +
+            matriculadetalle.programacion?.docente?.persona?.apellidomaterno!;
+            this.alumnonombre = matriculadetalle.matricula?.alumno?.persona?.nombres + ' ' +
+            matriculadetalle.matricula?.alumno?.persona?.apellidopaterno + ' ' +
+            matriculadetalle.matricula?.alumno?.persona?.apellidomaterno;
+            this.tipovalor = Number(matriculadetalle.programacion?.aula?.tipovalor);
           }
         },
         error: (error) => {
@@ -131,49 +137,64 @@ export class VerNotaApoderadoComponent implements OnInit {
 
   buscarNotas() {
     this.formSubmitted = true;
+    this.literal = [];
+    this.vigesimal = [];
     if (this.notaForm.valid) {
       this.cargando = true;
       let arrciclos = (this.notaForm.get('cicloId')?.value).split(',');
       let arrevaluaciones = (this.notaForm.get('evaluacionId')?.value).split(',');
-      this.notasAux = [];
-      this.notas = [];
       this.notaService.notasMatriculaCicloEvaluacion(Number(this.route.snapshot.paramMap.get('id')),
         arrciclos[0],
-        arrevaluaciones[0]).subscribe(({ ok, notas }) => {
-          if (ok) {
-            this.notas = notas;
-            let objeto = {
-              fecha: "",
-              ciclo: "",
-              evaluacion: "",
-              valor: 0,
-              valorletra: "",
-              situacion: "",
-              alias:""
-            }
-            this.notas.forEach(nota => {
-              let ObjA= this.retornaLetra(nota.valor);
-              objeto = {
-                fecha: nota.fecha,
-                ciclo: arrciclos[1],
-                evaluacion: arrevaluaciones[1],
-                valor: nota.valor,
-                valorletra: ObjA.letra,
-                situacion: ObjA.situacion,
-                alias: ObjA.alias
+        arrevaluaciones[0]).subscribe({
+          next: ({ ok, notas }) => {
+            if (ok) {
+              this.notas = notas;
+              let totalNotas = notas.length;
+              if (this.tipovalor == 1) {
+                // literal
+                this.rangos.forEach(rango => {
+                  let objeto = {
+                    rango: rango,
+                    total: 0,
+                    porcentaje: 0,
+                  }
+                  this.literal.push(objeto);
+                });
+                this.notas.forEach(nota => {
+                  this.literal.forEach(dato => {
+                    if (dato.rango.letra == nota.valor) {
+                      dato.total = dato.total + 1;
+                      dato.porcentaje = Math.round((dato.total / totalNotas) * 100);
+                    }
+                  });
+                });
               }
-              this.notasAux.push(objeto);
-            });
-            this.ciclonombre = arrciclos[1];
-            this.evaluacionnombre = arrevaluaciones[1];
-            this.totalevaluaciones = notas.length;
-            this.calcularPromedio();
-            this.cargando = false;
+
+              if (this.tipovalor == 2) {
+                // vigesimal
+                this.rangos.forEach(rango => {
+                  let objeto = {
+                    rango: rango,
+                    total: 0,
+                    porcentaje: 0
+                  }
+                  this.vigesimal.push(objeto);
+                });
+                this.notas.forEach(nota => {
+                  this.vigesimal.forEach(dato => {
+                    if (dato.rango.inicio <= nota.valor && dato.rango.fin >= nota.valor) {
+                      dato.total = dato.total + 1;
+                      dato.porcentaje = Math.round((dato.total / totalNotas) * 100);
+                    }
+                  });
+                });
+              }
+              this.cargando = false;
+            }
           }
         });
     }
   }
-
   public obtenerLetra(valor: any) {
     let retorno = {
       letra: "NL",
@@ -250,7 +271,7 @@ export class VerNotaApoderadoComponent implements OnInit {
       let url = this.institucionService.getImageUrlInstitucion(this.institucion.img!);
       let nombreArchivo = 'REPORTE: ' + moment().format('DD/MM/yyyy') + '.pdf';
 
-      if (this.bandBoton === 0) {
+      if (this.tipovalor === 1) {
         var docDefinition: any = {
           content: [
             {
@@ -316,16 +337,6 @@ export class VerNotaApoderadoComponent implements OnInit {
             },
             {
               text: [
-                { text: 'SUBAREA: ', bold: true, }, this.subareanombre
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-
-            {
-              text: [
                 { text: 'DOCENTE: ', bold: true, }, this.docentenombre
               ],
               fontSize: 12,
@@ -336,15 +347,6 @@ export class VerNotaApoderadoComponent implements OnInit {
 
             {
               text: [
-                { text: 'CICLO: ', bold: true, }, this.ciclonombre
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-            {
-              text: [
                 { text: 'ALUMNO: ', bold: true, }, this.alumnonombre
               ],
               fontSize: 12,
@@ -352,15 +354,7 @@ export class VerNotaApoderadoComponent implements OnInit {
               width: 'auto',
               margin: [0, 1, 0, 1],
             },
-            {
-              text: [
-                { text: 'EVALUACIÓN: ', bold: true, }, this.evaluacionnombre
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
+
             {
               text: [
                 { text: 'FECHA : ', bold: true, }, moment().format('DD/MM/yyyy')
@@ -371,7 +365,6 @@ export class VerNotaApoderadoComponent implements OnInit {
             },
 
             {
-              //layout: 'lightHorizontalLines',
               margin: [0, 10, 0, 15],
               table: {
                 headerRows: 1,
@@ -379,53 +372,51 @@ export class VerNotaApoderadoComponent implements OnInit {
                 body: [
                   [
                     { text: 'N°', bold: true, alignment: 'center' },
-                    { text: 'FECHA', bold: true, alignment: 'center' },
+                    { text: 'AREA', bold: true, alignment: 'center' },
+                    { text: 'COMPETENCIA', bold: true, alignment: 'center' },
                     { text: 'CICLO', bold: true, alignment: 'center' },
-                    { text: 'EVALUACIÓN', bold: true, alignment: 'center' },
+                    { text: 'EVALUACION', bold: true, alignment: 'center' },
                     { text: 'NOTA', bold: true, alignment: 'center' },
-                    { text: 'SITUACIÓN', bold: true, alignment: 'center' },
 
                   ],
-                  ...this.notasAux.map(p => (
+                  ...this.notas.map(p => (
                     [
-                      this.notasAux.indexOf(p) + 1,
-                      p.fecha,
-                      p.ciclo,
-                      p.evaluacion,
-                      p.valor,
-                      { text: p.situacion, alignment: 'center' }
+                      this.notas.indexOf(p) + 1,
+                      p.competencia?.area?.nombre,
+                      p.competencia?.descripcion,
+                      p.ciclo?.nombre,
+                      p.evaluacion?.nombre,
+                      p.valor
                     ])),
                 ]
               }
             },
-
+            
             {
-              text: [
-                { text: 'RESUMEN: ', bold: true, }
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 5, 0, 2],
-            },
-
-            {
-              //layout: 'lightHorizontalLines',
               margin: [0, 1, 0, 5],
               table: {
-                widths: ['auto', 'auto'],
+                headerRows: 1,
+                widths: ['auto', 'auto', 'auto', 'auto', 'auto'],
                 body: [
                   [
-                    'PROMEDIO: ', this.promediototal
+                    { text: 'N°', bold: true, alignment: 'center' },
+                    { text: 'ESCALA', bold: true, alignment: 'center' },
+                    { text: 'TOTAL', bold: true, alignment: 'center' },
+                    { text: 'PORCENTAJE', bold: true, alignment: 'center' },
+                    { text: 'SITUACION', bold: true, alignment: 'center' },
                   ],
-                  [
-                    'TOTAL EVALUACIONES: ', this.totalevaluaciones
-                  ]
-                ],
+                  ...this.literal.map(p => (
+                    [
+                      this.literal.indexOf(p) + 1,
+                      p.rango.letra,
+                      p.total,
+                      p.porcentaje+' % ',
+                      p.rango.situacion
+                    ])),
+                ]
               }
             },
-
-
+            
           ],
           styles: {
             header: {
@@ -440,7 +431,9 @@ export class VerNotaApoderadoComponent implements OnInit {
             }
           }
         };
-      } else {
+      }else{
+
+
         var docDefinition: any = {
           content: [
             {
@@ -506,16 +499,6 @@ export class VerNotaApoderadoComponent implements OnInit {
             },
             {
               text: [
-                { text: 'SUBAREA: ', bold: true, }, this.subareanombre
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-
-            {
-              text: [
                 { text: 'DOCENTE: ', bold: true, }, this.docentenombre
               ],
               fontSize: 12,
@@ -526,15 +509,6 @@ export class VerNotaApoderadoComponent implements OnInit {
 
             {
               text: [
-                { text: 'CICLO: ', bold: true, }, this.ciclonombre
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-            {
-              text: [
                 { text: 'ALUMNO: ', bold: true, }, this.alumnonombre
               ],
               fontSize: 12,
@@ -542,15 +516,7 @@ export class VerNotaApoderadoComponent implements OnInit {
               width: 'auto',
               margin: [0, 1, 0, 1],
             },
-            {
-              text: [
-                { text: 'EVALUACIÓN: ', bold: true, }, this.evaluacionnombre
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
+
             {
               text: [
                 { text: 'FECHA : ', bold: true, }, moment().format('DD/MM/yyyy')
@@ -561,7 +527,6 @@ export class VerNotaApoderadoComponent implements OnInit {
             },
 
             {
-              //layout: 'lightHorizontalLines',
               margin: [0, 10, 0, 15],
               table: {
                 headerRows: 1,
@@ -569,51 +534,51 @@ export class VerNotaApoderadoComponent implements OnInit {
                 body: [
                   [
                     { text: 'N°', bold: true, alignment: 'center' },
-                    { text: 'FECHA', bold: true, alignment: 'center' },
+                    { text: 'AREA', bold: true, alignment: 'center' },
+                    { text: 'COMPETENCIA', bold: true, alignment: 'center' },
                     { text: 'CICLO', bold: true, alignment: 'center' },
-                    { text: 'EVALUACIÓN', bold: true, alignment: 'center' },
+                    { text: 'EVALUACION', bold: true, alignment: 'center' },
                     { text: 'NOTA', bold: true, alignment: 'center' },
-                    { text: 'SITUACIÓN', bold: true, alignment: 'center' },
 
                   ],
-                  ...this.notasAux.map(p => (
+                  ...this.notas.map(p => (
                     [
-                      this.notasAux.indexOf(p) + 1,
-                      p.fecha,
-                      p.ciclo,
-                      p.evaluacion,
-                      p.valorletra,
-                      { text: p.situacion, alignment: 'center' }
+                      this.notas.indexOf(p) + 1,
+                      p.competencia?.area?.nombre,
+                      p.competencia?.descripcion,
+                      p.ciclo?.nombre,
+                      p.evaluacion?.nombre,
+                      p.valor
                     ])),
                 ]
               }
             },
-
+            
             {
-              text: [
-                { text: 'RESUMEN: ', bold: true, }
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 5, 0, 2],
-            },
-
-            {
-              //layout: 'lightHorizontalLines',
               margin: [0, 1, 0, 5],
               table: {
-                widths: ['auto', 'auto'],
+                headerRows: 1,
+                widths: ['auto', 'auto', 'auto', 'auto', 'auto'],
                 body: [
                   [
-                    'PROMEDIO: ', this.promediototalletra
+                    { text: 'N°', bold: true, alignment: 'center' },
+                    { text: 'RANGO', bold: true, alignment: 'center' },
+                    { text: 'TOTAL', bold: true, alignment: 'center' },
+                    { text: 'PORCENTAJE', bold: true, alignment: 'center' },
+                    { text: 'SITUACION', bold: true, alignment: 'center' },
                   ],
-                  [
-                    'TOTAL EVALUACIONES: ', this.totalevaluaciones
-                  ]
-                ],
+                  ...this.vigesimal.map(p => (
+                    [
+                      this.vigesimal.indexOf(p) + 1,
+                      p.rango.inicio+' - '+p.rango.fin,
+                      p.total,
+                      p.porcentaje+' % ',
+                      p.rango.situacion
+                    ])),
+                ]
               }
             },
+            
           ],
           styles: {
             header: {
@@ -628,8 +593,9 @@ export class VerNotaApoderadoComponent implements OnInit {
             }
           }
         };
+
+
       }
-
 
       if (accion === "OPEN") {
         pdfMake.createPdf(docDefinition).open();
@@ -640,7 +606,6 @@ export class VerNotaApoderadoComponent implements OnInit {
           pdfMake.createPdf(docDefinition).download(nombreArchivo);
         }
       }
-
     }
   }
 

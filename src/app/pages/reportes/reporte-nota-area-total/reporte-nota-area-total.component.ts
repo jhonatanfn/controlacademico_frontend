@@ -1,36 +1,28 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChartData, ChartOptions } from 'chart.js';
 import { Ciclo } from 'src/app/models/ciclo.model';
-import { Evaluacion } from 'src/app/models/evaluacion.model';
 import { Periodo } from 'src/app/models/periodo.model';
-import { Programacion } from 'src/app/models/programacion.model';
 import { CicloService } from 'src/app/services/ciclo.service';
-import { EvaluacionService } from 'src/app/services/evaluacion.service';
-import { MatriculaService } from 'src/app/services/matricula.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
-import Swal from 'sweetalert2';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
-import * as  moment from 'moment';
 import { Institucion } from 'src/app/models/institucion.model';
 import { InstitucionService } from 'src/app/services/institucion.service';
 import { AulaService } from 'src/app/services/aula.service';
-import { SubareaService } from 'src/app/services/subarea.service';
 import { Aula } from 'src/app/models/aula.model';
-import { Subarea } from 'src/app/models/subarea.model';
-import { Matricula } from 'src/app/models/matricula.model';
 import { Docente } from 'src/app/models/docente.model';
-import { UsuarioService } from 'src/app/services/usuario.service';
-import { ProgramacionService } from 'src/app/services/programacion.service';
-import { Apoderado } from 'src/app/models/apoderado.model';
-import { Alumno } from 'src/app/models/alumno.model';
 import { RangoService } from 'src/app/services/rango.service';
 import { Rango } from 'src/app/models/rango.model';
 import { AreaService } from 'src/app/services/area.service';
 import { Area } from 'src/app/models/area.model';
 import { NotaService } from 'src/app/services/nota.service';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
+import { Matriculadetalle } from 'src/app/models/matriculadetalle';
+import { CompetenciaService } from 'src/app/services/competencia.service';
+import { Competencia } from 'src/app/models/competencia.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-reporte-nota-area-total',
@@ -39,31 +31,24 @@ import { NotaService } from 'src/app/services/nota.service';
 })
 export class ReporteNotaAreaTotalComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
-  public titulo2: string = 'Lista de Notas';
-  public icono2: string = 'bi bi-calendar-check';
-  public titulo3: string = 'Resumen';
+  public titulo: string = 'Buscar';
+  public icono: string = 'bi bi-search';
+  public titulo2: string = 'Resultado';
+  public icono2: string = 'bi bi-pin-angle';
+  public titulo3: string = 'Datos Reporte';
   public icono3: string = 'bi bi-card-checklist';
   public titulo4: string = 'Promedios por SubArea';
   public icono4: string = 'bi bi-calculator-fill';
   public repForm!: FormGroup;
   public periodos: Periodo[] = [];
-  public programaciones: Programacion[] = [];
   public ciclos: Ciclo[] = [];
   public datos: any[] = [];
-  public promedios: any[] = [];
   public formSubmitted: boolean = false;
-  public evaluaciones: Evaluacion[] = [];
   @ViewChild('htmlData') htmlData!: ElementRef;
   public institucion!: Institucion;
   public aulas: Aula[] = [];
-  public subareas: Subarea[] = [];
   public areas: Area[] = [];
-  public areasAuxiliar: Area[] = [];
   public rangos: Rango[] = [];
-  public aulasAux: Aula[] = [];
-  public subareasAux: Subarea[] = [];
   public docente!: Docente;
   public periodonombre: string = "";
   public aulanombre: string = "";
@@ -71,30 +56,43 @@ export class ReporteNotaAreaTotalComponent implements OnInit {
   public ciclonombre: string = "";
   public docentenombre: string = "";
   public alumnonombre: string = "";
-  public promediobimestral: number = 0;
-  public promediobimestralLetra: string = "";
-  public matriculas: Matricula[] = [];
-  public matriculasAux: Matricula[] = [];
+  public matriculadetalles: Matriculadetalle[] = [];
   public cargando: boolean = false;
-  public apoderado!: Apoderado;
-  public alumno!: Alumno;
-  public bandBoton: number = 0;
-  public mensajeboton: string = "Convertir a Letras";
-  public datosAux: any[] = [];
+  public competencias: Competencia[] = [];
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
+  public salesData: ChartData<'line'> = {
+    labels: [],
+    datasets: [],
+  };
+  public chartOptions: ChartOptions = {
+    responsive: true,
+    animation: {
+      duration: 2000
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Estadísticas',
+      },
+    },
+  };
+  chartColors = {
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(231,233,237)'
+  };
+
+  constructor(private fb: FormBuilder,
     private cicloService: CicloService, private periodoService: PeriodoService,
-    private matriculaService: MatriculaService, private areaService: AreaService,
-    private evaluacionService: EvaluacionService, private institucionService: InstitucionService,
-    private aulaService: AulaService, private subareaService: SubareaService,
-    private usuarioService: UsuarioService, private programacionService: ProgramacionService,
-    private rangoService: RangoService, private notaService: NotaService) {
+    private matriculadetalleService: MatriculadetalleService, private areaService: AreaService,
+    private institucionService: InstitucionService, private notaService: NotaService,
+    private aulaService: AulaService, private competenciaService: CompetenciaService,
+    private rangoService: RangoService) {
 
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
     this.periodoService.todo().subscribe(({ ok, periodos }) => {
       if (ok) {
         this.periodos = periodos;
@@ -105,153 +103,36 @@ export class ReporteNotaAreaTotalComponent implements OnInit {
         this.ciclos = ciclos;
       }
     });
-    this.evaluacionService.todo().subscribe(({ ok, evaluaciones }) => {
-      if (ok) {
-        this.evaluaciones = evaluaciones;
-      }
-    });
     this.rangoService.todo().subscribe(({ ok, rangos }) => {
       if (ok) {
         this.rangos = rangos;
       }
     });
-
-    if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR" ||
-      this.usuarioService.usuario.role.nombre === "APODERADO" ||
-      this.usuarioService.usuario.role.nombre === "ALUMNO") {
-
-      this.areaService.todo().subscribe({
-        next: ({ ok, areas }) => {
-          if (ok) {
-            this.areas = areas;
-          }
-        }
-      });
-
-    }
-
-
-    if (this.usuarioService.usuario.role.nombre === "DOCENTE") {
-
-      this.usuarioService.docentePorPersona().subscribe({
-        next: ({ ok, docente }) => {
-          if (ok) {
-            this.docente = docente;
-            this.programacionService.programacionesPorDocente(Number(this.docente.id))
-              .subscribe({
-                next: ({ ok, programaciones }) => {
-                  if (ok) {
-                    this.areasAuxiliar = [];
-                    this.aulasAux = [];
-
-                    programaciones.forEach(programacion => {
-                      this.aulasAux.push(programacion.aula!);
-                      this.areasAuxiliar.push(programacion.subarea?.area!);
-                    });
-                    var lookupObject: any = {};
-                    var lookupObject2: any = {};
-                    for (var i in this.aulasAux) {
-                      lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
-                    }
-                    for (var i in this.areasAuxiliar) {
-                      lookupObject2[this.areasAuxiliar[i].id!] = this.areasAuxiliar[i];
-                    }
-
-                    for (i in lookupObject) {
-                      this.aulas.push(lookupObject[i]);
-                    }
-
-                    for (i in lookupObject2) {
-                      this.areas.push(lookupObject2[i]);
-                    }
-                  }
-                }
-              })
-          }
-        }
-      });
-    }
-
-    if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
-      this.aulaService.todo().subscribe({
-        next: ({ ok, aulas }) => {
-          if (ok) {
-            this.aulas = aulas;
-          }
-        }
-      });
-
-    }
-
-    if (this.usuarioService.usuario.role.nombre === "APODERADO") {
-
-      this.usuarioService.apoderadoPorPersona().subscribe(({ ok, apoderado }) => {
+    this.areaService.todo().subscribe({
+      next: ({ ok, areas }) => {
         if (ok) {
-          this.apoderado = apoderado;
-
-          this.matriculaService.matriculasApoderado(Number(this.apoderado.id))
-            .subscribe({
-              next: ({ ok, matriculas }) => {
-                if (ok) {
-                  matriculas.forEach(matricula => {
-                    this.aulasAux.push(matricula.programacion?.aula!);
-                  });
-                  var lookupObject: any = {};
-                  for (var i in this.aulasAux) {
-                    lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
-                  }
-                  for (i in lookupObject) {
-                    this.aulas.push(lookupObject[i]);
-                  }
-                }
-              }
-            });
+          this.areas = areas;
         }
-      });
-    }
-
-    if (this.usuarioService.usuario.role.nombre === "ALUMNO") {
-
-      this.usuarioService.alumnoPorPersona().subscribe({
-        next: ({ ok, alumno }) => {
-          if (ok) {
-            this.alumno = alumno;
-
-            this.matriculaService.matriculasPorAlumnoReporte(Number(this.alumno.id))
-              .subscribe({
-                next: ({ ok, matriculas }) => {
-                  if (ok) {
-                    matriculas.forEach(matricula => {
-                      this.aulasAux.push(matricula.programacion?.aula!);
-                    });
-                    var lookupObject: any = {};
-                    for (var i in this.aulasAux) {
-                      lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
-                    }
-                    for (i in lookupObject) {
-                      this.aulas.push(lookupObject[i]);
-                    }
-                  }
-                }
-              })
-          }
+      }
+    });
+    this.aulaService.todo().subscribe({
+      next: ({ ok, aulas }) => {
+        if (ok) {
+          this.aulas = aulas;
         }
-      })
-    }
-
+      }
+    });
     this.institucion = this.institucionService.institucion;
   }
 
   ngOnInit(): void {
     this.repForm = this.fb.group({
       periodoId: ['', Validators.required],
-      cicloId: ['', Validators.required],
       aulaId: ['', Validators.required],
       areaId: ['', Validators.required],
-      matriculaId: ['']
+      cicloId: ['', Validators.required]
     });
   }
-
   campoRequerido(campo: string) {
     if (this.repForm.get(campo)?.getError('required') && this.formSubmitted) {
       return true;
@@ -259,203 +140,92 @@ export class ReporteNotaAreaTotalComponent implements OnInit {
       return false;
     }
   }
-
   cargarMatriculas() {
-    if (this.repForm.get('periodoId')?.value && this.repForm.get('aulaId')?.value &&
-      this.repForm.get('areaId')?.value) {
-      let arrPeriodos = (this.repForm.get('periodoId')?.value).split(',');
-      let arrAulas = (this.repForm.get('aulaId')?.value).split(',');
-      let arrAreas = (this.repForm.get('areaId')?.value).split(',');
-
-      if (this.usuarioService.usuario.role.nombre === "APODERADO") {
-
-        this.matriculaService.matriculasPeriodoAulaApoderadoArea(
-          Number(arrPeriodos[0]), Number(arrAulas[0]), Number(arrAreas[0]),
-          Number(this.apoderado.id)).subscribe({
-            next: ({ ok, matriculas }) => {
-              if (ok) {
-                this.matriculas = matriculas;
-
-                var lookupObject: any = {};
-                var lookupObject2: any = {};
-                for (var i in this.matriculas) {
-                  lookupObject[this.matriculas[i].alumnoId!] = this.matriculas[i];
-                  lookupObject2[this.matriculas[i].programacion?.subarea?.id!] = this.matriculas[i].programacion?.subarea;
+    let arrPeriodos = (this.repForm.get('periodoId')?.value).split(',');
+    let arrAulas = (this.repForm.get('aulaId')?.value).split(',');
+    let arrAreas = (this.repForm.get('areaId')?.value).split(',');
+    if (arrPeriodos[0] && arrAulas[0] && arrAreas[0]) {
+      this.matriculadetalleService.matriculadetallesPeriodoAulaArea(arrPeriodos[0],
+        arrAulas[0], arrAreas[0]).subscribe({
+          next: ({ ok, matriculadetalles }) => {
+            if (ok) {
+              this.matriculadetalles = matriculadetalles;
+              this.competenciaService.competenciasArea(arrAreas[0]).subscribe({
+                next: ({ ok, competencias }) => {
+                  if (ok) {
+                    this.competencias = competencias;
+                  }
                 }
-                this.matriculas = [];
-                this.subareas = [];
-                for (i in lookupObject) {
-                  this.matriculas.push(lookupObject[i]);
-                }
-                for (i in lookupObject2) {
-                  this.subareas.push(lookupObject2[i]);
-                }
-                this.repForm.controls['matriculaId'].setValue("");
-              }
+              });
             }
-          });
-
-      } else {
-
-        if (this.usuarioService.usuario.role.nombre === "ALUMNO") {
-
-          this.matriculaService.matriculasPeriodoAulaApoderadoArea(
-            Number(arrPeriodos[0]), Number(arrAulas[0]), Number(arrAreas[0]),
-            Number(this.alumno.apoderadoId)).subscribe({
-              next: ({ ok, matriculas }) => {
-                if (ok) {
-                  this.matriculas = matriculas;
-                  var lookupObject: any = {};
-                  var lookupObject2: any = {};
-                  for (var i in this.matriculas) {
-                    lookupObject[this.matriculas[i].alumnoId!] = this.matriculas[i];
-                    lookupObject2[this.matriculas[i].programacion?.subarea?.id!] = this.matriculas[i].programacion?.subarea;
-                  }
-                  this.matriculas = [];
-                  this.subareas = [];
-                  for (i in lookupObject) {
-                    this.matriculas.push(lookupObject[i]);
-                  }
-                  for (i in lookupObject2) {
-                    this.subareas.push(lookupObject2[i]);
-                  }
-                  this.repForm.controls['matriculaId'].setValue("");
-                }
-              }
-            });
-
-        } else {
-          this.matriculaService.matriculasPeriodoAulaArea(
-            Number(arrPeriodos[0]), Number(arrAulas[0]), Number(arrAreas[0]))
-            .subscribe({
-              next: ({ ok, matriculas }) => {
-                if (ok) {
-                  this.matriculas = matriculas;
-                  var lookupObject: any = {};
-
-                  var lookupObject2: any = {};
-
-                  for (var i in this.matriculas) {
-                    lookupObject[this.matriculas[i].alumnoId!] = this.matriculas[i];
-                    lookupObject2[this.matriculas[i].programacion?.subarea?.id!] = this.matriculas[i].programacion?.subarea;
-                  }
-
-                  this.matriculas = [];
-                  this.subareas = [];
-                  for (i in lookupObject) {
-                    this.matriculas.push(lookupObject[i]);
-                  }
-
-                  for (i in lookupObject2) {
-                    this.subareas.push(lookupObject2[i]);
-                  }
-                  this.repForm.controls['matriculaId'].setValue("");
-                }
-              }
-            });
-        }
-      }
+          }
+        });
     }
   }
+  generarBarras() {
+    let etiquetas: any[] = [];
+    let datas: any[] = [];
+    let arrayLista: any[] = [];
+    this.rangos.forEach(rango => {
+      let label = rango.situacion;
+      let objeto = {
+        rango: rango,
+        total: 0,
+        porcentaje: 0
+      }
+      arrayLista.push(objeto);
+      etiquetas.push(label);
+    });
 
-
-  retornaPromedio(objetos: any[]) {
-    let p = 0;
-    let tipo = "";
-    let total = 0;
-    let promedios: any[] = [];
-    this.evaluaciones.forEach(evaluacion => {
-      p = 0;
-      tipo = evaluacion.nombre;
-      total = 0;
-      objetos.forEach(objeto => {
-        if (objeto.evaluacion.id == evaluacion.id) {
-          p = p + objeto.valor;
-          total = total + 1;
+    this.datos.forEach(dato => {
+      arrayLista.forEach(item => {
+        if (item.rango.inicio <= dato.promedioarea && item.rango.fin >= dato.promedioarea) {
+          item.total = item.total + 1;
+          item.porcentaje = Math.round((item.total / this.datos.length) * 100);
         }
       });
-      let pt = {};
-      if (total > 0) {
-        pt = {
-          promedio: Math.round(p / total),
-          tipo: tipo
-        }
-      } else {
-        pt = {
-          promedio: 0,
-          tipo: tipo
-        }
-      }
-      promedios.push(pt);
     });
-    return promedios;
-  }
 
-  calculaPromedio(vector: any[], evaluacionId: number) {
-    let p = 0;
-    let total = 0;
-    let promedio = 0;
-    vector.forEach(objeto => {
-      if (objeto.evaluacion.id == evaluacionId) {
-        p = p + objeto.valor;
-        total = total + 1;
-      }
+    arrayLista.forEach(item => {
+      let label = item.porcentaje;
+      datas.push(label);
     });
-    if (total > 0) {
-      promedio = Math.round(p / total);
+    this.salesData = {
+      labels: etiquetas,
+      datasets: [
+        {
+          label: 'Porcentajes',
+          backgroundColor: [
+            this.chartColors.red,
+            this.chartColors.yellow,
+            this.chartColors.blue,
+            this.chartColors.green
+          ],
+          hoverBackgroundColor: [
+            this.chartColors.red,
+            this.chartColors.yellow,
+            this.chartColors.blue,
+            this.chartColors.green
+          ],
+          hoverBorderColor: [
+            this.chartColors.red,
+            this.chartColors.yellow,
+            this.chartColors.blue,
+            this.chartColors.green
+          ],
+          hoverBorderWidth: 2,
+          data: datas,
+          tension: 0.5
+        },
+      ],
     }
-    return promedio;
   }
 
-  calculaPromedioArea(vector: any[]) {
-    let pb = 0;
-    let pbt = 0;
-    vector.forEach(vec => {
-      pb = pb + vec.promedioA;
-    });
-
-    pbt = Math.round(pb / this.promedios.length);
-    return pbt;
-  }
-
-  coversionNotas() {
-
-    if (this.bandBoton == 0) {
-      this.bandBoton = 1;
-      this.mensajeboton = "Convertir a Numeros";
-    } else {
-      this.bandBoton = 0;
-      this.mensajeboton = "Convertir a Letras";
-    }
-
-  }
-
-
-  public obtenerLetra(valor: any) {
-    let retorno = {
-      letra: "NL",
-      situacion: "NS",
-      color: "",
-      alias: ""
-    };
-    this.rangos.forEach(rango => {
-      if (valor >= rango.inicio && valor <= rango.fin) {
-        retorno = {
-          letra: rango.letra,
-          situacion: rango.situacion,
-          color: rango.color,
-          alias: rango.alias
-        };
-      }
-    });
-    return retorno;
-  }
 
   buscarNotas() {
     this.formSubmitted = true;
     if (this.repForm.valid) {
       this.datos = [];
-      this.promedios = [];
       let arrPeriodos = (this.repForm.get('periodoId')?.value).split(',');
       let arrAulas = (this.repForm.get('aulaId')?.value).split(',');
       let arrAreas = (this.repForm.get('areaId')?.value).split(',');
@@ -464,56 +234,23 @@ export class ReporteNotaAreaTotalComponent implements OnInit {
       this.aulanombre = arrAulas[1];
       this.areanombre = arrAreas[1];
       this.ciclonombre = arrciclos[1];
-      
-      this.matriculas.forEach(matricula => {
-        this.datos = [];
-        this.promedios = [];
-        this.cargando = true;
-        this.notaService.notasArea(
-          Number(arrPeriodos[0]), Number(arrAulas[0]), Number(arrAreas[0]), Number(arrciclos[0]),
-          Number(matricula.alumnoId)
-        ).subscribe({
-          next: ({ ok, notas }) => {
-            if (ok) {
-              let promEval = 0;
-              let totalN = 0;
-              let subareaN = "";
-              this.subareas.forEach(subarea => {
+      this.cargando = true;
 
-                notas.forEach(nota => {
-                  if (nota.matricula?.programacion?.subarea?.nombre === subarea.nombre) {
-                    promEval = promEval + nota.valor;
-                    totalN = totalN + 1;
-                    subareaN = subarea.nombre;
-                  }
-                });
-                let retorno = this.obtenerLetra(Math.round(promEval / totalN));
-                this.promedios.push({
-                  subarea: subareaN,
-                  promedioA: Math.round(promEval / totalN),
-                  promedioL: retorno.letra,
-                });
-                promEval = 0;
-                totalN = 0;
-                subareaN = "";
-              });
-
-              let retornoC = this.obtenerLetra(this.calculaPromedioArea(this.promedios));
-              this.datos.push({
-                matricula: matricula,
-                area: arrAreas[1],
-                promedios: this.promedios,
-                promedioarea: this.calculaPromedioArea(this.promedios),
-                promedioL: retornoC.letra,
-                situacion: retornoC.situacion,
-                color: retornoC.alias
-              });
-              this.promedios = [];
+      this.matriculadetalles.forEach(matriculadetalle => {
+        this.notaService.notasPeriodoAulaAreaCicloAlumno(arrPeriodos[0], arrAulas[0], arrAreas[0],
+          arrciclos[0], Number(matriculadetalle.matricula?.alumno?.id)).subscribe({
+            next: ({ ok, notas }) => {
+              if (ok) {
+                let objeto = {
+                  alumno: matriculadetalle,
+                  notas: notas
+                };
+                this.datos.push(objeto);
+              }
             }
-            this.cargando = false;
-          }
-        });
+          });
       });
+      this.cargando = false;
     }
   }
 
@@ -536,8 +273,8 @@ export class ReporteNotaAreaTotalComponent implements OnInit {
       img.src = url;
     });
   }
-
   async generatePDF(accion: string) {
+
     this.formSubmitted = true;
 
     if (this.repForm.valid) {
@@ -548,308 +285,152 @@ export class ReporteNotaAreaTotalComponent implements OnInit {
       let arrAreas = (this.repForm.get('areaId')?.value).split(',');
       let arrciclos = (this.repForm.get('cicloId')?.value).split(',');
 
-      if (this.bandBoton == 0) {
-        var docDefinition: any = {
-          content: [
-            {
-              columns: [
-                {
-                  image: await this.getBase64ImageFromURL(url),
-                  width: 60,
-                  height: 60,
-                },
-                {
-                  text: this.institucion.nombre,
-                  fontSize: 14,
-                  color: '#0000',
-                  margin: [3, 25, 0, 0],
-                  bold: true,
-                }
-              ]
-            },
-            {
-              text: 'DIRECCIÓN: ' + this.institucion.direccion,
-              fontSize: 10,
-              color: '#0000',
-              bold: true,
-            },
-            {
-              text: 'TELÉFONO: ' + this.institucion.telefono,
-              fontSize: 10,
-              color: '#0000',
-              bold: true,
-            },
-            {
-              text: 'EMAIL: ' + this.institucion.email,
-              fontSize: 10,
-              color: '#0000',
-              bold: true,
-            },
-
-            {
-              text: 'REPORTE DE NOTAS',
-              style: ['header'],
-              margin: [0, 10, 0, 10],
-              decoration: 'underline',
-              decorationStyle: 'solid',
-              decorationColor: 'black'
-            },
-            {
-              text: [
-                { text: 'PERIODO: ', bold: true }, arrPeriodos[1]
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-            {
-              text: [
-                { text: 'AULA: ', bold: true, }, arrAulas[1]
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-            {
-              text: [
-                { text: 'AREA: ', bold: true, }, arrAreas[1]
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-
-            {
-              text: [
-                { text: 'CICLO: ', bold: true, }, arrciclos[1]
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-            {
-              text: [
-                { text: 'FECHA : ', bold: true, }, moment().format('DD/MM/yyyy')
-              ],
-              fontSize: 12,
-              color: '#0000',
-              margin: [0, 1, 0, 5],
-            },
-
-            {
-              text: [
-                { text: 'LISTA DE NOTAS: ', bold: true, }
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 5, 0, 2],
-            },
-
-            {
-              //layout: 'lightHorizontalLines',
-              margin: [0, 1, 0, 5],
-              table: {
-                headerRows: 1,
-                widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
-                body: [
-                  [
-                    { text: 'N°', bold: true, alignment: 'center' },
-                    { text: 'ALUMNO', bold: true, alignment: 'center' },
-                    { text: 'AREA', bold: true, alignment: 'center' },
-                    { text: 'SUBAREAS', bold: true, alignment: 'center' },
-                    { text: 'PROMEDIO', bold: true, alignment: 'center' },
-                    { text: 'SITUACIÓN', bold: true, alignment: 'center' }
-                  ],
-                  ...this.datos.map(p => (
-                    [
-                      this.datos.indexOf(p) + 1,
-                      p.matricula.alumno.persona.apellidopaterno+' '+
-                      p.matricula.alumno.persona.apellidomaterno+' '+
-                      p.matricula.alumno.persona.nombres,
-                      p.area,
-                      p.promedios.map((pr: any) => (
-                        [
-                          { text: pr.subarea + ' : ' + pr.promedioA, alignment: "center" }
-                        ]
-                      )),
-                      p.promedioarea,
-                      p.situacion
-                    ])),
-                ]
+      var docDefinition: any = {
+        content: [
+          {
+            columns: [
+              {
+                image: await this.getBase64ImageFromURL(url),
+                width: 60,
+                height: 60,
+              },
+              {
+                text: this.institucion.nombre,
+                fontSize: 14,
+                color: '#0000',
+                margin: [3, 25, 0, 0],
+                bold: true,
               }
-            },
+            ]
+          },
+          {
+            text: 'DIRECCIÓN: ' + this.institucion.direccion,
+            fontSize: 10,
+            color: '#0000',
+            bold: true,
+          },
+          {
+            text: 'TELÉFONO: ' + this.institucion.telefono,
+            fontSize: 10,
+            color: '#0000',
+            bold: true,
+          },
+          {
+            text: 'EMAIL: ' + this.institucion.email,
+            fontSize: 10,
+            color: '#0000',
+            bold: true,
+          },
 
-          ],
-          styles: {
-            header: {
-              fontSize: 15,
-              bold: true,
-              alignment: "center",
-            },
-            firma: {
-              fontSize: 12,
-              bold: true,
-              alignment: "center",
-            }
-          }
-        };
-      } else {
-        var docDefinition: any = {
-          content: [
-            {
-              columns: [
-                {
-                  image: await this.getBase64ImageFromURL(url),
-                  width: 60,
-                  height: 60,
-                },
-                {
-                  text: this.institucion.nombre,
-                  fontSize: 14,
-                  color: '#0000',
-                  margin: [3, 25, 0, 0],
-                  bold: true,
-                }
-              ]
-            },
-            {
-              text: 'DIRECCIÓN: ' + this.institucion.direccion,
-              fontSize: 10,
-              color: '#0000',
-              bold: true,
-            },
-            {
-              text: 'TELÉFONO: ' + this.institucion.telefono,
-              fontSize: 10,
-              color: '#0000',
-              bold: true,
-            },
-            {
-              text: 'EMAIL: ' + this.institucion.email,
-              fontSize: 10,
-              color: '#0000',
-              bold: true,
-            },
-
-            {
-              text: 'REPORTE DE NOTAS',
-              style: ['header'],
-              margin: [0, 10, 0, 10],
-              decoration: 'underline',
-              decorationStyle: 'solid',
-              decorationColor: 'black'
-            },
-            {
-              text: [
-                { text: 'PERIODO: ', bold: true }, arrPeriodos[1]
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-            {
-              text: [
-                { text: 'AULA: ', bold: true, }, arrAulas[1]
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-            {
-              text: [
-                { text: 'AREA: ', bold: true, }, arrAreas[1]
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-
-            {
-              text: [
-                { text: 'CICLO: ', bold: true, }, arrciclos[1]
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 1, 0, 1],
-            },
-            
-            {
-              text: [
-                { text: 'FECHA : ', bold: true, }, moment().format('DD/MM/yyyy')
-              ],
-              fontSize: 12,
-              color: '#0000',
-              margin: [0, 1, 0, 5],
-            },
-
-            {
-              text: [
-                { text: 'LISTA DE NOTAS: ', bold: true, }
-              ],
-              fontSize: 12,
-              color: '#0000',
-              width: 'auto',
-              margin: [0, 5, 0, 2],
-            },
-
-            {
-              //layout: 'lightHorizontalLines',
-              margin: [0, 1, 0, 5],
-              table: {
-                headerRows: 1,
-                widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
-                body: [
+          {
+            text: 'REPORTE DE NOTAS',
+            style: ['header'],
+            margin: [0, 10, 0, 10],
+            decoration: 'underline',
+            decorationStyle: 'solid',
+            decorationColor: 'black'
+          },
+          {
+            text: [
+              { text: 'PERIODO: ', bold: true }, arrPeriodos[1]
+            ],
+            fontSize: 12,
+            color: '#0000',
+            width: 'auto',
+            margin: [0, 1, 0, 1],
+          },
+          {
+            text: [
+              { text: 'AULA: ', bold: true, }, arrAulas[1]
+            ],
+            fontSize: 12,
+            color: '#0000',
+            width: 'auto',
+            margin: [0, 1, 0, 1],
+          },
+          {
+            text: [
+              { text: 'AREA: ', bold: true, }, arrAreas[1]
+            ],
+            fontSize: 12,
+            color: '#0000',
+            width: 'auto',
+            margin: [0, 1, 0, 1],
+          },
+          {
+            text: [
+              { text: 'CICLO: ', bold: true, }, arrciclos[1]
+            ],
+            fontSize: 12,
+            color: '#0000',
+            width: 'auto',
+            margin: [0, 1, 0, 1],
+          },
+          {
+            text: [
+              { text: 'FECHA REPORTE: ', bold: true, }, moment().format('DD/MM/yyyy')
+            ],
+            fontSize: 12,
+            color: '#0000',
+            margin: [0, 1, 0, 5],
+          },
+          {
+            margin: [0, 1, 0, 5],
+            table: {
+              headerRows: 1,
+              widths: ['auto', 'auto', 'auto'],
+              body: [
+                [
+                  { text: 'N°', bold: true, alignment: 'center' },
+                  { text: 'ALUMNO', bold: true, alignment: 'center' },
+                  { text: '', bold: true, alignment: 'center' }
+                ],
+                ...this.datos.map(p => (
                   [
-                    { text: 'N°', bold: true, alignment: 'center' },
-                    { text: 'ALUMNO', bold: true, alignment: 'center' },
-                    { text: 'AREA', bold: true, alignment: 'center' },
-                    { text: 'SUBAREAS', bold: true, alignment: 'center' },
-                    { text: 'PROMEDIO', bold: true, alignment: 'center' },
-                    { text: 'SITUACIÓN', bold: true, alignment: 'center' }
-                  ],
-                  ...this.datos.map(p => (
+                    this.datos.indexOf(p) + 1,
+                    p.alumno.matricula?.alumno?.persona?.apellidopaterno + ' ' +
+                    p.alumno.matricula?.alumno?.persona?.apellidomaterno + ' ' +
+                    p.alumno.matricula?.alumno?.persona?.nombres,
                     [
-                      this.datos.indexOf(p) + 1,
-                      p.matricula.alumno.persona.apellidopaterno+' '+
-                      p.matricula.alumno.persona.apellidomaterno+' '+
-                      p.matricula.alumno.persona.nombres,
-                      p.area,
-                      p.promedios.map((pr: any) => (
-                        [
-                          { text: pr.subarea + ' : ' + pr.promedioL, alignment: "center" }
-                        ]
-                      )),
-                      p.promedioL,
-                      p.situacion
-                    ])),
-                ]
-              }
-            },
-
-          ],
-          styles: {
-            header: {
-              fontSize: 15,
-              bold: true,
-              alignment: "center",
-            },
-            firma: {
-              fontSize: 12,
-              bold: true,
-              alignment: "center",
+                      {
+                        margin: [0, 1, 0, 1],
+                        table: {
+                          body: [
+                            [
+                              { text: 'Competencia', bold: true },
+                              { text: 'Evaluación', bold: true },
+                              { text: 'Valor', bold: true }
+                            ],
+                            ...p.notas.map((nt: any) => (
+                              [
+                                nt.competencia?.descripcion,
+                                nt.evaluacion?.nombre,
+                                nt.valor
+                              ]
+                            ))
+                          ]
+                        },
+                      },
+                    ]
+                  ])),
+              ]
             }
+          },
+
+        ],
+        styles: {
+          header: {
+            fontSize: 15,
+            bold: true,
+            alignment: "center",
+          },
+          firma: {
+            fontSize: 12,
+            bold: true,
+            alignment: "center",
           }
-        };
-      }
+        }
+      };
 
 
       if (accion === "OPEN") {
@@ -861,8 +442,8 @@ export class ReporteNotaAreaTotalComponent implements OnInit {
           pdfMake.createPdf(docDefinition).download(nombreArchivo);
         }
       }
-
     }
+
   }
 
 }

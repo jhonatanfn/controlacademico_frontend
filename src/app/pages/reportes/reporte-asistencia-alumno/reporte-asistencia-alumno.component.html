@@ -1,180 +1,113 @@
 <div class="row">
-    <div class="col-12 col-lg-3">
-        <div class="row">
-            <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-body">
-                        <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-                        <div class="row">
-                            <div class="col-12">
-                                <form [formGroup]="asisForm" (submit)="buscarAsistencias()">
-                                    <div class="row">
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="periodoId" class="form-label">Periodo</label>
-                                                <select class="form-select" aria-label="Seleccionar periodo"
-                                                    formControlName="periodoId" (change)="cargarMatriculas()">
-                                                    <option value="">Seleccionar Periodo</option>
-                                                    <option *ngFor="let periodo of periodos"
-                                                        [value]="[periodo.id,periodo.nombre]">
-                                                        {{periodo.nombre}}
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="campoRequerido('periodoId')" id="periodoId"
-                                                    class="form-text text-danger">
-                                                    La periodo es requerido
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="aulaId" class="form-label">Aula</label>
-                                                <select class="form-select" aria-label="Seleccionar aula"
-                                                    formControlName="aulaId" (change)="cargarMatriculas()">
-                                                    <option value="">Seleccionar Aula</option>
-                                                    <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre]">
-                                                        {{aula.nombre}}
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="campoRequerido('aulaId')" id="aulaId"
-                                                    class="form-text text-danger">
-                                                    El aula es requerido
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="subareaId" class="form-label">Subarea</label>
-                                                <select class="form-select" aria-label="Seleccionar aula"
-                                                    formControlName="subareaId" (change)="cargarMatriculas()">
-                                                    <option value="">Seleccionar Subarea</option>
-                                                    <option *ngFor="let subarea of subareas"
-                                                        [value]="[subarea.id,subarea.nombre]">
-                                                        {{subarea.nombre}}
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="campoRequerido('subareaId')" id="subareaId"
-                                                    class="form-text text-danger">
-                                                    La subarea es requerida
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="matriculaId" class="form-label">Alumnos</label>
-                                                <select class="form-select" aria-label="Seleccionar matricula"
-                                                    formControlName="matriculaId" (change)="limpiar()">
-                                                    <option value="">Seleccionar alumno</option>
-                                                    <option *ngFor="let matricula of matriculas"
-                                                        [value]="[matricula.id,matricula.alumno?.persona?.nombres,matricula.alumno?.persona?.apellidopaterno,matricula.alumno?.persona?.apellidomaterno,matricula.programacion?.docente?.persona?.nombres,matricula.programacion?.docente?.persona?.apellidopaterno,matricula.programacion?.docente?.persona?.apellidomaterno]">
-                                                        {{matricula.alumno?.persona?.apellidopaterno}}
-                                                        {{matricula.alumno?.persona?.apellidomaterno}}
-                                                        {{matricula.alumno?.persona?.nombres}}
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="campoRequerido('matriculaId')" id="matriculaId"
-                                                    class="form-text text-danger">
-                                                    El alumno es requerido
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="fechainicial" class="form-label">Fecha Inicial</label>
-                                                <input type="date" class="form-control" formControlName="fechainicial">
-                                                <div *ngIf="campoRequerido('fechainicial')" id="fechainicial"
-                                                    class="form-text text-danger">
-                                                    La Fecha Inicial es requerida
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="fechafinal" class="form-label">Fecha Final</label>
-                                                <input type="date" class="form-control" formControlName="fechafinal">
-                                                <div *ngIf="campoRequerido('fechafinal')" id="fechafinal"
-                                                    class="form-text text-danger">
-                                                    La Fecha Final es requerida
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary me-2">
-                                        <i class="bi bi-search"></i>
-                                        Buscar
-                                    </button>
-
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="col-12 mb-3">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
             </div>
-            <div class="col-12">
-                <div class="col-12" *ngIf="datos.length>0">
-                    <div class="card contenido-principal">
-                        <div class="card-body">
-                            <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <form [formGroup]="asisForm" (submit)="buscarAsistencias()">
                             <div class="row">
-                                <div class="col-12">
-                                    <div class="card w-100">
-                                        <div class="card-body">
-                                            <h6 class="card-title">Periodo:</h6>
-                                            <p class="card-text"> {{ periodonombre | uppercase }}</p>
-                                            <h6 class="card-title">Aula:</h6>
-                                            <p class="card-text">{{ aulanombre | uppercase }}</p>
-                                            <h6 class="card-title">Subarea:</h6>
-                                            <p class="card-text"> {{ subareanombre | uppercase }}</p>
-                                            <h6 class="card-title">Docente:</h6>
-                                            <p class="card-text"> {{ docentenombre | uppercase }}</p>
-                                            <h6 class="card-title">Alumno:</h6>
-                                            <p class="card-text"> {{ alumnonombre | uppercase }}</p>
-                                            <h6 class="card-title">Rango Fechas:</h6>
-                                            <p class="card-text"> Desde: {{ fechai | date:'dd/MM/yyyy' }} Hasta:
-                                                {{fechaf | date:'dd/MM/yyyy'}}</p>
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="periodoId" class="form-label">Periodo</label>
+                                        <select class="form-select" aria-label="Seleccionar periodo"
+                                            formControlName="periodoId" (change)="cargarAlumnos()">
+                                            <option value="">Seleccionar Periodo</option>
+                                            <option *ngFor="let periodo of periodos"
+                                                [value]="[periodo.id,periodo.nombre]">
+                                                {{periodo.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('periodoId')" id="periodoId"
+                                            class="form-text text-danger">
+                                            La periodo es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="aulaId" class="form-label">Aula</label>
+                                        <select class="form-select" aria-label="Seleccionar aula"
+                                            formControlName="aulaId" (change)="cargarAlumnos()">
+                                            <option value="">Seleccionar Aula</option>
+                                            <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre]">
+                                                {{aula.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('aulaId')" id="aulaId" class="form-text text-danger">
+                                            El aula es requerido
+                                        </div>
+                                    </div>
+                                </div>
 
-                                            <h6 class="card-title">N° Asistencias:</h6>
-                                            <p class="card-text"> {{ asistiototal }}</p>
-                                            <h6 class="card-title">N° Faltas:</h6>
-                                            <p class="card-text"> {{ faltototal }}</p>
-                                            <h6 class="card-title">N° Justificaciones:</h6>
-                                            <p class="card-text"> {{ justificototal }}</p>
-                                            <h6 class="card-title">N° No Registrados:</h6>
-                                            <p class="card-text"> {{ norgistradototal }}</p>
+                                <div class="col-12 col-md-6">
+                                    <div class="mb-3">
+                                        <label for="alumnoId" class="form-label">Alumno</label>
+                                        <select class="form-select" id="alumnoId" formControlName="alumnoId"
+                                            aria-label="Seleccionar alumno">
+                                            <option value="">Seleccionar alumno</option>
+                                            <option *ngFor="let matriculadetalle of matriculadetalles"
+                                                [value]="[matriculadetalle.matricula?.alumno?.id]">
+                                                {{matriculadetalle.matricula?.alumno?.persona?.apellidopaterno}}
+                                                {{matriculadetalle.matricula?.alumno?.persona?.apellidomaterno}}
+                                                {{matriculadetalle.matricula?.alumno?.persona?.nombres}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('alumnoId')" id="alumnoId"
+                                            class="form-text text-danger">
+                                            El alumno es requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="fechainicial" class="form-label">Fecha Inicial</label>
+                                        <input type="date" class="form-control" formControlName="fechainicial">
+                                        <div *ngIf="campoRequerido('fechainicial')" id="fechainicial"
+                                            class="form-text text-danger">
+                                            La Fecha es requerida
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="fechafinal" class="form-label">Fecha Final</label>
+                                        <input type="date" class="form-control" formControlName="fechafinal">
+                                        <div *ngIf="campoRequerido('fechafinal')" id="fechafinal"
+                                            class="form-text text-danger">
+                                            La Fecha es requerida
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-search"></i>
+                                Buscar
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-12 col-lg-9">
+
+    <div class="col-12">
         <div class="row">
-            <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-body">
+            <div class="col-12 col-lg-8 mb-3 mb-lg-0">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
                         <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-
-                                <div class="d-lg-flex d-flex-column justify-content-end mt-1" *ngIf="datos.length>0">
-                                    <button type="button" class="btn btn-danger btn-sm me-2"
-                                        (click)="generatePDF('OPEN')" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Visualizar PDF">
-                                        <i class="bi bi-file-earmark-pdf"></i>
-                                        Visualizar
-                                    </button>
+                                <div class="d-lg-flex d-flex-column justify-content-start mt-1" *ngIf="datos.length>0">
                                     <button type="button" class="btn btn-primary btn-sm me-2"
-                                        (click)="generatePDF('PRINT')" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        (click)="generatePDF('OPEN')" data-bs-toggle="tooltip" data-bs-placement="top"
                                         title="Imprimir PDF">
                                         <i class="bi bi-printer"></i>
                                         Imprimir
@@ -199,47 +132,44 @@
                                         No hay registros.
                                     </div>
                                     <table class="table table-bordered table-hover" *ngIf="datos.length>0">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="w70">N°</th>
-                                                <th scope="col">Fecha</th>
-                                                <th scope="col">Subarea</th>
-                                                <th scope="col">Alumno</th>
-                                                <th scope="col" class="w70">Asistió</th>
-                                                <th scope="col" class="w70">Faltó</th>
-                                                <th scope="col" class="w70">Justificó</th>
-                                                <th scope="col" class="w70">No Registró</th>
-                                            </tr>
-                                        </thead>
+
                                         <tbody>
                                             <tr *ngFor="let dato of datos; let i= index">
-                                                <th>{{i+1}}</th>
-                                                <td>
-                                                    {{dato.fecha | date:'dd/MM/yyyy'}}
-                                                </td>
-                                                <td>{{subareanombre | uppercase}}</td>
-                                                <td>{{alumnonombre | uppercase}}</td>
-                                                <td class="text-center">
+                                                <th class="w70">{{i+1}}</th>
+                                                <td class="w100">{{dato.fecha | date:'dd/MM/yyyy'}}</td>
+                                                <td class="text-center" class="w100">
                                                     <span class="badge rounded-pill bg-success" *ngIf="dato.asistio==1">
                                                         <i class="bi bi-check-lg" style="font-size: 1rem;"></i>
+                                                        {{dato.etiquetaA}}
                                                     </span>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" class="w100">
                                                     <span class="badge rounded-pill bg-danger" *ngIf="dato.falto==1">
                                                         <i class="bi bi-x-lg" style="font-size: 1rem;"></i>
+                                                        {{dato.etiquetaF}}
                                                     </span>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center" class="w100">
                                                     <span class="badge rounded-pill bg-primary"
                                                         *ngIf="dato.justifico==1">
-                                                        <i class="bi bi-exclamation-triangle-fill" style="font-size: 1rem;"></i>
+                                                        <i class="bi bi-exclamation-triangle" style="font-size: 1rem;">
+                                                        </i>
+                                                        {{dato.etiquetaJ}}
                                                     </span>
                                                 </td>
-                                                
-                                                <td class="text-center">
+                                                <td class="text-center" class="w100">
+                                                    <span class="badge rounded-pill bg-warning"
+                                                        *ngIf="dato.tardanza==1">
+                                                        <i class="bi bi-clock" style="font-size: 1rem;">
+                                                        </i>
+                                                        {{dato.etiquetaT}}
+                                                    </span>
+                                                </td>
+                                                <td class="text-center" class="w100">
                                                     <span class="badge rounded-pill bg-info"
                                                         *ngIf="dato.noregistrado==1">
                                                         <i class="bi bi-cloud-slash" style="font-size: 1rem;"></i>
+                                                        {{dato.etiquetaNR}}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -247,6 +177,26 @@
                                     </table>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf="datos.length>0">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <tbody>
+                                    <tr *ngFor="let resumen of resumenes">
+                                        <th>{{resumen.situacion.nombre}}</th>
+                                        <td>{{resumen.total}}</td>
+                                        <td>{{resumen.porcentaje}} %</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

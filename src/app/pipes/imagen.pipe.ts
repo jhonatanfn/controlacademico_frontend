@@ -9,20 +9,17 @@ const base_url= environment.base_url;
 export class ImagenPipe implements PipeTransform {
 
   transform(img: string): string {
-    
+    let retorno = "";
     if(!img){
-      return  `${base_url}/uploads/no-image`;
+     retorno= `${base_url}/uploads/no-img.jpg`;
     }else{
-      if(img?.includes('https')){
-        return img;
+      if(img?.includes('https') && navigator.onLine){
+        retorno= img;
       }else{
-        if(img){
-          return `${base_url}/uploads/${img}`;
-        }else{
-          return  `${base_url}/uploads/no-image`;
-        }
+        retorno= `${base_url}/uploads/no-img.jpg`;
       }
     }
+    return retorno;
   }
 
 }

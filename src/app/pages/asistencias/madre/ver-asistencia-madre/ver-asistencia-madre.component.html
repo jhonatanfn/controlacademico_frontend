@@ -1,0 +1,206 @@
+<div class="row">
+    <div class="col-12 mb-3">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <form [formGroup]="asisForm" (submit)="buscarAsistencias()">
+                            <div class="row">
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="periodoId" class="form-label">Periodo</label>
+                                        <select class="form-select" aria-label="Seleccionar periodo"
+                                            formControlName="periodoId">
+                                            <option value="">Seleccionar Periodo</option>
+                                            <option *ngFor="let periodo of periodos"
+                                                [value]="[periodo.id,periodo.nombre]">
+                                                {{periodo.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('periodoId')" id="periodoId"
+                                            class="form-text text-danger">
+                                            La periodo es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="aulaId" class="form-label">Aula</label>
+                                        <select class="form-select" aria-label="Seleccionar aula"
+                                            formControlName="aulaId">
+                                            <option value="">Seleccionar Aula</option>
+                                            <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre]">
+                                                {{aula.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('aulaId')" id="aulaId" class="form-text text-danger">
+                                            El aula es requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="mb-3">
+                                        <label for="alumnoId" class="form-label">Alumno</label>
+                                        <select class="form-select" aria-label="Seleccionar alumno"
+                                            formControlName="alumnoId">
+                                            <option value="">Seleccionar Alumno</option>
+                                            <option *ngFor="let alumno of alumnos"
+                                                [value]="[alumno.id,alumno.persona?.nombres]">
+                                                {{alumno.persona?.nombres}}
+                                                {{alumno.persona?.apellidopaterno}}
+                                                {{alumno.persona?.apellidomaterno}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('alumnoId')" id="alumnoId"
+                                            class="form-text text-danger">
+                                            El alumno es requerido
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="fechainicial" class="form-label">Fecha Inicial</label>
+                                        <input type="date" class="form-control" formControlName="fechainicial">
+                                        <div *ngIf="campoRequerido('fechainicial')" id="fechainicial"
+                                            class="form-text text-danger">
+                                            La Fecha es requerida
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="fechafinal" class="form-label">Fecha Final</label>
+                                        <input type="date" class="form-control" formControlName="fechafinal">
+                                        <div *ngIf="campoRequerido('fechafinal')" id="fechafinal"
+                                            class="form-text text-danger">
+                                            La Fecha es requerida
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-search"></i>
+                                Buscar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12 col-lg-8 mb-3 mb-lg-0">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-lg-flex d-flex-column justify-content-start mt-1" *ngIf="datos.length>0">
+                                    <button type="button" class="btn btn-primary btn-sm me-2"
+                                        (click)="generatePDF('OPEN')" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Imprimir PDF">
+                                        <i class="bi bi-printer"></i>
+                                        Imprimir
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-sm me-2"
+                                        (click)="generatePDF('DOWNLOAD')" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="Descargar PDF">
+                                        <i class="bi bi-arrow-down-circle"></i>
+                                        Descargar
+                                    </button>
+                                </div>
+                                <div class="mb-1" *ngIf="cargando">
+                                    <div class="alert alert-info text-center" role="alert">
+                                        <h6 class="alert-heading">Cargando...</h6>
+                                        <div class="spinner-border" role="status">
+                                        </div>
+                                        <p>Por favor espera</p>
+                                    </div>
+                                </div>
+                                <div class="table-responsive mt-2" *ngIf="!cargando">
+                                    <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
+                                        No hay registros.
+                                    </div>
+                                    <table class="table table-bordered table-hover" *ngIf="datos.length>0">
+
+                                        <tbody>
+                                            <tr *ngFor="let dato of datos; let i= index">
+                                                <th class="w70">{{i+1}}</th>
+                                                <td class="w100">{{dato.fecha | date:'dd/MM/yyyy'}}</td>
+                                                <td class="text-center" class="w100">
+                                                    <span class="badge rounded-pill bg-success" *ngIf="dato.asistio==1">
+                                                        <i class="bi bi-check-lg" style="font-size: 1rem;"></i>
+                                                        {{dato.etiquetaA}}
+                                                    </span>
+                                                </td>
+                                                <td class="text-center" class="w100">
+                                                    <span class="badge rounded-pill bg-danger" *ngIf="dato.falto==1">
+                                                        <i class="bi bi-x-lg" style="font-size: 1rem;"></i>
+                                                        {{dato.etiquetaF}}
+                                                    </span>
+                                                </td>
+                                                <td class="text-center" class="w100">
+                                                    <span class="badge rounded-pill bg-primary"
+                                                        *ngIf="dato.justifico==1">
+                                                        <i class="bi bi-exclamation-triangle" style="font-size: 1rem;">
+                                                        </i>
+                                                        {{dato.etiquetaJ}}
+                                                    </span>
+                                                </td>
+                                                <td class="text-center" class="w100">
+                                                    <span class="badge rounded-pill bg-warning"
+                                                        *ngIf="dato.tardanza==1">
+                                                        <i class="bi bi-clock" style="font-size: 1rem;">
+                                                        </i>
+                                                        {{dato.etiquetaT}}
+                                                    </span>
+                                                </td>
+                                                <td class="text-center" class="w100">
+                                                    <span class="badge rounded-pill bg-info"
+                                                        *ngIf="dato.noregistrado==1">
+                                                        <i class="bi bi-cloud-slash" style="font-size: 1rem;"></i>
+                                                        {{dato.etiquetaNR}}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4" *ngIf="datos.length>0">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <tbody>
+                                    <tr *ngFor="let resumen of resumenes">
+                                        <th>{{resumen.situacion.nombre}}</th>
+                                        <td>{{resumen.total}}</td>
+                                        <td>{{resumen.porcentaje}} %</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

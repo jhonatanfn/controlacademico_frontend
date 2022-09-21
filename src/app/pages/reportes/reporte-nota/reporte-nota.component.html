@@ -1,15 +1,17 @@
 <div class="row">
-    <div class="col-12 col-lg-3">
+    <div class="col-12">
         <div class="row">
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-body">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <form [formGroup]="repForm" (submit)="buscarNotas()">
                                     <div class="row">
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="periodoId" class="form-label">Periodo</label>
                                                 <select class="form-select" aria-label="Seleccionar periodo"
@@ -26,7 +28,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="aulaId" class="form-label">Aula</label>
                                                 <select class="form-select" aria-label="Seleccionar aula"
@@ -42,8 +44,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="subareaId" class="form-label">Subarea</label>
                                                 <select class="form-select" aria-label="Seleccionar aula"
@@ -60,8 +61,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="cicloId" class="form-label">Ciclo</label>
                                                 <select class="form-select" aria-label="Seleccionar ciclo"
@@ -79,7 +79,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <button type="submit" class="btn btn-primary me-2">
                                         <i class="bi bi-search"></i>
                                         Buscar
@@ -90,10 +89,14 @@
                     </div>
                 </div>
             </div>
+
+            <!--
             <div class="col-12" *ngIf="datos.length>0">
                 <div class="card contenido-principal">
-                    <div class="card-body">
+                    <div class="card-header">
                         <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <div class="card w-100">
@@ -119,37 +122,56 @@
                     </div>
                 </div>
             </div>
+            -->
         </div>
     </div>
 
-    <div class="col-12 col-lg-9">
-        <div class="card contenido-principal">
-            <div class="card-body">
+    <div class="col-12">
+        <div class="card card-color-primary contenido-principal">
+            <div class="card-header card.card-color-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
-
                     <div class="col-12">
                         <div class="d-lg-flex d-flex-column justify-content-end mt-1" *ngIf="datos.length>0">
-                            <button type="button" class="btn btn-success btn-sm me-2" (click)="coversionNotas()"
+                            <button type="button" class="btn btn-success btn-sm me-2 mb-1" (click)="coversionNotas()"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="{{mensajeboton}}">
                                 <i class="bi bi-arrow-repeat"></i>
                                 Convertir
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm me-2" (click)="generatePDF('OPEN')"
+                            <button type="button" class="btn btn-danger btn-sm me-2 mb-1" (click)="generatePDF('OPEN')"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Visualizar PDF">
                                 <i class="bi bi-file-earmark-pdf"></i>
                                 Visualizar
                             </button>
-                            <button type="button" class="btn btn-primary btn-sm me-2" (click)="generatePDF('PRINT')"
+                            <button type="button" class="btn btn-primary btn-sm me-2 mb-1" (click)="generatePDF('PRINT')"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Imprimir PDF">
                                 <i class="bi bi-printer"></i>
                                 Imprimir
                             </button>
-                            <button type="button" class="btn btn-secondary btn-sm me-2"
+                            <button type="button" class="btn btn-secondary btn-sm me-2 mb-1"
                                 (click)="generatePDF('DOWNLOAD')" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Descargar PDF">
                                 <i class="bi bi-arrow-down-circle"></i>
                                 Descargar
+                            </button>
+                            <button class="btn btn-sm btn-warning me-2 mb-1" data-bs-toggle="modal"
+                                data-bs-target="#barra" data-bs-placement="top" title="Gráfico de Barras"
+                                (click)="generarBarras()">
+                                <i class="bi bi-bar-chart-line"></i>
+                                Barras
+                            </button>
+                            <button class="btn btn-sm btn-danger me-2 mb-1" data-bs-toggle="modal"
+                                data-bs-target="#sector" data-bs-placement="top" title="Gráfico de Sectores"
+                                (click)="generarBarras()">
+                                <i class="bi bi-pie-chart"></i>
+                                Sectores
+                            </button>
+                            <button class="btn btn-sm btn-info me-2 mb-1" data-bs-toggle="modal" data-bs-target="#linea"
+                                data-bs-placement="top" title="Gráfico de Lineas" (click)="generarBarras()">
+                                <i class="bi bi-graph-up"></i>
+                                Lineas
                             </button>
                         </div>
 
@@ -171,6 +193,8 @@
                                     <tr>
                                         <th scope="col" class="w70">N°</th>
                                         <th scope="col">Apellidos y Nombres</th>
+                                        <th scope="col">Aula</th>
+                                        <th scope="col">Ciclo</th>
                                         <th scope="col">Subarea</th>
                                         <th scope="col"> Prom. Eval.</th>
                                         <th scope="col">Prom. Total</th>
@@ -184,24 +208,26 @@
                                             {{ dato.matriculaObj?.alumno?.persona?.apellidomaterno | uppercase}}
                                             {{ dato.matriculaObj?.alumno?.persona?.nombres | uppercase}}
                                         </td>
+                                        <td>{{dato.matriculaObj?.programacion?.aula?.nombre}}</td>
+                                        <td>{{ciclonombre}}</td>
                                         <td>
                                             {{dato.matriculaObj?.programacion?.subarea?.nombre | uppercase}}
                                         </td>
                                         <td>
-                                            <tr *ngFor="let prom of dato.promedios">
+                                    <tr *ngFor="let prom of dato.promedios">
 
-                                                <table class="table table-bordered table-hover">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{prom.tipo}}</td>
-                                                            <td>
-                                                                <small *ngIf="bandBoton===0">{{prom.promedio}}</small>
-                                                                <small *ngIf="bandBoton===1">{{prom.letra}}</small>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </tr>
+                                        <table class="table table-bordered table-hover">
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{prom.tipo}}</td>
+                                                    <td>
+                                                        <small *ngIf="bandBoton===0">{{prom.promedio}}</small>
+                                                        <small *ngIf="bandBoton===1">{{prom.letra}}</small>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </tr>
                                     </td>
                                     <th class="text-center" style="font-size: 20px;">
                                         <small *ngIf="bandBoton===1">{{dato.promedioTotalLetra}}</small>
@@ -219,6 +245,82 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="barra" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Gráfico de Barras</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas baseChart [data]="salesData" [type]="'bar'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="sector" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Gráfico de Sectores</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas baseChart [data]="salesData" [type]="'pie'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="linea" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Gráfico de Lineas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas baseChart [data]="salesData" [type]="'line'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Salir</button>
             </div>
         </div>
     </div>

@@ -55,13 +55,14 @@ header .botones .enlace1{
     font-weight: 500;
 }
 
+/*
 header .botones a:hover {
 	background-color: #e9e3e3f1;
 }
-
+*/
 header .botones .perfil {
 	height: 30px;
-	padding: 0 7px;
+    width: 30px;
 	background: none;
 	min-width: max-content;
 }
@@ -70,7 +71,6 @@ header .botones .perfil img {
 	width: 30px;
 	height: 30px;
 	border-radius: 100px;
-	margin-right: 5px;
 }
 
 header .boton{

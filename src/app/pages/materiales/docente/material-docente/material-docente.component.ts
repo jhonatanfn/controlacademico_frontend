@@ -15,9 +15,9 @@ import Swal from 'sweetalert2';
 })
 export class MaterialDocenteComponent implements OnInit {
 
-  public titulo2: string = 'Lista';
+  public titulo2: string = 'Lista de Materiales';
   public icono2: string = 'bi bi-justify';
-  public titulo3: string = 'Detalle';
+  public titulo3: string = 'Datos Asignación';
   public icono3: string = 'bi bi-card-checklist';
   public materialForm!: FormGroup;
   public formSubmitted: boolean = false;
@@ -36,7 +36,7 @@ export class MaterialDocenteComponent implements OnInit {
 
   public periodonombre: string = "";
   public aulanombre: string = "";
-  public subareanombre: string = "";
+  public areanombre: string = "";
   public docentenombre: string = "";
   public total: number = 0;
   public archivoAux: string = "";
@@ -55,7 +55,7 @@ export class MaterialDocenteComponent implements OnInit {
           if (ok) {
             this.periodonombre = programacion.periodo?.nombre!;
             this.aulanombre = programacion.aula?.nombre!;
-            this.subareanombre = programacion.subarea?.nombre!;
+            this.areanombre = programacion.area?.nombre!;
             this.docentenombre = programacion.docente?.persona?.nombres! + ' ' +
               programacion.docente?.persona?.apellidopaterno! + ' ' +
               programacion.docente?.persona?.apellidomaterno!;
@@ -160,12 +160,9 @@ export class MaterialDocenteComponent implements OnInit {
 
 
   guardarMaterial() {
-
     this.formSubmitted = true;
     if (this.materialForm.valid) {
-
       if (this.band) {
-
         Swal.fire({
           title: 'Guardar',
           text: "¿Desea guardar el material?",
@@ -239,8 +236,6 @@ export class MaterialDocenteComponent implements OnInit {
           confirmButtonText: 'Actualizar'
         }).then((result) => {
           if (result.isConfirmed) {
-
-
             this.materialService.actualizar(this.materialForm.controls['id'].value, this.materialForm.value)
               .subscribe({
                 next: ({ ok, msg, material }) => {
@@ -299,8 +294,6 @@ export class MaterialDocenteComponent implements OnInit {
                   });
                 }
               });
-
-
           }
         })
       }
@@ -356,7 +349,7 @@ export class MaterialDocenteComponent implements OnInit {
                 icon: 'success',
                 title: msg,
                 showConfirmButton: false,
-                timer: 2500
+                timer: 1000
               })
             }
           }, (error) => {
@@ -365,7 +358,7 @@ export class MaterialDocenteComponent implements OnInit {
               icon: 'info',
               title: error.error.msg,
               showConfirmButton: false,
-              timer: 2500
+              timer: 1000
             })
           });
       }

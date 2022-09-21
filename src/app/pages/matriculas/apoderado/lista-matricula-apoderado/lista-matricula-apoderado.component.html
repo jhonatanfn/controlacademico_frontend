@@ -1,25 +1,25 @@
 <div class="row">
     <div class="col-12 col-lg-12">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <div class="mb-0">
+                        <select class="form-select" aria-label="Default select example"
+                            [(ngModel)]="periodoseleccionado" (change)="listarMatriculas()">
+                            <option value="">TODOS</option>
+                            <option *ngFor="let periodo of periodos" [value]="periodo.id">
+                                {{periodo.nombre}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12 col-lg-2">
-                        <div class="mb-3">
-                            <select class="form-select" aria-label="Default select example"
-                                [(ngModel)]="periodoseleccionado" (change)="listarMatriculas()">
-                                <option value="">Seleccionar Periodo</option>
-                                <option *ngFor="let periodo of periodos" [value]="periodo.id">
-                                    {{periodo.nombre}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-10">
+                    <div class="col-12 col-lg-12">
                         <div class="d-flex align-items-start mb-2 buscador">
-                            <div class="input-group me-1">
+                            <div class="input-group me-0">
                                 <span class="input-group-text" id="buscar-algo">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-search" viewBox="0 0 16 16">
@@ -27,8 +27,9 @@
                                             d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                                     </svg>
                                 </span>
-                                <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar por nombres"
-                                    aria-describedby="buscar-algo" (keyup)="buscarMatriculas(txtTermino.value)" #txtTermino>
+                                <input type="search" class="form-control" placeholder="Buscar"
+                                    aria-label="Buscar por nombres" aria-describedby="buscar-algo"
+                                    (keyup)="buscarMatriculas(txtTermino.value)" #txtTermino>
                             </div>
                         </div>
                     </div>
@@ -43,47 +44,42 @@
                 </div>
 
                 <div class="table-responsive mb-1" *ngIf="!cargando">
-                    <div class="alert alert-primary" role="alert" *ngIf="matriculas.length==0">
+                    <div class="alert alert-primary" role="alert" *ngIf="matriculadetalles.length==0">
                         No hay registros.
                     </div>
-                    <table class="table table-bordered table-hover" *ngIf="matriculas.length>0">
+                    <table class="table table-bordered table-hover" *ngIf="matriculadetalles.length>0">
                         <thead>
                             <tr>
                                 <th scope="col" class="w70">N°</th>
                                 <th scope="col" class="w70">Periodo</th>
                                 <th scope="col">Alumno</th>
                                 <th scope="col">Aula</th>
-                                <th scope="col">Subarea</th>
+                                <th scope="col">Area</th>
                                 <th scope="col">Docente</th>
                                 <th scope="col" class="w70"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let matricula of matriculas; let i=index">
+                            <tr *ngFor="let matriculadetalle of matriculadetalles; let i=index">
                                 <th>{{desde+i+1 }}</th>
-                                <td>{{matricula.programacion?.periodo?.nombre}}</td>
-                                <td>{{matricula.alumno?.persona?.nombres}}
-                                    {{matricula.alumno?.persona?.apellidopaterno}}
-                                    {{matricula.alumno?.persona?.apellidomaterno}}
+                                <td>{{matriculadetalle.programacion?.periodo?.nombre}}</td>
+                                <td>{{matriculadetalle.matricula?.alumno?.persona?.nombres}}
+                                    {{matriculadetalle.matricula?.alumno?.persona?.apellidopaterno}}
+                                    {{matriculadetalle.matricula?.alumno?.persona?.apellidomaterno}}
                                 </td>
-                                <td>{{matricula.programacion?.aula?.nombre}}</td>
-                                <td>{{matricula.programacion?.subarea?.nombre}}</td>
-                                <td>{{matricula.programacion?.docente?.persona?.nombres}}</td>
+                                <td>{{matriculadetalle.programacion?.aula?.nombre}}</td>
+                                <td>{{matriculadetalle.programacion?.area?.nombre}}</td>
+                                <td>
+                                    {{matriculadetalle.programacion?.docente?.persona?.nombres}}
+                                    {{matriculadetalle.programacion?.docente?.persona?.apellidopaterno}}
+                                    {{matriculadetalle.programacion?.docente?.persona?.apellidomaterno}}
+                                </td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-primary me-1"
-                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Notas"
-                                            [routerLink]="['notas',matricula.id]">
+                                        <button type="button" class="btn btn-primary me-1" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" title="Notas" [routerLink]="['notas',matriculadetalle.id]">
                                             <span>
                                                 <i class="bi bi-stickies"></i>
-                                            </span>
-                                        </button>
-
-                                        <button type="button" class="btn btn-success me-1"
-                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Asistencias"
-                                            [routerLink]="['asistencia',matricula.id]">
-                                            <span>
-                                                <i class="bi bi-megaphone"></i>
                                             </span>
                                         </button>
                                     </div>
@@ -92,11 +88,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-start" *ngIf="!cargando">
-                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
-                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
-                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
-                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                <div class="d-flex justify-content-between align-items-start" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
                 </div>
             </div>
         </div>

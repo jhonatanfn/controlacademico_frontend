@@ -1,3 +1,7 @@
+.logo img{
+	max-width: 8rem;
+	height: 8rem;
+}
 .acerca-de .foto{
     background-color: #fff;
 }

@@ -44,17 +44,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="d-flex">
-                                        <button type="submit" class="d-flex btn btn-primary me-2">
-                                            <i class="bi bi-calendar2-check me-2"></i>
-                                            Generar
-                                        </button>
-                                        <button type="button" class="d-flex btn btn-primary me-2"
-                                            (click)="guardarHorario()">
-                                            <i class="bi bi-hdd me-2"></i>
-                                            Guardar
-                                        </button>
+                                        <div class="d-flex justify-content-between">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="bi bi-calendar2-check"></i>
+                                                Generar
+                                            </button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -70,7 +65,14 @@
             <div class="col-12">
                 <div class="card contenido-principal">
                     <div class="card-header">
-                        <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                        <div class="d-flex justify-content-between">
+                            <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                            <button type="button" class="btn btn-primary" (click)="guardarHorario()" 
+                            *ngIf="datos.length>0">
+                                <i class="bi bi-hdd"></i>
+                                Guardar
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -102,12 +104,12 @@
                                                 <td *ngFor="let dato of datos.slice(in.inicio,in.final)">
                                                     <p>{{dato.hora.inicio}} - {{dato.hora.fin}}
                                                     </p>
-                                                    <select class="form-select" aria-label="Seleccionar subarea"
-                                                        *ngIf="dato.hora.tipo===1" [(ngModel)]="dato.subareaId"
+                                                    <select class="form-select" aria-label="Seleccionar area"
+                                                        *ngIf="dato.hora.tipo===1" [(ngModel)]="dato.areaId"
                                                         (change)="verificaSeleccion(dato)">
-                                                        <option value=0>Seleccionar Subarea</option>
-                                                        <option *ngFor="let subarea of subareas" [value]="subarea.id">
-                                                            {{subarea.nombre}}
+                                                        <option value=0>Seleccionar Area</option>
+                                                        <option *ngFor="let area of areas" [value]="area.id">
+                                                            {{area.nombre}}
                                                         </option>
                                                     </select>
                                                     <strong *ngIf="dato.hora.tipo===0" class="text-center">

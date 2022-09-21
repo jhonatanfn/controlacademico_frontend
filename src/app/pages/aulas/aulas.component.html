@@ -1,14 +1,18 @@
 <div class="row">
     <div class="col-12 col-lg-12">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <!--Encabezado-->
-                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <a routerLink="crear" type="button" class="d-flex btn btn-primary">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo
+                    </a>
+                </div>
             </div>
             <div class="card-body">
-                <!-- Bucador y boto nuevo-->
                 <div class="d-flex align-items-start mb-2 buscador">
-                    <div class="input-group me-1">
+                    <div class="input-group me-0">
                         <span class="input-group-text" id="buscar-algo">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-search" viewBox="0 0 16 16">
@@ -19,13 +23,14 @@
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                             aria-describedby="buscar-algo" (keyup)="buscarAula(txtTermino.value)" #txtTermino>
                     </div>
+                    <!--
                     <a routerLink="crear" type="button" class="d-flex btn btn-primary">
                         <i class="bi bi-plus-square me-2"></i>
                         Nuevo
                     </a>
+                    -->
                 </div>
 
-                <!--Alerta-->
                 <div class="mb-1" *ngIf="cargando">
                     <div class="alert alert-info text-center" role="alert">
                         <h6 class="alert-heading">Cargando...</h6>
@@ -60,8 +65,8 @@
                                 <td>{{aula.seccion.nombre | uppercase}}</td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-success me-1"
-                                            data-bs-placement="top" title="Editar" [routerLink]="['editar',aula.id]">
+                                        <button type="button" class="btn btn-success me-1" data-bs-placement="top"
+                                            title="Editar" [routerLink]="['editar',aula.id]">
                                             <span>
                                                 <i class="bi bi-pen"></i>
                                             </span>
@@ -78,11 +83,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-start" *ngIf="!cargando">
-                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
-                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
-                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
-                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                <div class="d-flex justify-content-between align-items-start" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
                 </div>
             </div>
         </div>

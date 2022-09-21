@@ -1,0 +1,137 @@
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearCompetencia()">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-2 buscador">
+                    <div class="input-group me-0">
+                        <span class="input-group-text" id="buscar-algo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </span>
+                        <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                            aria-describedby="buscar-algo" (keyup)="buscarCompetencia(txtTermino.value)" #txtTermino>
+                    </div>
+                </div>
+
+                <div class="mb-1" *ngIf="cargando">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h6 class="alert-heading">Cargando...</h6>
+                        <div class="spinner-border" role="status">
+                        </div>
+                        <p>Por favor espera</p>
+                    </div>
+                </div>
+
+                <div class="table-responsive mb-1" *ngIf="!cargando">
+                    <div class="alert alert-primary" role="alert" *ngIf="competencias.length==0">
+                        No hay registros.
+                    </div>
+                    <table class="table table-bordered table-hover" *ngIf="competencias.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col">Descripción</th>
+                                <th scope="col">Area</th>
+                                <th scope="col" class="w100"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let competencia of competencias;let i=index">
+                                <th>{{desde+i+1}}</th>
+                                <td>{{competencia.descripcion | uppercase}}</td>
+                                <td>{{competencia.area?.nombre | uppercase}}</td>
+                                <td>
+                                    <div class="btn-group text-center">
+                                        <button type="button" class="btn btn-success me-1" data-bs-toggle="modal"
+                                            data-bs-target="#crear" data-bs-placement="top" title="Editar"
+                                            (click)="editarCompetencia(competencia)">
+                                            <span>
+                                                <i class="bi bi-pen"></i>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-danger" data-bs-placement="top"
+                                            title="Eliminar" (click)="eliminarCompetencia(competencia)">
+                                            <span>
+                                                <i class="bi bi-x-circle"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-between align-items-center" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{{titulocompetencia}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="competenciaForm" autocomplete="off" (submit)="guardarCompetencia()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="areaId" class="form-label">Area</label>
+                        <select class="form-select" id="areaId" aria-label="Default select example"
+                            formControlName="areaId">
+                            <option value="">Seleccionar area</option>
+                            <option *ngFor="let area of areas" [value]="area.id">
+                                {{area.nombre}}
+                            </option>
+                        </select>
+                        <div *ngIf="campoRequerido('areaId')" id="gradoId" class="form-text text-danger">
+                            El area es requerida
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="5"
+                            formControlName="descripcion">
+                        </textarea>
+                        <div class="form-text text-danger" *ngIf="campoRequerido('descripcion')">
+                            El campo descripcion es requerido
+                        </div>
+                        <div class="form-text text-danger" *ngIf="campoMaxLengh('descripcion',255)">
+                            El campo descripcion debe tener como maximo 255 caracteres
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                        <i class="bi bi-x-lg"></i>
+                        Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-hdd"></i>
+                        {{boton}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

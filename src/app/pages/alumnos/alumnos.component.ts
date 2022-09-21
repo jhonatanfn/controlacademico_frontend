@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Alumno } from 'src/app/models/alumno.model';
 import { AlumnoService } from 'src/app/services/alumno.service';
-import { MenuService } from 'src/app/services/menu.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -44,12 +43,16 @@ export class AlumnosComponent implements OnInit {
   listarAlumnos() {
     this.cargando = true;
     this.alumnoService.listar(this.desde)
-      .subscribe(({ alumnos, total }) => {
-        this.alumnos = alumnos;
-        this.totalRegistros = total;
-        this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-        this.cargando = false;
-        this.controlBotonesPaginacion();
+      .subscribe({
+        next: ({ ok, alumnos, total }) => {
+          if (ok) {
+            this.alumnos = alumnos;
+            this.totalRegistros = total;
+            this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+            this.cargando = false;
+            this.controlBotonesPaginacion();
+          }
+        }
       });
   }
 
@@ -66,7 +69,6 @@ export class AlumnosComponent implements OnInit {
   }
 
   eliminarAlumno(alumno: Alumno) {
-
     this.alumnoService.tieneMatricula(alumno.id!).subscribe({
       next: ({ ok, msg }) => {
         if (ok) {
@@ -78,7 +80,6 @@ export class AlumnosComponent implements OnInit {
             timer: 1500
           })
         } else {
-
           Swal.fire({
             title: 'Borrar Alumno',
             text: "Desea borrar a: " + alumno.persona?.nombres,
@@ -131,11 +132,10 @@ export class AlumnosComponent implements OnInit {
   }
 
   buscarAlumno(termino: string) {
-
     if (termino.length == 0) {
       this.listarAlumnos();
     } else {
-      this.alumnoService.buscarPorNombres(termino)
+      this.alumnoService.buscar(termino)
         .subscribe({
           next: (resp: Alumno[]) => {
             this.alumnos = resp;
@@ -152,35 +152,8 @@ export class AlumnosComponent implements OnInit {
               timer: 1000
             });
           }
-        })
+        });
     }
-
-    /*
-    if (this.busqueda == 1) {
-      if (termino.length == 0) {
-        this.listarAlumnos();
-      } else {
-        this.alumnoService.buscarPorDocumento(termino)
-          .subscribe({
-            next: (resp: Alumno[]) => {
-              this.alumnos = resp;
-              this.totalRegistros = resp.length;
-              this.cargando = false;
-              this.controlBotonesPaginacion();
-            },
-            error: (error) => {
-              Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: error.error.msg,
-                showConfirmButton: false,
-                timer: 1000
-              });
-            }
-          })
-      }
-    }
-*/
   }
 
 }

@@ -1,53 +1,54 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanLoad, Router, UrlSegment } from '@angular/router';
-import { Apoderado } from '../models/apoderado.model';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
+import { Madre } from '../models/madre.model';
+import { Padre } from '../models/padre.model';
 import { MatriculaService } from '../services/matricula.service';
+import { MatriculadetalleService } from '../services/matriculadetalle.service';
 import { UsuarioService } from '../services/usuario.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IsMatriculaApoderadoGuard implements CanActivate {
-  
-  public apoderado!:Apoderado;
 
-  constructor(private usuarioService:UsuarioService,
-    private matriculaService:MatriculaService,private router: Router){}
-  
+  public padre!: Padre;
+  public madre!: Madre;
+
+  constructor(private usuarioService: UsuarioService,
+    private matriculadetalleService: MatriculadetalleService, private router: Router) { }
+
   canActivate(route: ActivatedRouteSnapshot) {
 
-      this.usuarioService.apoderadoPorPersona().subscribe(({ ok, apoderado }) => {
+    if (this.usuarioService.usuario.role.nombre == "PADRE") {
+      this.usuarioService.padrePorPersona().subscribe(({ ok, padre }) => {
         if (ok) {
-          this.apoderado= apoderado;
-          this.matriculaService.perteneceMatriculaApoderado(
-            Number(this.apoderado.id),
+          this.padre = padre;
+          this.matriculadetalleService.perteneceMatriculadetallePadre(
+            Number(this.padre.id),
             Number(route.paramMap.get('id'))
-          ).subscribe(({ok})=>{
-            
-            if(!ok){
+          ).subscribe(({ ok }) => {
+            if (!ok) {
               this.router.navigateByUrl('dashboard');
             }
-          })
+          });
         }
       });
-    return true;
-  }
-  canLoad(route: ActivatedRouteSnapshot){
-    
-      this.usuarioService.apoderadoPorPersona().subscribe(({ ok, apoderado }) => {
+    }
+    if (this.usuarioService.usuario.role.nombre == "MADRE") {
+      this.usuarioService.madrePorPersona().subscribe(({ ok, madre }) => {
         if (ok) {
-          this.apoderado= apoderado;
-          this.matriculaService.perteneceMatriculaApoderado(
-            Number(this.apoderado.id),
+          this.madre = madre;
+          this.matriculadetalleService.perteneceMatriculadetalleMadre(
+            Number(this.madre.id),
             Number(route.paramMap.get('id'))
-          ).subscribe(({ok})=>{
-            if(!ok){
+          ).subscribe(({ ok }) => {
+            if (!ok) {
               this.router.navigateByUrl('dashboard');
             }
-          })
+          });
         }
       });
-    
+    }
     return true;
   }
 }

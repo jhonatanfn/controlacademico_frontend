@@ -48,6 +48,10 @@ export class PeriodoService {
     const base = `${base_url}/periodos/${id}`;
     return this.http.delete<crudPeriodo>(base, this.headers);
   }
+  porNombre(nombre:string){
+    const url = `${base_url}/periodos/consulta/${nombre}`;
+    return this.http.get<crudPeriodo>(url, this.headers);
+  }
 
   buscarPorNombre(termino: string) {
     const base = `${base_url}/periodos/busqueda/${termino}`;
@@ -60,13 +64,13 @@ export class PeriodoService {
   }
   private transformar(busquedas: any[]): Periodo[] {
     return busquedas.map(
-      periodo => new Periodo(periodo.nombre, periodo.id)
+      periodo => new Periodo(periodo.nombre, periodo.fechainicial, periodo.fechafinal, periodo.id)
     );
   }
 
-  tieneProgramaciones(periodoId:number){
-    const base= `${base_url}/periodos/tieneprogramaciones/${periodoId}`;
-    return this.http.get<crudPeriodo>(base,this.headers);
+  tieneProgramaciones(periodoId: number) {
+    const base = `${base_url}/periodos/tieneprogramaciones/${periodoId}`;
+    return this.http.get<crudPeriodo>(base, this.headers);
   }
 
 }

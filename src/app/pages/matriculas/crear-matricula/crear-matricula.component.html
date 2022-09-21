@@ -1,7 +1,7 @@
 <div class="row">
-    <div class="col-12 col-lg-5">
-        <div class="card contenido-principal">
-            <div class="card-header">
+    <div class="col-12 col-lg-5 mb-3 mb-lg-0">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
             </div>
             <div class="card-body">
@@ -12,8 +12,8 @@
                                 <ng-select [(ngModel)]="selectedAlumno" (change)="alumnoSeleccionado()"
                                     placeholder="Buscar alumno">
                                     <ng-option *ngFor="let alumno of alumnos"
-                                        [value]="[alumno.id,alumno.persona?.numero,alumno.persona?.nombres,alumno.persona?.apellidopaterno,alumno.persona?.apellidomaterno]">
-                                        {{alumno.persona?.numero}} -
+                                        [value]="[alumno.id,alumno.persona?.dni,alumno.persona?.nombres,alumno.persona?.apellidopaterno,alumno.persona?.apellidomaterno,alumno.persona?.img]">
+                                        {{alumno.persona?.dni}} -
                                         {{alumno.persona?.apellidopaterno}} {{alumno.persona?.apellidomaterno}}
                                         {{alumno.persona?.nombres}}
                                     </ng-option>
@@ -26,14 +26,25 @@
                         <div class="mb-3" *ngIf="existeAlumno">
                             <div class="card">
                                 <div class="card-body">
-                                    <h6 class="card-title">Número Documento:</h6>
-                                    <p class="card-text">{{alumno_numero}}</p>
-                                    <h6 class="card-title">Nombres y Apellidos:</h6>
-                                    <p class="card-text">
-                                        {{alumno_nombres}}
-                                        {{alumno_apellidopaterno}}
-                                        {{alumno_apellidomaterno}}
-                                    </p>
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-between mb-2 mt-2">
+                                            <img [src]="alumno_img | imagen"
+                                                class="rounded-circle mt-4 border border-2 me-2" alt=""
+                                                style="width: 95px; height: 95px;">
+                                            <div class="card w-100">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">DNI:</h6>
+                                                    <p class="card-text">{{alumno_numero}}</p>
+                                                    <h6 class="card-title">Nombres y Apellidos:</h6>
+                                                    <p class="card-text">
+                                                        {{alumno_nombres}}
+                                                        {{alumno_apellidopaterno}}
+                                                        {{alumno_apellidomaterno}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -42,19 +53,27 @@
             </div>
         </div>
     </div>
-
-
     <div class="col-12 col-lg-7">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+                    <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                    <div class="d-flex justify-content-between">
+                        <div class="col d-flex justify-content-start gap-2">
+                            <button type="button" class="btn btn-primary btn-sm" (click)="guardarMatricula()">
+                                <i class="bi bi-hdd"></i>
+                                Guardar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <form [formGroup]="matriculaForm" (submit)="generarMatricula()">
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-12 col-md-6">
                                     <div class="mb-3">
                                         <label for="periodoId" class="form-label">Periodo</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -71,13 +90,14 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12">
+                                <div class="col-12 col-md-6">
                                     <div class="mb-3">
                                         <label for="aulaId" class="form-label">Aula</label>
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="aulaId">
                                             <option value="">Seleccionar aula</option>
-                                            <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre,aula.nivel,aula.grado,aula.seccion]">
+                                            <option *ngFor="let aula of aulas"
+                                                [value]="[aula.id,aula.nombre,aula.nivel,aula.grado,aula.seccion]">
                                                 {{aula.nombre}}
                                             </option>
                                         </select>
@@ -86,28 +106,11 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-                            <div class="row">
-                                <div class="col d-flex justify-content-start">
-                                    <button type="submit" class="btn btn-primary btn-sm me-2">
-                                        <i class="bi bi-search"></i>
-                                        Buscar
-                                    </button>
-                                    
-                                    <button type="button" class="btn btn-primary btn-sm me-2" 
-                                    [disabled]="programaciones.length==0"
-                                        (click)="guardarMatricula()">
-                                        <i class="bi bi-hdd"></i>
-                                        Guardar
-                                    </button>
-                                    <button type="button" class="btn btn-success btn-sm me-2"
-                                        (click)="imprimirMatricula('OPEN')" [disabled]="programaciones.length==0">
-                                        <i class="bi bi-printer"></i>
-                                        Imprimir
-                                    </button>
-                                </div>
-                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="bi bi-search"></i>
+                                Buscar
+                            </button>
                         </form>
                     </div>
 
@@ -125,7 +128,7 @@
                                             <tr>
                                                 <th scope="col" class="w70">Periodo</th>
                                                 <th scope="col">Aula</th>
-                                                <th scope="col">Subarea</th>
+                                                <th scope="col">Area</th>
                                                 <th scope="col">Docente</th>
                                             </tr>
                                         </thead>
@@ -133,8 +136,11 @@
                                             <tr *ngFor="let p of programaciones">
                                                 <td>{{p.periodo?.nombre}}</td>
                                                 <td>{{p.aula?.nombre}}</td>
-                                                <td>{{p.subarea?.nombre}}</td>
-                                                <td>{{p.docente?.persona?.nombres}}</td>
+                                                <td>{{p.area?.nombre}}</td>
+                                                <td>{{p.docente?.persona?.nombres}}
+                                                    {{p.docente?.persona?.apellidopaterno}}
+                                                    {{p.docente?.persona?.apellidomaterno}}
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Alumno } from 'src/app/models/alumno.model';
-import { Matricula } from 'src/app/models/matricula.model';
+import { Matriculadetalle } from 'src/app/models/matriculadetalle';
 import { Periodo } from 'src/app/models/periodo.model';
-import { MatriculaService } from 'src/app/services/matricula.service';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 })
 export class ListaMatriculaAlumnoComponent implements OnInit {
 
-  public matriculas: Matricula[] = [];
+  public matriculadetalles: Matriculadetalle[] = [];
   public cargando: boolean = true;
   public titulo: string = 'Tabla Matriculas';
   public icono: string = 'bi bi-table';
@@ -28,7 +28,7 @@ export class ListaMatriculaAlumnoComponent implements OnInit {
   public periodos: Periodo[] = [];
 
   constructor(
-    private matriculaService: MatriculaService,
+    private matriculadetalleService: MatriculadetalleService,
     private usuarioService: UsuarioService,
     private periodoService: PeriodoService) {
 
@@ -52,7 +52,7 @@ export class ListaMatriculaAlumnoComponent implements OnInit {
   }
 
   controlBotonesPaginacion() {
-    if (this.matriculas.length !== 5) {
+    if (this.matriculadetalles.length !== 5) {
       this.ds = true;
     } else {
       this.ds = false;
@@ -66,23 +66,24 @@ export class ListaMatriculaAlumnoComponent implements OnInit {
 
   listarMatriculas() {
     this.cargando = true;
+    this.matriculadetalles=[];
 
     if(this.periodoseleccionado){
 
-      this.matriculaService.matriculasPorAlumnoPeriodo(Number(this.alumno.id),
+      this.matriculadetalleService.matriculadetallesPorAlumnoPeriodo(Number(this.alumno.id),
       Number(this.periodoseleccionado), this.desde)
-        .subscribe(({ matriculas, total }) => {
-          this.matriculas = matriculas;
-          this.totalRegistros = total;
-          this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-          this.cargando = false;
-          this.controlBotonesPaginacion();
+        .subscribe(({ matriculadetalles, total }) => {
+            this.matriculadetalles = matriculadetalles;
+            this.totalRegistros = total;
+            this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+            this.cargando = false;
+            this.controlBotonesPaginacion();
         });
 
     }else{
-      this.matriculaService.matriculasPorAlumno(Number(this.alumno.id), this.desde)
-        .subscribe(({ matriculas, total }) => {
-          this.matriculas = matriculas;
+      this.matriculadetalleService.matriculadetallesPorAlumno(Number(this.alumno.id), this.desde)
+        .subscribe(({ matriculadetalles, total }) => {
+          this.matriculadetalles = matriculadetalles;
           this.totalRegistros = total;
           this.numeropaginas = Math.ceil(this.totalRegistros / 5);
           this.cargando = false;
@@ -105,17 +106,15 @@ export class ListaMatriculaAlumnoComponent implements OnInit {
   }
 
   buscarMatriculas(termino: string) {
-
     if(this.periodoseleccionado){
-
       if (termino.length == 0) {
         this.listarMatriculas();
       } else {
-        this.matriculaService.buscarMatriculasPorAlumnoPeriodo(termino, Number(this.alumno.id),
+        this.matriculadetalleService.buscarMatriculadetallesPorAlumnoPeriodo(termino, Number(this.alumno.id),
         Number(this.periodoseleccionado))
           .subscribe({
-            next: (resp: Matricula[]) => {
-              this.matriculas = resp;
+            next: (resp: Matriculadetalle[]) => {
+              this.matriculadetalles = resp;
               this.totalRegistros = resp.length;
               this.controlBotonesPaginacion();
             },
@@ -130,16 +129,14 @@ export class ListaMatriculaAlumnoComponent implements OnInit {
             }
           });
       }
-
     }else{
-
       if (termino.length == 0) {
         this.listarMatriculas();
       } else {
-        this.matriculaService.buscarMatriculasPorAlumno(termino, Number(this.alumno.id))
+        this.matriculadetalleService.buscarMatriculadetallesPorAlumno(termino, Number(this.alumno.id))
           .subscribe({
-            next: (resp: Matricula[]) => {
-              this.matriculas = resp;
+            next: (resp: Matriculadetalle[]) => {
+              this.matriculadetalles = resp;
               this.totalRegistros = resp.length;
               this.controlBotonesPaginacion();
             },

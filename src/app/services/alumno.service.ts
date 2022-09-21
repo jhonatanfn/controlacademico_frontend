@@ -50,6 +50,21 @@ export class AlumnoService {
     const base= `${base_url}/alumnos/${id}`;
     return this.http.delete<crudAlumno>(base,this.headers);
   }
+  searchDNI(dni: string){
+    const base = `${base_url}/alumnos/searchdni/${dni}`;
+    return this.http.get<crudAlumno>(base, this.headers);
+  }
+
+  buscar(termino: string){
+    const base=`${base_url}/alumnos/busqueda/${termino}`;
+    return this.http.get<any[]>(base,this.headers)
+    .pipe(
+      map((resp:any)=>{
+        return this.transformar(resp.busquedas)
+      })
+    );
+  }
+
 
   porNumero(numero:string){
     const base= `${base_url}/alumnos/alumno/${numero}`;
@@ -65,6 +80,7 @@ export class AlumnoService {
       })
     );
   }
+
   buscarPorApellido(termino:string){
     const base=`${base_url}/alumnos/busqueda/apellido/${termino}`;
     return this.http.get<any[]>(base,this.headers)
@@ -97,12 +113,22 @@ export class AlumnoService {
 
   private transformar(busquedas:any[]):Alumno[]{
     return busquedas.map(
-      alumno=>new Alumno(alumno.personaId,alumno.apoderadoId,alumno.persona,alumno.apoderado,alumno.id)
+      alumno=>new Alumno(alumno.personaId,alumno.padreId,alumno.madreId,alumno.vivecon,alumno.tienediscapacidad,alumno.cualdiscapacidad,alumno.certificadiscapacidad,alumno.observacion,alumno.persona,alumno.padre,alumno.madre,alumno.id)
     );
   }
   tieneMatricula(alumnoId:number){
     const base=`${base_url}/alumnos/tienematricula/${alumnoId}`;
     return this.http.get<crudAlumno>(base,this.headers);
+  }
+
+  listaAlumnosPorPadre(padreId:number){
+    const base= `${base_url}/alumnos/padre/${padreId}`;
+    return this.http.get<listarAlumnos>(base, this.headers);
+  }
+
+  listaAlumnosPorMadre(madreId:number){
+    const base= `${base_url}/alumnos/madre/${madreId}`;
+    return this.http.get<listarAlumnos>(base, this.headers);
   }
 
 }

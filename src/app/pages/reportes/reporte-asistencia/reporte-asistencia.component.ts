@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Evaluacion } from 'src/app/models/evaluacion.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import * as  moment from 'moment';
@@ -29,10 +28,10 @@ import { MatriculaService } from 'src/app/services/matricula.service';
 })
 export class ReporteAsistenciaComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
-  public titulo2: string = 'Alumnos';
-  public icono2: string = 'bi bi-people-fill';
+  public titulo: string = 'Buscar';
+  public icono: string = 'bi bi-search';
+  public titulo2: string = 'Resultado';
+  public icono2: string = 'bi bi-pin-angle';
   public titulo3: string = 'Resumen';
   public icono3: string = 'bi bi-card-checklist';
   public asisForm!: FormGroup;
@@ -59,17 +58,13 @@ export class ReporteAsistenciaComponent implements OnInit {
   public cargando: boolean = false;
   public apoderado!: Apoderado;
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     private periodoService: PeriodoService, private asistenciaService: AsistenciaService,
     private institucionService: InstitucionService, private aulaService: AulaService,
     private subareaService: SubareaService, private usuarioService: UsuarioService,
     private programacionService: ProgramacionService,
     private matriculaService: MatriculaService) {
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
+
     this.periodoService.todo().subscribe(({ ok, periodos }) => {
       if (ok) {
         this.periodos = periodos;
@@ -78,6 +73,8 @@ export class ReporteAsistenciaComponent implements OnInit {
 
     if (this.usuarioService.usuario.role.nombre === "DOCENTE") {
 
+
+      /*
       this.usuarioService.docentePorPersona().subscribe({
         next: ({ ok, docente }) => {
           if (ok) {
@@ -110,6 +107,8 @@ export class ReporteAsistenciaComponent implements OnInit {
           }
         }
       });
+
+*/
     }
 
     if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
@@ -363,6 +362,15 @@ export class ReporteAsistenciaComponent implements OnInit {
           {
             text: [
               { text: 'SUBAREA: ', bold: true }, arrSubareas[1]
+            ],
+            fontSize: 12,
+            color: '#0000',
+            width: 'auto',
+            margin: [0, 1, 0, 1],
+          },
+          {
+            text: [
+              { text: 'DOCENTE: ', bold: true }, this.docentenombre
             ],
             fontSize: 12,
             color: '#0000',

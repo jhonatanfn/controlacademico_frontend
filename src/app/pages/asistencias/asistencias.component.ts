@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Periodo } from 'src/app/models/periodo.model';
-import { Programacion } from 'src/app/models/programacion.model';
-import { PeriodoService } from 'src/app/services/periodo.service';
-import { ProgramacionService } from 'src/app/services/programacion.service';
+import { Aula } from 'src/app/models/aula.model';
+import { AulaService } from 'src/app/services/aula.service';
 
 @Component({
   selector: 'app-asistencias',
@@ -11,7 +9,7 @@ import { ProgramacionService } from 'src/app/services/programacion.service';
 })
 export class AsistenciasComponent implements OnInit {
 
-  public programaciones: Programacion[] = [];
+  public aulas: Aula[] = [];
   public cargando: boolean = true;
   public titulo: string = 'Tabla Asistencias';
   public icono: string = 'bi bi-table';
@@ -20,28 +18,30 @@ export class AsistenciasComponent implements OnInit {
   public numeropaginas = 0;
   public ds: boolean = true;
   public da: boolean = true;
-  public periodoseleccionado: any = "";
-  public periodos: Periodo[] = [];
 
-  constructor(
-    private programacionService: ProgramacionService,
-    private periodoService: PeriodoService) {
+  constructor(private aulaService: AulaService) {
+  }
 
-    this.periodoService.todo().subscribe({
-      next: ({ ok, periodos }) => {
+  ngOnInit(): void {
+    this.listarAulas();
+  }
+
+  listarAulas() {
+    this.cargando = true;
+    this.aulaService.listar().subscribe({
+      next: ({ ok, aulas, total }) => {
         if (ok) {
-          this.periodos = periodos;
+          this.aulas = aulas;
+          this.totalRegistros = total;
+          this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+          this.cargando = false;
+          this.controlBotonesPaginacion();
         }
       }
     });
   }
-
-  ngOnInit(): void {
-    this.listarProgramaciones();
-  }
-
   controlBotonesPaginacion() {
-    if (this.programaciones.length !== 5) {
+    if (this.aulas.length !== 5) {
       this.ds = true;
     } else {
       this.ds = false;
@@ -52,35 +52,6 @@ export class AsistenciasComponent implements OnInit {
       this.da = false;
     }
   }
-
-
-  listarProgramaciones() {
-    this.cargando = true;
-
-    if (this.periodoseleccionado) {
-      this.programacionService.porPeriodoPaginado(Number(this.periodoseleccionado), this.desde)
-        .subscribe({
-          next: ({ programaciones, total }) => {
-            this.programaciones = programaciones;
-            this.totalRegistros = total;
-            this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-            this.cargando = false;
-            this.controlBotonesPaginacion();
-          }
-        });
-    } else {
-      this.programacionService.listar(this.desde)
-        .subscribe(({ programaciones, total }) => {
-          this.programaciones = programaciones;
-          this.totalRegistros = total;
-          this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-          this.cargando = false;
-          this.controlBotonesPaginacion();
-        });
-    }
-
-  }
-
   cambiarPagina(valor: number) {
     this.desde += valor;
     if (this.desde < 0) {
@@ -90,22 +61,20 @@ export class AsistenciasComponent implements OnInit {
         this.desde -= valor;
       }
     }
-    this.listarProgramaciones();
+    this.listarAulas();
   }
 
-  buscarAsistencias(nombre: string) {
-
-    if (nombre.length == 0) {
-      this.listarProgramaciones();
-    } else {
-      this.programacionService.buscarPorDocente(nombre).subscribe((resp: Programacion[]) => {
-        this.programaciones = resp;
-        this.totalRegistros = resp.length;
-        this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-        this.cargando = false;
+  buscarAula(termino:string){
+    if(termino.length==0){
+      this.listarAulas();
+    }else{
+      this.aulaService.buscarPorNombre(termino)
+      .subscribe((resp:Aula[])=>{
+        this.aulas=resp;
+        this.totalRegistros=resp.length;
+        this.cargando= false;
         this.controlBotonesPaginacion();
       });
     }
   }
-
 }

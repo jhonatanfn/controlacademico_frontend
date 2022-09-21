@@ -1,9 +1,9 @@
 <div class="row">
-    <div class="col-12 col-lg-3">
+    <div class="col-12 col-lg-3 mb-3 mb-lg-0">
         <div class="row">
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-header">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
                     </div>
                     <div class="card-body">
@@ -34,11 +34,6 @@
                                             <i class="bi bi-search me-2"></i>
                                             Buscar
                                         </button>
-                                        <button type="button" class="d-flex btn btn-primary me-2"
-                                            (click)="eliminarHorario()">
-                                            <i class="bi bi-hdd me-2"></i>
-                                            Eliminar
-                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -48,27 +43,38 @@
             </div>
 
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-header">
+                <div class="card card-color-primary contenido-principal">
+                    <div class="card-header card-color-header">
                         <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card w-100">
-                                    <div class="card-body">
-                                        <h6 class="card-title">Aula:</h6>
-                                        <p class="card-text"> {{ aulanombre | uppercase }}</p>
-                                        <h6 class="card-title">Nivel:</h6>
-                                        <p class="card-text">{{ nivelnombre | uppercase }}</p>
-                                        <h6 class="card-title">Grado:</h6>
-                                        <p class="card-text">{{ gradonombre | uppercase }}</p>
-                                        <h6 class="card-title">Seccion:</h6>
-                                        <p class="card-text">{{ seccionnombre | uppercase }}</p>
-                                    </div>
+
+                        <ol class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Aula</div>
+                                    {{ aulanombre | uppercase}}
                                 </div>
-                            </div>
-                        </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Nivel</div>
+                                    {{ nivelnombre | uppercase}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Grado</div>
+                                    {{ gradonombre | uppercase}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Seccion</div>
+                                    {{ seccionnombre | uppercase}}
+                                </div>
+                            </li>
+                        </ol>
                     </div>
                 </div>
             </div>
@@ -78,9 +84,15 @@
     <div class="col-12 col-lg-9">
         <div class="row">
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-header">
-                        <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <div class="d-flex justify-content-between">
+                            <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                            <button type="button" class="d-flex btn btn-primary" (click)="eliminarHorario()">
+                                <i class="bi bi-hdd me-2"></i>
+                                Eliminar
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -113,7 +125,7 @@
                                                     <p>{{dato.hora.inicio}} - {{dato.hora.fin}}
                                                     </p>
                                                     <p class="text-center" *ngIf="dato.hora.tipo===1">
-                                                        {{dato.programacion?.subarea?.nombre | uppercase}}
+                                                        {{dato.programacion?.area?.nombre | uppercase}}
                                                     </p>
                                                     <strong *ngIf="dato.hora.tipo===0" class="text-center">
                                                         RECREO

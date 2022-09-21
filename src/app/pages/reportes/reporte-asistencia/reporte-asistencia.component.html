@@ -1,16 +1,17 @@
 <div class="row">
-    <div class="col-12 col-lg-3">
+    <div class="col-12">
         <div class="row">
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-body">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <form [formGroup]="asisForm" (submit)="buscarAsistencias()">
                                     <div class="row">
-        
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="periodoId" class="form-label">Periodo</label>
                                                 <select class="form-select" aria-label="Seleccionar periodo"
@@ -27,7 +28,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="aulaId" class="form-label">Aula</label>
                                                 <select class="form-select" aria-label="Seleccionar aula"
@@ -44,8 +45,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="subareaId" class="form-label">Subarea</label>
                                                 <select class="form-select" aria-label="Seleccionar aula"
@@ -62,8 +62,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="fecha" class="form-label">Fecha</label>
                                                 <input type="date" class="form-control" formControlName="fecha">
@@ -73,7 +72,6 @@
                                                 </div>
                                             </div>
                                         </div>
-        
                                     </div>
         
                                     <button type="submit" class="btn btn-primary me-2">
@@ -87,6 +85,8 @@
                     </div>
                 </div>
             </div>
+
+            <!--
             <div class="col-12">
                 <div class="col-12" *ngIf="datos.length>0">
                     <div class="card contenido-principal">
@@ -120,17 +120,20 @@
                     </div>
                 </div>
             </div>
+            -->
+
         </div>
     </div>
-    <div class="col-12 col-lg-9">
+    <div class="col-12">
 
-        <div class="card contenido-principal">
-            <div class="card-body">
+        <div class="card card-color-primary contenido-principal">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                     
-                        <div class="d-lg-flex d-flex-column justify-content-end mt-1" *ngIf="datos.length>0">
+                        <div class="d-lg-flex d-flex-column justify-content-start mt-1" *ngIf="datos.length>0">
                             <button type="button" class="btn btn-danger btn-sm me-2" (click)="generatePDF('OPEN')"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Visualizar PDF">
                                 <i class="bi bi-file-earmark-pdf"></i>
@@ -165,6 +168,8 @@
                                     <tr>
                                         <th scope="col" class="w70">N°</th>
                                         <th scope="col">Apellidos y Nombres</th>
+                                        <th cope="col">Aula</th>
+                                        <th cope="col">Subarea</th>
                                         <th scope="col">Fecha</th>
                                         <th scope="col">Situación</th>
                                     </tr>
@@ -176,6 +181,8 @@
                                             {{dato.matricula.alumno?.persona?.apellidomaterno | uppercase}}
                                             {{dato.matricula.alumno?.persona?.nombres | uppercase}}
                                         </td>
+                                        <td>{{dato.matricula?.programacion?.aula?.nombre}}</td>
+                                        <td>{{dato.matricula?.programacion?.subarea?.nombre}}</td>
                                         <td>
                                             {{dato.fecha | date:'dd/MM/yyyy'}}
                                         </td>

@@ -1,3 +1,253 @@
+<div class="row">
+    <div class="col-12 col-md-4 mb-3">
+        <div class="d-flex flex-column gap-2">
+            <div class="logo text-center">
+                <img *ngIf="!imgTemp" [src]="usuario.persona.img! | imagen" class="rounded-circle mb-3 mt-1" alt="">
+                <img *ngIf="imgTemp" [src]="imgTemp" class="rounded-circle mb-3 mt-1" alt="">
+            </div>
+            <div class="list-group card-color-primary">
+                <a class="list-group-item list-group-item-action cursor {{activousuario}}"
+                    (click)="verificarOpcion('fusuario')">
+                    <i class="{{icono}}"></i>
+                    Datos de Usuario
+                </a>
+                <a class="list-group-item list-group-item-action cursor {{activopersonal}}"
+                    (click)="verificarOpcion('fpersonal')">
+                    <i class="{{icono4}}"></i>
+                    Datos Personales
+                </a>
+                <a class="list-group-item list-group-item-action cursor {{activologo}}"
+                    (click)="verificarOpcion('flogo')">
+                    <i class="{{icono2}}"></i>
+                    Imagen de Perfil
+                </a>
+                <a class="list-group-item list-group-item-action cursor {{activocambiar}}"
+                    (click)="verificarOpcion('fcambiar')">
+                    <i class="{{icono3}}"></i>
+                    Cambiar Contraseña
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-8 mb-3">
+        <div class="card card-color-primary contenido-principal mt-0" *ngIf="flogo">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row acerca-de d-flex align-items-start px-3">
+                    <div class="col-12 col-lg-12 foto text-center">
+                        <img *ngIf="!imgTemp" [src]="usuario.persona.img! | imagen" class="rounded-circle mb-3 mt-1"
+                            alt="">
+                        <img *ngIf="imgTemp" [src]="imgTemp" class="rounded-circle mb-3 mt-1" alt="">
+                    </div>
+                    <div class="col-12 col-lg-12 mb-3">
+                        <input class="form-control" type="file" id="formFile" (change)="cambiarImagen($event)">
+                    </div>
+                    <div class="d-grid gap-2 col-12 mx-auto">
+                        <button class="btn btn-primary" type="button" [disabled]="!imagenSubir" (click)="subirImagen()">
+                            <i class="bi bi-hdd"></i>
+                            Actualizar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card card-color-primary contenido-principal mt-0" *ngIf="fusuario">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row acerca-de d-flex align-items-start px-3">
+                    <div class="col-12 col-lg-12 info">
+                        <form action="" [formGroup]="perfilForm" (ngSubmit)="actualizarPefil()" autocomplete="off">
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Nombre</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-person-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="nombre" formControlName="nombre"
+                                        placeholder="Nombre" aria-label="Nombre" aria-describedby="basic-addon1">
+                                </div>
+                                <div id="nombre" class="form-text text-danger" *ngIf="campoRequerido('nombre')">
+                                    El nombre es requerido
+                                </div>
+                                <div id="nombre" class="form-text text-danger" *ngIf="campoMaxLengh('nombre')">
+                                    El nombre debe tener un maximo de 15 caracteres
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput2" class="form-label">Email</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-envelope-fill"></i>
+                                    </span>
+                                    <input type="email" class="form-control" id="email" formControlName="email"
+                                        placeholder="Email" aria-label="Email" aria-describedby="basic-addon2">
+                                </div>
+
+                                <div id="email" class="form-text text-danger" *ngIf="campoEmail('email')">
+                                    El email no es valido
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-12 mx-auto">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-hdd"></i>
+                                    Actualizar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-color-primary contenido-principal mt-0" *ngIf="fpersonal">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo4" [icono]="icono4"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <form [formGroup]="datosForm" (ngSubmit)="actualizarDatos()" autocomplete="off">
+
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Nombres</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-person-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="nombres" formControlName="nombres"
+                                        placeholder="Nombres" aria-label="Nombre" aria-describedby="basic-addon1">
+                                </div>
+                                <div id="nombres" class="form-text text-danger" *ngIf="campoRequerido2('nombres')">
+                                    El nombre es requerido
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Apellido Paterno</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-person-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="apellidopaterno"
+                                        formControlName="apellidopaterno" placeholder="Apellido Paterno"
+                                        aria-label="Apellido Paterno" aria-describedby="basic-addon1">
+                                </div>
+                                <div id="apellidopaterno" class="form-text text-danger"
+                                    *ngIf="campoRequerido2('apellidopaterno')">
+                                    El apellido paterno es requerido
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Apellido Materno</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-person-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="apellidomaterno"
+                                        formControlName="apellidomaterno" placeholder="Apellido Materno"
+                                        aria-label="Apellido Materno" aria-describedby="basic-addon1">
+                                </div>
+                                <div id="apellidomaterno" class="form-text text-danger"
+                                    *ngIf="campoRequerido2('apellidomaterno')">
+                                    El apellido materno es requerido
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Domicilio</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-house-door-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="domicilio" formControlName="domicilio"
+                                        placeholder="Domicilio" aria-label="Domicilio" aria-describedby="basic-addon1">
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Telefono</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-telephone-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="telefono" formControlName="telefono"
+                                        placeholder="Telefono" aria-label="Telefono" aria-describedby="basic-addon1">
+                                </div>
+
+                            </div>
+
+                            <div class="d-grid gap-2 col-12 mx-auto">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-hdd"></i>
+                                    Actualizar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-color-primary contenido-principal mt-0" *ngIf="fcambiar">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row acerca-de d-flex align-items-start px-3">
+                    <div class="col-12 col-lg-12 info">
+                        <form [formGroup]="passForm" (submit)="actualizarPassword()">
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput3" class="form-label">Password</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-key-fill"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="password" formControlName="password"
+                                        placeholder="Password" aria-label="password" aria-describedby="basic-addon1"
+                                        autocomplete="on">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput4" class="form-label">Repita password</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-key-fill"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="password2"
+                                        formControlName="password2" placeholder="Repita password" aria-label="password2"
+                                        aria-describedby="basic-addon2" autocomplete="on">
+                                </div>
+                                <div id="password2" class="form-text text-danger" *ngIf="contrasenasNoValidas()">
+                                    Los passwords deben ser iguales
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 col-12 mx-auto">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-hdd"></i>
+                                    Actualizar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--
 <div class="row mb-5">
     <div class="col-12 col-lg-5">
         <div class="card contenido-principal">
@@ -5,24 +255,23 @@
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
             </div>
             <div class="card-body">
-                 <div class="row acerca-de d-flex align-items-start px-3">
+                <div class="row acerca-de d-flex align-items-start px-3">
                     <div class="col-12 col-lg-12 foto text-center">
-                        <img  *ngIf="!imgTemp" [src]="usuario.persona.img! | imagen" class="rounded-circle mb-3 mt-1" alt="">
-                        <img  *ngIf="imgTemp" [src]="imgTemp" class="rounded-circle mb-3 mt-1" alt="">
+                        <img *ngIf="!imgTemp" [src]="usuario.persona.img! | imagen" class="rounded-circle mb-3 mt-1"
+                            alt="">
+                        <img *ngIf="imgTemp" [src]="imgTemp" class="rounded-circle mb-3 mt-1" alt="">
                     </div>
                     <div class="col-12 col-lg-12 mb-3">
                         <input class="form-control" type="file" id="formFile" (change)="cambiarImagen($event)">
                     </div>
                     <div class="d-grid gap-2 col-12 mx-auto">
-                        <button class="btn btn-primary" type="button" 
-                                [disabled]="!imagenSubir"    
-                                (click)="subirImagen()">
+                        <button class="btn btn-primary" type="button" [disabled]="!imagenSubir" (click)="subirImagen()">
                             <i class="bi bi-hdd"></i>
                             Actualizar
                         </button>
                     </div>
-                 </div>
-                 
+                </div>
+
             </div>
         </div>
     </div>
@@ -41,11 +290,8 @@
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-person-fill"></i>
                                     </span>
-                                    <input type="text" class="form-control" 
-                                    id="nombre"
-                                    formControlName="nombre"
-                                    placeholder="Nombre" 
-                                    aria-label="Nombre" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control" id="nombre" formControlName="nombre"
+                                        placeholder="Nombre" aria-label="Nombre" aria-describedby="basic-addon1">
                                 </div>
                                 <div id="nombre" class="form-text text-danger" *ngIf="campoRequerido('nombre')">
                                     El nombre es requerido
@@ -60,13 +306,10 @@
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-envelope-fill"></i>
                                     </span>
-                                    <input type="email" class="form-control" 
-                                    id="email"
-                                    formControlName="email"
-                                    placeholder="Email" 
-                                    aria-label="Email" aria-describedby="basic-addon2">
+                                    <input type="email" class="form-control" id="email" formControlName="email"
+                                        placeholder="Email" aria-label="Email" aria-describedby="basic-addon2">
                                 </div>
-                
+
                                 <div id="email" class="form-text text-danger" *ngIf="campoEmail('email')">
                                     El email no es valido
                                 </div>
@@ -100,17 +343,13 @@
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-person-fill"></i>
                                     </span>
-                                    <input type="text" class="form-control" 
-                                    id="nombres"
-                                    formControlName="nombres"
-                                    placeholder="Nombres" 
-                                    aria-label="Nombre" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control" id="nombres" formControlName="nombres"
+                                        placeholder="Nombres" aria-label="Nombre" aria-describedby="basic-addon1">
                                 </div>
-                                <div id="nombres" class="form-text text-danger" 
-                                *ngIf="campoRequerido2('nombres')">
+                                <div id="nombres" class="form-text text-danger" *ngIf="campoRequerido2('nombres')">
                                     El nombre es requerido
                                 </div>
-                                
+
                             </div>
 
                             <div class="mb-3">
@@ -119,17 +358,15 @@
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-person-fill"></i>
                                     </span>
-                                    <input type="text" class="form-control" 
-                                    id="apellidopaterno"
-                                    formControlName="apellidopaterno"
-                                    placeholder="Apellido Paterno" 
-                                    aria-label="Apellido Paterno" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control" id="apellidopaterno"
+                                        formControlName="apellidopaterno" placeholder="Apellido Paterno"
+                                        aria-label="Apellido Paterno" aria-describedby="basic-addon1">
                                 </div>
-                                <div id="apellidopaterno" class="form-text text-danger" 
-                                *ngIf="campoRequerido2('apellidopaterno')">
+                                <div id="apellidopaterno" class="form-text text-danger"
+                                    *ngIf="campoRequerido2('apellidopaterno')">
                                     El apellido paterno es requerido
                                 </div>
-                               
+
                             </div>
 
                             <div class="mb-3">
@@ -138,17 +375,15 @@
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-person-fill"></i>
                                     </span>
-                                    <input type="text" class="form-control" 
-                                    id="apellidomaterno"
-                                    formControlName="apellidomaterno"
-                                    placeholder="Apellido Materno" 
-                                    aria-label="Apellido Materno" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control" id="apellidomaterno"
+                                        formControlName="apellidomaterno" placeholder="Apellido Materno"
+                                        aria-label="Apellido Materno" aria-describedby="basic-addon1">
                                 </div>
-                                <div id="apellidomaterno" class="form-text text-danger" 
-                                *ngIf="campoRequerido2('apellidomaterno')">
+                                <div id="apellidomaterno" class="form-text text-danger"
+                                    *ngIf="campoRequerido2('apellidomaterno')">
                                     El apellido materno es requerido
                                 </div>
-                               
+
                             </div>
 
                             <div class="mb-3">
@@ -157,13 +392,10 @@
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-house-door-fill"></i>
                                     </span>
-                                    <input type="text" class="form-control" 
-                                    id="direccion"
-                                    formControlName="direccion"
-                                    placeholder="Direccion" 
-                                    aria-label="Direccion" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control" id="direccion" formControlName="direccion"
+                                        placeholder="Direccion" aria-label="Direccion" aria-describedby="basic-addon1">
                                 </div>
-                               
+
                             </div>
 
                             <div class="mb-3">
@@ -172,13 +404,10 @@
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-telephone-fill"></i>
                                     </span>
-                                    <input type="text" class="form-control" 
-                                    id="telefono"
-                                    formControlName="telefono"
-                                    placeholder="Telefono" 
-                                    aria-label="Telefono" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control" id="telefono" formControlName="telefono"
+                                        placeholder="Telefono" aria-label="Telefono" aria-describedby="basic-addon1">
                                 </div>
-                               
+
                             </div>
 
                             <div class="d-grid gap-2 col-12 mx-auto">
@@ -202,20 +431,16 @@
             <div class="card-body">
                 <div class="row acerca-de d-flex align-items-start px-3">
                     <div class="col-12 col-lg-12 info">
-                        <form  [formGroup]="passForm" (submit)="actualizarPassword()">
+                        <form [formGroup]="passForm" (submit)="actualizarPassword()">
                             <div class="mb-3">
                                 <label for="exampleFormControlInput3" class="form-label">Password</label>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-key-fill"></i>
                                     </span>
-                                    <input type="password" class="form-control" 
-                                    id="password"
-                                    formControlName="password"
-                                    placeholder="Password" 
-                                    aria-label="password" 
-                                    aria-describedby="basic-addon1" 
-                                    autocomplete="on">
+                                    <input type="password" class="form-control" id="password" formControlName="password"
+                                        placeholder="Password" aria-label="password" aria-describedby="basic-addon1"
+                                        autocomplete="on">
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -224,21 +449,16 @@
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-key-fill"></i>
                                     </span>
-                                    <input type="password" class="form-control" 
-                                    id="password2"
-                                    formControlName="password2"
-                                    placeholder="Repita password" 
-                                    aria-label="password2" 
-                                    aria-describedby="basic-addon2" 
-                                    autocomplete="on">
+                                    <input type="password" class="form-control" id="password2"
+                                        formControlName="password2" placeholder="Repita password" aria-label="password2"
+                                        aria-describedby="basic-addon2" autocomplete="on">
                                 </div>
-                                <div id="password2" class="form-text text-danger" 
-                                *ngIf="contrasenasNoValidas()">
+                                <div id="password2" class="form-text text-danger" *ngIf="contrasenasNoValidas()">
                                     Los passwords deben ser iguales
                                 </div>
                             </div>
                             <div class="d-grid gap-2 col-12 mx-auto">
-                                <button class="btn btn-primary" type="submit" >
+                                <button class="btn btn-primary" type="submit">
                                     <i class="bi bi-hdd"></i>
                                     Actualizar
                                 </button>
@@ -251,5 +471,4 @@
     </div>
 </div>
 
-
-
+-->

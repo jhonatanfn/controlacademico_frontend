@@ -1,16 +1,148 @@
-<div class="row mb-5">
-    <div class="col-12 col-lg-5">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <!--Encabezado-->
+<div class="row">
+    <div class="col-12 col-md-4 mb-3 mb-md-0">
+        <div class="d-flex flex-column">
+            <div class="logo text-center">
+                <img *ngIf="!imgTemp" [src]="institucion.img! | imginstitucion" class="img-fluid mb-3 mt-1"
+                    alt="imagen institucion">
+                <img *ngIf="imgTemp" [src]="imgTemp" class="img-fluid mb-3 mt-1" alt="imagen institucion">
+            </div>
+            <div class="list-group card-color-primary">
+                <a class="list-group-item list-group-item-action cursor {{activogeneral}}"
+                    (click)="verificarOpcion('general')">
+                    <i class="{{icono5}}"></i>
+                    Información General
+                </a>
+                <a class="list-group-item list-group-item-action cursor {{activoactualizar}}"
+                    (click)="verificarOpcion('actualizar')">
+                    <i class="{{icono4}}"></i>
+                    Actualizar Información
+                </a>
+                <a class="list-group-item list-group-item-action cursor {{activologo}}"
+                    (click)="verificarOpcion('cambiar')">
+                    <i class="{{icono2}}"></i>
+                    Cambiar Logo
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-8">
+
+        <div class="card card-color-primary  contenido-principal mt-0" *ngIf="general">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo5" [icono]="icono5"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+
+                        <ol class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Nombre</div>
+                                    {{institucion.nombre}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Dirección</div>
+                                    {{institucion.direccion}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Teléfono</div>
+                                    {{institucion.telefono}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Email</div>
+                                    {{institucion.email}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Departamento</div>
+                                    {{institucion.departamento}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Provincia</div>
+                                    {{institucion.provincia}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Distrito</div>
+                                    {{institucion.distrito}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Centro Poblado</div>
+                                    {{institucion.centropoblado}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">DRE</div>
+                                    {{institucion.dre}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">UGEL</div>
+                                    {{institucion.ugel}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Tipo de Gestión</div>
+                                    {{institucion.tipogestion}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Género de los Alumno</div>
+                                    {{institucion.generoalumno}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Forma de Atencíon</div>
+                                    {{institucion.formaatencion}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Turno de Atención</div>
+                                    {{institucion.turnoatencion}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Página web</div>
+                                    {{institucion.paginaweb}}
+                                </div>
+                            </li>
+                        </ol>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-color-primary  contenido-principal mt-0" *ngIf="cambiar">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
             </div>
             <div class="card-body">
-                <!--Formulario-->
                 <div class="row acerca-de d-flex align-items-start px-3">
                     <div class="col-12 col-lg-12 foto text-center">
-                        <img *ngIf="!imgTemp" [src]="institucion.img! | imginstitucion" 
-                        class="img-fluid mb-3 mt-1"
+                        <img *ngIf="!imgTemp" [src]="institucion.img! | imginstitucion" class="img-fluid mb-3 mt-1"
                             alt="imagen institucion">
                         <img *ngIf="imgTemp" [src]="imgTemp" class="img-fluid mb-3 mt-1" alt="imagen institucion">
                     </div>
@@ -26,7 +158,6 @@
                             <p>Por favor espera</p>
                         </div>
                     </div>
-
                     <div class="d-grid gap-2 col-12 mx-auto">
                         <button class="btn btn-primary" type="button" [disabled]="!imagenSubir" (click)="subirImagen()">
                             <i class="bi bi-hdd"></i>
@@ -37,28 +168,23 @@
 
             </div>
         </div>
-    </div>
-
-    <div class="col-12 col-lg-7">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <!--Encabezado-->
+        <div class="card card-color-primary contenido-principal mt-0" *ngIf="actualizar">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo4" [icono]="icono4"></app-headertable>
             </div>
             <div class="card-body">
-                <!--Formulario-->
                 <div class="row">
                     <div class="col-12">
                         <form [formGroup]="datosForm" (ngSubmit)="actualizarDatos()" autocomplete="off">
 
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Nombre</label>
+                                <label for="nombre" class="form-label">Nombre</label>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-pencil-fill"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="nombres" formControlName="nombre"
-                                        placeholder="Nombres" aria-label="Nombre" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control" id="nombre" formControlName="nombre"
+                                        placeholder="Nombre" aria-label="Nombre" aria-describedby="basic-addon1">
                                 </div>
                                 <div id="nombres" class="form-text text-danger" *ngIf="campoRequerido('nombre')">
                                     El nombre es requerido
@@ -70,7 +196,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Direccion</label>
+                                <label for="direccion" class="form-label">Direccion</label>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-house-door-fill"></i>
@@ -87,7 +213,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Telefono</label>
+                                <label for="telefono" class="form-label">Telefono</label>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-telephone-fill"></i>
@@ -104,7 +230,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Email</label>
+                                <label for="email" class="form-label">Email</label>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-envelope-fill"></i>
@@ -118,6 +244,124 @@
                                 </div>
                                 <div id="nombres" class="form-text text-danger" *ngIf="campoEmail('email')">
                                     El email no es válido
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="departamento" class="form-label">Departamento</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="departamento"
+                                        formControlName="departamento" placeholder="Departamento"
+                                        aria-label="Departamento" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="provincia" class="form-label">Provincia</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="provincia" formControlName="provincia"
+                                        placeholder="provincia" aria-label="Provincia" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="distrito" class="form-label">Distrito</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="distrito" formControlName="distrito"
+                                        placeholder="distrito" aria-label="Distrito" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="centropoblado" class="form-label">Centro Poblado</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="centropoblado"
+                                        formControlName="centropoblado" placeholder="Centropoblado"
+                                        aria-label="Centropoblado" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="dre" class="form-label">DRE</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-map-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="dre" formControlName="dre"
+                                        placeholder="Dre" aria-label="Dre" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ugel" class="form-label">UGEL</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-map-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="ugel" formControlName="ugel"
+                                        placeholder="Ugel" aria-label="Ugel" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tipogestion" class="form-label">Tipo de Gestión</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-briefcase-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="tipogestion"
+                                        formControlName="tipogestion" placeholder="Tipogestion" aria-label="tipogestion"
+                                        aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="generoalumno" class="form-label">Género de los Alumnos</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-person-rolodex"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="generoalumno"
+                                        formControlName="generoalumno" placeholder="Genero de los alumnos"
+                                        aria-label="Genero de los alumnos" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="formaatencion" class="form-label">Forma de Atención</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-flag-fill"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="formaatencion"
+                                        formControlName="formaatencion" placeholder="Forma de Atención"
+                                        aria-label="Forma de Atención" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="turnoatencion" class="form-label">Turno de Atención</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-smartwatch"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="turnoatencion"
+                                        formControlName="turnoatencion" placeholder="Turno de Atención"
+                                        aria-label="Turno de Atención" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="paginaweb" class="form-label">Página Web</label>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-globe"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="paginaweb" formControlName="paginaweb"
+                                        placeholder="Página Web" aria-label="Página Web"
+                                        aria-describedby="basic-addon1">
                                 </div>
                             </div>
                             <div class="d-grid gap-2 col-12 mx-auto">

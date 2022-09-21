@@ -45,6 +45,40 @@ export class MatriculaService {
     const base= `${base_url}/matriculas/${id}`;
     return this.http.delete<crudMatricula>(base,this.headers);
   }
+
+  busqueda(nombre:string){
+    const base= `${base_url}/matriculas/busqueda/${nombre}`;
+    return this.http.get<any[]>(base,this.headers)
+    .pipe(
+      map((resp:any)=>{
+        return this.transformar(resp.busquedas)
+      })
+    )
+  }
+
+
+  aprobadoAlumno(alumnoId:number){
+    const url=`${base_url}/matriculas/aprobado/${alumnoId}`;
+    return this.http.get<crudMatricula>(url,this.headers);
+  }
+
+
+  listarmatriculasAnterior(alumnoId:number){
+    const url=`${base_url}/matriculas/periodoanterior/${alumnoId}`;
+    return this.http.get<listarMatriculas>(url,this.headers);
+  }
+
+  
+  matriculasPeriodoAulaArea(periodoId:number,aulaId:number,areaId:number){
+    const base= `${base_url}/matriculas/listamatriculasarea/${periodoId}/${aulaId}/${areaId}`;
+    return this.http.get<listarMatriculas>(base,this.headers);
+  }
+
+  matriculasPeriodoAulaSubarea(periodoId:number,aulaId:number,subareaId:number){
+    const base= `${base_url}/matriculas/listamatriculas/${periodoId}/${aulaId}/${subareaId}`;
+    return this.http.get<listarMatriculas>(base,this.headers);
+  }
+
   buscarPorAlumno(nombre:string){
     const base= `${base_url}/matriculas/busqueda/${nombre}`;
     return this.http.get<any[]>(base,this.headers)
@@ -65,16 +99,16 @@ export class MatriculaService {
   }
   private transformar(busquedas:any[]):Matricula[]{
     return busquedas.map(
-      matricula=>new Matricula(matricula.alumnoId,matricula.programacionId,matricula.nota,
-      matricula.alumno,matricula.programacion,matricula.id)
+      matricula=>new Matricula(matricula.alumnoId,matricula.alumno,matricula.fecha,matricula.hora,matricula.id)
     );
   }
+
   existeMatricula(periodo:number,aula:number,alumno:number){
     const base= `${base_url}/matriculas/existe/${periodo}/${aula}/${alumno}`;
     return this.http.get<crudMatricula>(base,this.headers);
   }
   matriculasPorProgramacion(programacionId:number){
-    const base=`${base_url}/matriculas/programacion/${programacionId}`;
+    const base=`${base_url}/matriculas/programacion/alumnos/${programacionId}`;
     return this.http.get<listarMatriculas>(base,this.headers);
   }
 
@@ -98,15 +132,23 @@ export class MatriculaService {
     return this.http.get<listarMatriculas>(base, this.headers);
   }
 
+  
   perteneceMatriculaAlumno(matriculaId:number,alumnoId:number){
     const base= `${base_url}/matriculas/pertenece/${matriculaId}/${alumnoId}`;
     return this.http.get<crudMatricula>(base,this.headers);
   }
+
+
+
+
   perteneceProgramacionAlumno(programacionId:number,alumnoId:number){
     const base= `${base_url}/matriculas/pertenece/programacion/${programacionId}/${alumnoId}`;
     return this.http.get<crudMatricula>(base,this.headers);
   }
 
+
+
+  
   perteneceMatriculaApoderado(apoderadoId:number, matriculaId:number){
     const base= `${base_url}/matriculas/pertenece/apoderado/${apoderadoId}/${matriculaId}`;
     return this.http.get<crudMatricula>(base,this.headers);
@@ -156,10 +198,7 @@ export class MatriculaService {
     return this.http.get<crudMatricula>(base,this.headers);
   }
 
-  matriculasPeriodoAulaSubarea(periodoId:number,aulaId:number,subareaId:number){
-    const base= `${base_url}/matriculas/listamatriculas/${periodoId}/${aulaId}/${subareaId}`;
-    return this.http.get<listarMatriculas>(base,this.headers);
-  }
+ 
   matriculasPeriodoAulaSubareaApoderado(periodoId:number,aulaId:number,subareaId:number,apoderadoId:number){
     const base= `${base_url}/matriculas/listamatriculasapoderado/${periodoId}/${aulaId}/${subareaId}/${apoderadoId}`;
     return this.http.get<listarMatriculas>(base,this.headers);
@@ -168,11 +207,7 @@ export class MatriculaService {
 
 
 
-  matriculasPeriodoAulaArea(periodoId:number,aulaId:number,areaId:number){
-    const base= `${base_url}/matriculas/listamatriculasarea/${periodoId}/${aulaId}/${areaId}`;
-    return this.http.get<listarMatriculas>(base,this.headers);
-  }
-
+  
   matriculasPeriodoAulaApoderadoArea(periodoId:number,aulaId:number,areaId:number,apoderadoId:number){
     const base= `${base_url}/matriculas/listamatriculasapoderadoarea/${periodoId}/${aulaId}/${areaId}/${apoderadoId}`;
     return this.http.get<listarMatriculas>(base,this.headers);
@@ -227,5 +262,10 @@ export class MatriculaService {
   matriculasPorSubarea(desde:number=0,subareaId:number){
     const url=`${base_url}/matriculas/subarea/${subareaId}?desde=${desde}`;
     return this.http.get<listarMatriculas>(url,this.headers);
+  }
+
+  matriculasPeriodoAula(periodoId:number, aulaId:number){
+    const base= `${base_url}/matriculas/periodoaula/${periodoId}/${aulaId}`;
+    return this.http.get<listarMatriculas>(base,this.headers);
   }
 }

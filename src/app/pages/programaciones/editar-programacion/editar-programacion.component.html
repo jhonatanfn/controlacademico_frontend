@@ -1,7 +1,7 @@
 <div class="row">
-    <div class="col-12 col-lg-6">
-        <div class="card contenido-principal">
-            <div class="card-header">
+    <div class="col-12 col-lg-12">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
             </div>
             <div class="card-body">
@@ -11,7 +11,7 @@
 
                             <div class="row">
 
-                                <div class="col-12 col-md-12">
+                                <div class="col-12 col-md-2">
                                     <div class="mb-3">
                                         <label for="periodoId" class="form-label">Periodo</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -27,7 +27,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-12">
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
                                         <label for="aulaId" class="form-label">Aula</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -42,12 +42,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-12">
+                                <div class="col-12 col-md-3">
                                     <div class="col-12 col-md-12">
                                         <div class="mb-3">
                                             <label for="areaId" class="form-label">Area</label>
                                             <select class="form-select" aria-label="Default select example"
-                                                formControlName="areaId" (change)="listarSubareas()">
+                                                formControlName="areaId">
                                                 <option value="">Seleccionar area</option>
                                                 <option *ngFor="let area of areas" [value]="area.id">
                                                     {{area.nombre}}
@@ -61,24 +61,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-12">
-                                    <div class="mb-3">
-                                        <label for="subareaId" class="form-label">Subarea</label>
-                                        <select class="form-select" aria-label="Default select example"
-                                            formControlName="subareaId">
-                                            <option value="">Seleccionar subarea</option>
-                                            <option *ngFor="let subarea of subareas" [value]="subarea.id">
-                                                {{subarea.nombre}}
-                                            </option>
-                                        </select>
-                                        <div *ngIf="campoRequerido('subareaId')" id="subareaId"
-                                            class="form-text text-danger">
-                                            El SubArea es requerido
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-md-12">
+                                <div class="col-12 col-md-4">
                                     <div class="mb-3">
                                         <label for="docenteId" class="form-label">Docente</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -97,9 +80,9 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-12">
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="numeromaxmat" class="form-label">Número Maximo de Matriculas</label>
+                                        <label for="numeromaxmat" class="form-label">N° Max de Inscritos</label>
                                         <input type="text" class="form-control" formControlName="numeromaxmat"
                                             id="numeromaxmat" aria-describedby="numeromaxmat">
                                         <div class="form-text text-danger" *ngIf="campoRequerido('numeromaxmat')">

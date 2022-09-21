@@ -7,10 +7,11 @@ export class Matricula{
 
     constructor(
         public alumnoId:number,
-        public programacionId:number,
-        public nota: Nota[],
         public alumno?:Alumno,
+        public fecha?:string,
+        public hora?:string,
+        public id?:number,
         public programacion?:Programacion,
-        public id?:number
+        public nota?:Nota
     ){}
 }

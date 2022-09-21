@@ -46,10 +46,13 @@ export class ProgramacionService {
     const base= `${base_url}/programaciones/${id}`;
     return this.http.delete<crudProgramacion>(base,this.headers);
   }
+
+
   porPeriodoAula(periodoid:number,aulaid:number){
     const base= `${base_url}/programaciones/periodo/aula/${periodoid}/${aulaid}`;
     return this.http.get<listarProgramacion>(base,this.headers);
   }
+  
 
   porPeriodo(periodoId:number){
     const base= `${base_url}/programaciones/periodo/${periodoId}`;
@@ -81,6 +84,16 @@ export class ProgramacionService {
     )
   }
 
+  busqueda(nombre:string){
+    const base=`${base_url}/programaciones/busqueda/${nombre}`;
+    return this.http.get<any[]>(base,this.headers)
+    .pipe(
+      map((resp:any)=>{
+        return this.transformar(resp.busquedas)
+      })
+    )
+  }
+
   buscarPorsubarea(nombre:string){
     const base=`${base_url}/programaciones/busqueda/subarea/${nombre}`;
     return this.http.get<any[]>(base,this.headers)
@@ -93,13 +106,18 @@ export class ProgramacionService {
 
   private transformar(busquedas:any[]):Programacion[]{
     return busquedas.map(
-      prog=>new Programacion(prog.periodoid,prog.aulaId,prog.subareaId,prog.docenteId,
-      prog.periodo,prog.aula,prog.subarea,prog.docente,prog.numeromat,prog.numeromaxmat,prog.id)
+      prog=>new Programacion(prog.periodoid,prog.aulaId,prog.areaId,prog.docenteId,
+      prog.periodo,prog.aula,prog.area,prog.docente,prog.numeromat,prog.numeromaxmat,prog.id)
     );
   }
 
-  existeProgramacion(periodo:number,aula:number,subarea:number){
-    const base=`${base_url}/programaciones/existe/${periodo}/${aula}/${subarea}`;
+  existeProgramacion(periodo:number,aula:number,area:number){
+    const base=`${base_url}/programaciones/existe/${periodo}/${aula}/${area}`;
+    return this.http.get<crudProgramacion>(base, this.headers);
+  }
+
+  existeProgramacionEditar(periodo:number,aula:number,area:number, programacion:number){
+    const base=`${base_url}/programaciones/existeeditar/${periodo}/${aula}/${area}/${programacion}`;
     return this.http.get<crudProgramacion>(base, this.headers);
   }
 
@@ -107,6 +125,14 @@ export class ProgramacionService {
     const base=`${base_url}/programaciones/docente/${docenteId}?desde=${desde}`;
     return this.http.get<listarProgramacion>(base, this.headers);
   }
+
+  programacionesPorDocenteTodos(docenteId:number){
+    const base=`${base_url}/programaciones/docente/todo/${docenteId}`;
+    return this.http.get<listarProgramacion>(base, this.headers);
+  }
+
+
+  
   programacionesPorDocentePeriodo(docenteId:number,periodoId:number){
     const base=`${base_url}/programaciones/docente/periodo/${docenteId}/${periodoId}`;
     return this.http.get<listarProgramacion>(base,this.headers);
@@ -117,11 +143,22 @@ export class ProgramacionService {
     return this.http.get<listarProgramacion>(base,this.headers);
   }
 
+  programacionesPorDocentePeriodoPaginadoTodos(docenteId:number,periodoId:number){
+    const base=`${base_url}/programaciones/docente/periodopaginado/todo/${docenteId}/${periodoId}`;
+    return this.http.get<listarProgramacion>(base,this.headers);
+  }
+
   perteneceProgramacionDocente(programacionId:number, docenteId:number){
     const base=`${base_url}/programaciones/pertenece/${programacionId}/${docenteId}`;
     return this.http.get<crudProgramacion>(base, this.headers);
   }
 
+  perteneceAulaDocente(aulaId:number, docenteId:number){
+    const base=`${base_url}/programaciones/perteneceaula/${aulaId}/${docenteId}`;
+    return this.http.get<crudProgramacion>(base, this.headers);
+  }
+
+  
   buscarProgramacionesDocente(nombre:string,docenteId:number){
     const base=`${base_url}/programaciones/busqueda/pordocente/${docenteId}/${nombre}`;
     return this.http.get<any[]>(base,this.headers)
@@ -131,6 +168,7 @@ export class ProgramacionService {
       })
     )
   }
+
   buscarProgramacionesDocentePeriodo(nombre:string,docenteId:number,periodoId:number){
     const base=`${base_url}/programaciones/busqueda/pordocenteperiodo/${docenteId}/${periodoId}/${nombre}`;
     return this.http.get<any[]>(base,this.headers)

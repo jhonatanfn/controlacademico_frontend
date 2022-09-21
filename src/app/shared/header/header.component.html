@@ -1,38 +1,50 @@
-<header class="fixed-top shadow py-0">
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center caja-nueva">
-            <div class="d-flex justify-content-start align-items-center">
+<header class="fixed-top py-0">
+    <div class="container-lg-fluid">
+        <div class="d-flex flex-column flex-sm-row justify-content-start justify-content-sm-between 
+        align-items-sm-center caja-nueva">
+            <div class="d-flex justify-content-start align-items-center mb-2 mb-sm-0 mx-2">
                 <a class="navbar-brand">
                     <img [src]="institucion.img! | imginstitucion" alt="imagen logo" class="img-fluid imagen-logo-fila">
                 </a>
                 <small class="titulo-logo-fila">{{institucion.nombre | uppercase}}</small>
             </div>
-            <nav class="dropdown botones d-none d-md-block">
-                <a href="#" class="dropdown-toggle perfil enlace1 text-center" type="button" id="dropdown-1"
+            <nav class="dropdown botones d-flex justify-content-between gap-2">
+                <a routerLink="institucion" class="me-1" *ngIf="usuario.role.nombre=='ADMINISTRADOR'">
+                    <i class="bi bi-house"></i>
+                </a>
+                <a routerLink="mensajerias" class="me-1">
+                    <i class="bi bi-envelope"></i>
+                </a>
+                <a href="#" class="dropdown-toggle perfil my-dropdown-toggle" type="button" id="dropdown-1"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <img [src]="usuario.persona.img! | imagen" alt="imagen usuario">{{usuario.nombre}}
+                    <img class="img-fluid rounded-circle" [src]="usuario.persona.img! | imagen" alt="imagen usuario">
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdown-2">
                     <li>
                         <div class="d-flex flex-column align-items-center">
-                            <img [src]="usuario.persona.img! | imagen" alt="imagen usuario" 
-                            class="img-fluid imagen-persona">
+                            <img class="img-fluid" [src]="usuario.persona.img! | imagen" alt="imagen usuario"
+                                class="img-fluid imagen-persona">
+                            <h6 class="dropdown-header fw-bold">
+                                {{usuario.persona.nombres}}
+                                {{usuario.persona.apellidopaterno}}
+                                {{usuario.persona.apellidomaterno}}
+                            </h6>
                             <h6 class="dropdown-header">{{usuario.role.nombre}}</h6>
                         </div>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a routerLinkActive="active" routerLink="perfil" class="dropdown-item">
+                    <li class="opciones"><a routerLinkActive="active" routerLink="perfil" class="dropdown-item">
                             <i class="bi bi-postcard me-2"></i>Perfil</a></li>
-                    <li><a (click)="logout()" class="dropdown-item cursor">
+                    <li class="opciones"><a (click)="logout()" class="dropdown-item cursor">
                             <i class="bi bi-door-open me-2"></i>Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </div>
         <div class="row d-flex justify-content-between align-items-center g-0 menu">
             <nav class="menu col-12 col-lg-10 navbar navbar-expand-lg navbar-light order-1 
-            order-lg-1">
+            order-lg-1 mx-2">
                 <div class="container-fluid">
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
                         aria-controls="menu" aria-expanded="false" aria-label="Mostrar / Ocultar Menu">
@@ -43,7 +55,7 @@
                             <li class="nav-item">
                                 <a routerLinkActive="active" routerLink="" class="nav-link" aria-current="page">
                                     <i class="bi bi-speedometer"></i>
-                                    Inicio
+                                    Principal
                                 </a>
                             </li>
                             <li class="nav-item dropdown" *ngFor="let item of menuItems">
@@ -65,25 +77,6 @@
                                             {{ subitem.titulo }}
                                         </a>
                                     </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown d-block d-lg-none">
-                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false" id="dropdown-menu">
-                                    <i class="bi bi-person"></i>
-                                    Perfil
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdown-menu">
-                                    <li>
-                                        <h6 class="dropdown-header">{{usuario.role.nombre}}</h6>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a routerLinkActive="active" routerLink="perfil" class="dropdown-item"><i
-                                                class="bi bi-postcard me-2"></i>Perfil</a></li>
-                                    <li><a (click)="logout()" class="dropdown-item cursor"><i
-                                                class="bi bi-door-open me-2"></i>Cerrar Sesión</a></li>
                                 </ul>
                             </li>
                         </ul>

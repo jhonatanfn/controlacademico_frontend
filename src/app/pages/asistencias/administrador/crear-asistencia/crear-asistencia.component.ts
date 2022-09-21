@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
-import { Ciclo } from 'src/app/models/ciclo.model';
-import { Matricula } from 'src/app/models/matricula.model';
-import { Periodo } from 'src/app/models/periodo.model';
-import { Programacion } from 'src/app/models/programacion.model';
 import { AsistenciaService } from 'src/app/services/asistencia.service';
-import { MatriculaService } from 'src/app/services/matricula.service';
-import { ProgramacionService } from 'src/app/services/programacion.service';
+import { AulaService } from 'src/app/services/aula.service';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
+import { PeriodoService } from 'src/app/services/periodo.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -22,41 +19,27 @@ export class CrearAsistenciaComponent implements OnInit {
   public icono: string = 'bi bi-plus-square';
   public titulo2: string = 'Tabla Alumnos';
   public icono2: string = 'bi bi-table';
-  public titulo3: string = 'Resumen';
+  public titulo3: string = 'Datos de la Asignación';
   public icono3: string = 'bi bi-card-checklist';
   public asisForm!: FormGroup;
-  public periodos: Periodo[] = [];
-  public programaciones: Programacion[] = [];
-  public ciclos: Ciclo[] = [];
-  public matriculas: Matricula[] = [];
   public datos: any[] = [];
   public formSubmitted: boolean = false;
-  public messageInfo:string="";
-
-  public periodonombre:string="";
-  public aulanombre:string="";
-  public subareanombre:string="";
-  public areanombre:string="";
-  public docentenombre:string="";
-
-  public cargando:boolean= false;
+  public messageInfo: string = "";
+  public periodoId: number = 0;
+  public periodonombre: string = "";
+  public aulanombre: string = "";
+  public cargando: boolean = false;
 
   constructor(private fb: FormBuilder,
-    private matriculaService: MatriculaService,
-    private asistenciaService: AsistenciaService, private route: ActivatedRoute,
-    private programacionService:ProgramacionService) {
+    private matriculadetalleService: MatriculadetalleService,
+    private asistenciaService: AsistenciaService,
+    private route: ActivatedRoute, private periodoService: PeriodoService,
+    private aulaService: AulaService,private router: Router) {
 
-    this.programacionService.obtener( Number(this.route.snapshot.paramMap.get('id')) )
-    .subscribe({
-      next: ({ok,programacion})=>{
-        if(ok){
-          this.periodonombre= programacion.periodo?.nombre || "";
-          this.aulanombre= programacion.aula?.nombre || "";
-          this.subareanombre= programacion.subarea?.nombre || "";
-          this.docentenombre= programacion.docente?.persona?.apellidopaterno+" "+
-          programacion.docente?.persona?.apellidomaterno+" "+
-          programacion.docente?.persona?.nombres;
-          this.areanombre= programacion.subarea?.area.nombre || "";
+    this.aulaService.obtener(Number(this.route.snapshot.paramMap.get('id'))).subscribe({
+      next: ({ ok, aula }) => {
+        if (ok) {
+          this.aulanombre = aula.nombre;
         }
       }
     });
@@ -65,10 +48,14 @@ export class CrearAsistenciaComponent implements OnInit {
 
   ngOnInit(): void {
     this.asisForm = this.fb.group({
-      fecha: [moment().format("YYYY-MM-DD"), Validators.required]
+      fecha: [moment().format("YYYY-MM-DD"), Validators.required],
+      matriculadetalleId: [''],
+      situacionId: [''],
+      aulaId: [Number(this.route.snapshot.paramMap.get('id'))]
     });
     this.buscarMatriculas();
   }
+
   campoRequerido(campo: string) {
     if (this.asisForm.get(campo)?.getError('required') && this.formSubmitted) {
       return true;
@@ -77,80 +64,79 @@ export class CrearAsistenciaComponent implements OnInit {
     }
   }
 
-  esfechaactual(campo: string) {
+  buscarMatriculas() {
+    this.cargando = true;
+    this.periodoService.porNombre(moment().format('YYYY')).subscribe({
+      next: ({ ok, periodo }) => {
+        if (ok) {
+          this.periodonombre = periodo.nombre;
+          this.asistenciaService.existeAsistencia(Number(periodo.id),
+            Number(this.asisForm.get('aulaId')?.value), moment().format("YYYY-MM-DD")).subscribe({
+              next: ({ ok, msg }) => {
+                if (!ok) {
+                  this.periodoId = Number(periodo.id);
+                  this.matriculadetalleService.listadoAlumnos(this.periodoId,
+                    Number(this.asisForm.get('aulaId')?.value))
+                    .subscribe({
+                      next: ({ ok, msg, matriculadetalles }) => {
+                        if (ok) {
+                          this.datos = [];
+                          matriculadetalles.forEach(matriculadetalle => {
+                            this.datos.push({
+                              matriculadetalleId: matriculadetalle.id,
+                              matriculadetalle: matriculadetalle,
+                              situacionId: 14,
+                              color: "success",
+                              texto: "ASISTIÓ"
+                            });
+                          });
+                          this.cargando = false;
+                        } else {
+                          this.messageInfo = msg;
+                        }
+                      },
+                      error: (error) => {
+                        Swal.fire({
+                          position: 'top-end',
+                          icon: 'error',
+                          title: error.error.msg,
+                          showConfirmButton: false,
+                          timer: 1000
+                        });
+                      }
+                    });
+                } else {
+                  this.messageInfo = msg;
+                }
+              }
+            });
+            this.cargando= false;
+        }
+      }
+    });
+  }
 
-    if (this.asisForm.get(campo)?.value === "") {
-      return;
+  cambiarEstado(dato: any) {
+    if (dato.color == "success") {
+      dato.color = "danger";
+      dato.texto = "FALTO";
     } else {
-      if ((this.asisForm.get(campo)?.value === moment().format("YYYY-MM-DD")) && this.formSubmitted) {
-        this.asisForm.controls[campo].setErrors(null);
-        return false;
+      if (dato.color == "danger") {
+        dato.color = "warning";
+        dato.texto = "TARDANZA";
       } else {
-        this.asisForm.controls[campo].setErrors({ NoActual: true });
-        return true;
+        if (dato.color == "warning") {
+          dato.color = "primary";
+          dato.texto = "JUSTIFICÓ";
+        } else {
+          dato.color = "success";
+          dato.texto = "ASISTIÓ";
+        }
       }
     }
-
   }
-
-  buscarMatriculas() {
-    this.cargando= true;
-    this.asistenciaService.existeAsistenciaProgramacionFecha(
-      Number(this.route.snapshot.paramMap.get('id')),
-      this.asisForm.get('fecha')?.value
-    ).subscribe({
-      next: ({ok,msg}) => {
-        if (!ok) {
-          this.matriculaService.matriculasPorProgramacion(Number(this.route.snapshot.paramMap.get('id')))
-            .subscribe(({ ok,msg, matriculas }) => {
-              if (ok) {
-                this.matriculas = matriculas;
-                this.matriculas.forEach(matricula => {
-                  this.datos.push({
-                    matricula: matricula,
-                    matriculaId: matricula.id,
-                    situacionId: 14,
-                    color: "success",
-                    texto: "ASISTIO"
-                  });
-                });
-              }else{
-                this.messageInfo=msg;
-              }
-              this.cargando= false;
-            });
-
-        }else{
-          this.messageInfo=msg;
-        }
-        this.cargando= false;
-      },
-      error: (err) => {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'error',
-          title: err.error.msg,
-          showConfirmButton: false,
-          timer: 1500
-        });
-      }
-    });
-
-  }
-
-  validacionDatos() {
-    let result: boolean = false;
-    this.datos.forEach(dato => {
-      if (dato.valor === "") {
-        result = true;
-      }
-    });
-    return result;
-  }
-
 
   guardarAsistencias() {
-
     this.formSubmitted = true;
     if (this.asisForm.valid) {
       Swal.fire({
@@ -164,52 +150,37 @@ export class CrearAsistenciaComponent implements OnInit {
         confirmButtonText: 'Guardar'
       }).then((result) => {
         if (result.isConfirmed) {
-          const fecha = moment().format("YYYY-MM-DD");
           this.datos.forEach(dato => {
-            dato.fecha = fecha;
             if (dato.color == "danger") {
               dato.situacionId = 4;
             } else {
               if (dato.color == "success") {
                 dato.situacionId = 14;
               } else {
-                dato.situacionId = 24;
+                if(dato.color =="primary"){
+                  dato.situacionId = 24;
+                }else{
+                  dato.situacionId = 34;
+                }
               }
             }
-
             this.asistenciaService.crear(dato)
               .subscribe(({ ok }) => {
                 if (ok) {
                 }
               });
-
           });
+          this.router.navigateByUrl('dashboard/asistencias');
           Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: 'Registro guardado exitosamente',
+            title: 'Asistencia guardada exitosamente',
             showConfirmButton: false,
-            timer: 1500
+            timer: 1000
           });
+
         }
-      })
-
+      });
     }
   }
-
-  cambiarEstado(dato: any) {
-    if (dato.color == "primary") {
-      dato.color = "danger";
-      dato.texto = "FALTO";
-    } else {
-      if (dato.color == "danger") {
-        dato.color = "success";
-        dato.texto = "ASISTIO";
-      } else {
-        dato.color = "primary";
-        dato.texto = "JUSTIFICÓ";
-      }
-    }
-  }
-
 }

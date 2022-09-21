@@ -15,8 +15,9 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Alumno } from 'src/app/models/alumno.model';
-import { MatriculaService } from 'src/app/services/matricula.service';
-import { Apoderado } from 'src/app/models/apoderado.model';
+import { AulaService } from 'src/app/services/aula.service';
+import { Padre } from 'src/app/models/padre.model';
+import { Madre } from 'src/app/models/madre.model';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -29,8 +30,8 @@ export class HorarioApoderadoComponent implements OnInit {
   public titulo: string = 'Buscar Horarios';
   public icono: string = 'bi bi-search';
   public titulo2: string = 'Horarios';
-  public icono2: string = 'bi bi-calendar-check';
-  public titulo3: string = 'Resumen';
+  public icono2: string = 'bi bi-calendar3';
+  public titulo3: string = 'Datos Horario';
   public icono3: string = 'bi bi-card-checklist';
   public horarioForm!: FormGroup;
   public periodos: Periodo[] = [];
@@ -49,62 +50,80 @@ export class HorarioApoderadoComponent implements OnInit {
   public message: string = "No hay horario";
   public institucion!: Institucion;
   public aulanombre: string = "";
-  public periodonombre:string="";
-  public alumnonombre:string="";
+  public periodonombre: string = "";
+  public alumnonombre: string = "";
   public nivelnombre: string = "";
   public gradonombre: string = "";
   public seccionnombre: string = "";
   public alumno!: Alumno;
-  public apoderado!: Apoderado;
+  public padre!: Padre;
+  public madre!: Madre;
 
-  public listaAlumno:any[]=[];
-  public listaAlumnoAux:any[]=[];
+  public listaAlumno: any[] = [];
+  public listaAlumnoAux: any[] = [];
 
   constructor(private fb: FormBuilder,
     private periodoService: PeriodoService, private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
-    private institucionService: InstitucionService, private matriculaService: MatriculaService) {
+    private institucionService: InstitucionService, private aulaService: AulaService) {
 
-
-    if (this.usuarioService.usuario.role.nombre === "APODERADO") {
+    if (this.usuarioService.usuario.role.nombre === "PADRE") {
       this.dias = this.horarioService.dias;
       this.institucion = this.institucionService.institucion;
-
-      this.usuarioService.apoderadoPorPersona().subscribe(({ ok, apoderado }) => {
+      this.usuarioService.padrePorPersona().subscribe(({ ok, padre }) => {
         if (ok) {
-          this.apoderado = apoderado;
-
-          this.matriculaService.matriculasApoderado(Number(this.apoderado.id))
-            .subscribe({
-              next: ({ ok, matriculas }) => {
-                if (ok) {
-                  matriculas.forEach(matricula => {
-                    this.aulasAux.push(matricula.programacion?.aula!);
-                  });
-                  var lookupObject: any = {};
-                  for (var i in this.aulasAux) {
-                    lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
-                  }
-                  for (i in lookupObject) {
-                    this.aulas.push(lookupObject[i]);
-                  }
-                  this.periodoService.todo().subscribe({
-                    next: ({ ok, periodos }) => {
-                      if (ok) {
-                        this.periodos = periodos;
-                      }
-                    }
-                  });
-                  this.horaService.todo().subscribe({
-                    next: ({ ok, horas }) => {
-                      if (ok) {
-                        this.horas = horas;
-                      }
-                    }
-                  });
-                }
+          this.padre = padre;
+          this.periodoService.todo().subscribe({
+            next: ({ ok, periodos }) => {
+              if (ok) {
+                this.periodos = periodos;
               }
-            });
+            }
+          });
+          this.horaService.todo().subscribe({
+            next: ({ ok, horas }) => {
+              if (ok) {
+                this.horas = horas;
+              }
+            }
+          });
+          this.aulaService.todo().subscribe({
+            next: ({ ok, aulas }) => {
+              if (ok) {
+                this.aulas = aulas;
+              }
+            }
+          });
+        }
+      });
+    }
+    if (this.usuarioService.usuario.role.nombre === "MADRE") {
+      this.dias = this.horarioService.dias;
+      this.institucion = this.institucionService.institucion;
+      this.usuarioService.madrePorPersona().subscribe(({ ok, madre }) => {
+        if (ok) {
+          this.madre = madre;
+          this.periodoService.todo().subscribe({
+            next: ({ ok, periodos }) => {
+              if (ok) {
+                this.periodos = periodos;
+              }
+            }
+          });
+          this.horaService.todo().subscribe({
+            next: ({ ok, horas }) => {
+              if (ok) {
+                this.horas = horas;
+              }
+            }
+          });
+          this.aulaService.todo().subscribe({
+            next: ({ ok, aulas }) => {
+              if (ok) {
+                this.aulas = aulas;
+              }
+            }
+          });
         }
       });
     }
@@ -133,12 +152,12 @@ export class HorarioApoderadoComponent implements OnInit {
       this.cargando = true;
       let arrperiodos = (this.horarioForm.get('periodoId')?.value).split(',');
       let arraulas = (this.horarioForm.get('aulaId')?.value).split(',');
-      
-      this.periodonombre= arrperiodos[1];
-      this.aulanombre= arraulas[1];
-      this.nivelnombre= arraulas[2];
-      this.gradonombre= arraulas[3];
-      this.seccionnombre= arraulas[4];
+
+      this.periodonombre = arrperiodos[1];
+      this.aulanombre = arraulas[1];
+      this.nivelnombre = arraulas[2];
+      this.gradonombre = arraulas[3];
+      this.seccionnombre = arraulas[4];
 
       this.horarioService.horariosPeriodoAula(
         Number(arrperiodos[0]),
@@ -153,7 +172,7 @@ export class HorarioApoderadoComponent implements OnInit {
                     id: resultado.id,
                     dia: objd,
                     hora: objh,
-                    subareaId: resultado.subareaId,
+                    areaId: resultado.areaId,
                     programacionId: resultado.programacionId,
                     programacion: resultado.programacion
                   }
@@ -186,7 +205,7 @@ export class HorarioApoderadoComponent implements OnInit {
   obtenerObjetoHorario(vector: any[], dia: string, hora: number) {
     let retorno = {
       id: 0,
-      subareaId: 0,
+      areaId: 0,
       programacionId: 0,
       programacion: ""
     };
@@ -194,7 +213,7 @@ export class HorarioApoderadoComponent implements OnInit {
       if (item.dia === dia && item.horaId === hora) {
         retorno = {
           id: item.id,
-          subareaId: item.programacion.subarea.id,
+          areaId: item.programacion.area.id,
           programacionId: item.programacion.id,
           programacion: item.programacion
         };
@@ -202,33 +221,6 @@ export class HorarioApoderadoComponent implements OnInit {
     });
     return retorno;
   }
-
-  listarAlumnos(){
-    let arrperiodos = (this.horarioForm.get('periodoId')?.value).split(',');
-    let arraulas = (this.horarioForm.get('aulaId')?.value).split(',');
-
-    this.listaAlumno=[];
-    this.listaAlumnoAux=[];
-    this.matriculaService.matriculasApoderadoPeriodoAula(Number(this.apoderado.id),
-    Number(arrperiodos[0]),Number(arraulas[0]))
-    .subscribe({
-      next: ({ ok, matriculas }) => {
-        if (ok) {
-          matriculas.forEach(matricula => {
-            this.listaAlumnoAux.push(matricula.alumno);
-          });
-          var lookupObject: any = {};
-          for (var i in this.listaAlumnoAux) {
-            lookupObject[this.listaAlumnoAux[i].id!] = this.listaAlumnoAux[i];
-          }
-          for (i in lookupObject) {
-            this.listaAlumno.push(lookupObject[i]);
-          }
-        }
-      }
-    });
-  }
-
   getBase64ImageFromURL(url: any) {
     return new Promise((resolve, reject) => {
       var img = new Image();
@@ -346,7 +338,7 @@ export class HorarioApoderadoComponent implements OnInit {
             margin: [0, 1, 0, 1],
           },
 
-          
+
           {
             margin: [0, 10, 0, 15],
             table: {
@@ -368,19 +360,19 @@ export class HorarioApoderadoComponent implements OnInit {
                       { text: intervalo.rango.inicio + '-' + intervalo.rango.fin, alignment: 'center' },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio].programacion?.area?.nombre || { text: 'RECREO', bold: true, fontSize: 10 }, alignment: 'center', fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 1].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 1].programacion?.area?.nombre || { text: 'RECREO', bold: true, fontSize: 10 }, alignment: 'center', fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 2].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 2].programacion?.area?.nombre || { text: 'RECREO', bold: true, fontSize: 10 }, alignment: 'center', fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 3].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 3].programacion?.area?.nombre || { text: 'RECREO', bold: true, fontSize: 10 }, alignment: 'center', fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 4].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 4].programacion?.area?.nombre || { text: 'RECREO', bold: true, fontSize: 10 }, alignment: 'center', fontSize: 10 },
                     ],
                   ]
                 )),

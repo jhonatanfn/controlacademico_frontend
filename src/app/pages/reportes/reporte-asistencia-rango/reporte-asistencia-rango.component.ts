@@ -1,10 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Evaluacion } from 'src/app/models/evaluacion.model';
 import { Periodo } from 'src/app/models/periodo.model';
-import { Programacion } from 'src/app/models/programacion.model';
-import { MenuService } from 'src/app/services/menu.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
+import { ChartData, ChartOptions } from 'chart.js';
 import * as  moment from 'moment';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -12,14 +10,12 @@ import { AsistenciaService } from 'src/app/services/asistencia.service';
 import { Institucion } from 'src/app/models/institucion.model';
 import { InstitucionService } from 'src/app/services/institucion.service';
 import { Aula } from 'src/app/models/aula.model';
-import { Subarea } from 'src/app/models/subarea.model';
 import { AulaService } from 'src/app/services/aula.service';
-import { SubareaService } from 'src/app/services/subarea.service';
 import { Docente } from 'src/app/models/docente.model';
-import { UsuarioService } from 'src/app/services/usuario.service';
-import { ProgramacionService } from 'src/app/services/programacion.service';
-import { MatriculaService } from 'src/app/services/matricula.service';
-import { Apoderado } from 'src/app/models/apoderado.model';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
+import { Matriculadetalle } from 'src/app/models/matriculadetalle';
+import { SituacionService } from 'src/app/services/situacion.service';
+import { Situacion } from 'src/app/models/situacion.model';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -29,152 +25,94 @@ import { Apoderado } from 'src/app/models/apoderado.model';
 })
 export class ReporteAsistenciaRangoComponent implements OnInit {
 
-  public titulo: string = '';
-  public icono: string = '';
-  public titulo2: string = 'Lista de Asistencias';
-  public icono2: string = 'bi bi-calendar-check';
-  public titulo3: string = 'Resumen';
-  public icono3: string = 'bi bi-card-checklist';
+  public titulo: string = 'Buscar';
+  public icono: string = 'bi bi-search';
+  public titulo2: string = 'Resultado';
+  public icono2: string = 'bi bi-pin-angle';
+  public titulo3: string = 'Datos Reporte';
+  public icono3: string = 'bi bi-bookmark';
   public asisForm!: FormGroup;
   public periodos: Periodo[] = [];
-  public programaciones: Programacion[] = [];
+  public matriculadetalles: Matriculadetalle[] = [];
   public datos: any[] = [];
   public formSubmitted: boolean = false;
-  public evaluaciones: Evaluacion[] = [];
   @ViewChild('htmlData') htmlData!: ElementRef;
   public asistiototal: number = 0;
   public faltototal: number = 0;
   public justificototal: number = 0;
-  public institucion!:Institucion;
-  public aulas:Aula[]=[];
-  public subareas:Subarea[]=[];
-  public aulasAux: Aula[] = [];
-  public subareasAux: Subarea[] = [];
+  public tardanzatotal: number = 0;
+  public noregistrototal: number = 0;
+  public total: number = 0;
+  public institucion!: Institucion;
+  public aulas: Aula[] = [];
   public docente!: Docente;
-  public periodonombre:string="";
-  public aulanombre:string="";
-  public subareanombre:string="";
-  public docentenombre:string="";
-  public fechai:string="";
-  public fechaf:string="";
-  public cargando:boolean= false;
-  public apoderado!:Apoderado;
+  public periodonombre: string = "";
+  public aulanombre: string = "";
+  public fechai: string = "";
+  public fechaf: string = "";
+  public cargando: boolean = false;
+  public situaciones: Situacion[] = [];
+  public graficos:any[]=[];
+  public salesData: ChartData<'line'> = {
+    labels: [],
+    datasets: [],
+  };
+  public chartOptions: ChartOptions = {
+    responsive: true,
+    animation: {
+      duration: 2000
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Estadísticas',
+      },
+    },
 
-  constructor(private menuService: MenuService, private fb: FormBuilder,
-    private periodoService: PeriodoService,private asistenciaService: AsistenciaService, 
-    private institucionService:InstitucionService,private aulaService:AulaService,
-    private subareaService:SubareaService,
-    private usuarioService: UsuarioService, 
-    private programacionService: ProgramacionService,
-    private matriculaService:MatriculaService) {
-    this.menuService.getTituloRuta()
-      .subscribe(({ titulo, icono }) => {
-        this.titulo = titulo;
-        this.icono = icono;
-      });
+  };
+  chartColors = {
+    red: 'rgb(224, 32, 32)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(53, 138, 31)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(105, 100, 100)'
+  };
+
+
+  constructor(private fb: FormBuilder,
+    private periodoService: PeriodoService, private asistenciaService: AsistenciaService,
+    private institucionService: InstitucionService, private aulaService: AulaService,
+    private situacionService: SituacionService,private matriculadetalleService: MatriculadetalleService) {
+
     this.periodoService.todo().subscribe(({ ok, periodos }) => {
       if (ok) {
         this.periodos = periodos;
       }
     });
-    
-    if (this.usuarioService.usuario.role.nombre === "DOCENTE") {
-
-      this.usuarioService.docentePorPersona().subscribe({
-        next: ({ ok, docente }) => {
-          if (ok) {
-            this.docente = docente;
-            this.programacionService.programacionesPorDocente(Number(this.docente.id))
-              .subscribe({
-                next: ({ ok, programaciones }) => {
-                  if (ok) {
-                    programaciones.forEach(programacion => {
-                      this.aulasAux.push(programacion.aula!);
-                      this.subareasAux.push(programacion.subarea!);
-                    });
-                    var lookupObject: any = {};
-                    var lookupObject2: any = {};
-                    for (var i in this.aulasAux) {
-                      lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
-                    }
-                    for (i in lookupObject) {
-                      this.aulas.push(lookupObject[i]);
-                    }
-                    for (var i in this.subareasAux) {
-                      lookupObject2[this.subareasAux[i].id!] = this.subareasAux[i];
-                    }
-                    for (i in lookupObject2) {
-                      this.subareas.push(lookupObject2[i]);
-                    }
-                  }
-                }
-              })
-          }
-        }
-      });
-    }
-
-    if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
-      this.aulaService.todo().subscribe({
-        next: ({ ok, aulas }) => {
-          if (ok) {
-            this.aulas = aulas;
-          }
-        }
-      });
-      this.subareaService.todo().subscribe({
-        next: ({ ok, subareas }) => {
-          if (ok) {
-            this.subareas = subareas;
-          }
-        }
-      });
-    }
- 
-    if (this.usuarioService.usuario.role.nombre === "APODERADO") {
-      
-      this.usuarioService.apoderadoPorPersona().subscribe(({ ok, apoderado }) => {
+    this.situacionService.todo().subscribe({
+      next: ({ ok, situaciones }) => {
         if (ok) {
-          this.apoderado = apoderado;
-
-          this.matriculaService.matriculasApoderado(Number(this.apoderado.id))
-            .subscribe({
-              next: ({ ok, matriculas }) => {
-                if (ok) {
-                  matriculas.forEach(matricula => {
-                    this.aulasAux.push(matricula.programacion?.aula!);
-                  });
-                  var lookupObject: any = {};
-                  for (var i in this.aulasAux) {
-                    lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
-                  }
-                  for (i in lookupObject) {
-                    this.aulas.push(lookupObject[i]);
-                  }
-                  this.subareaService.todo().subscribe({
-                    next: ({ ok, subareas }) => {
-                      if (ok) {
-                        this.subareas = subareas;
-                      }
-                    }
-                  });
-                }
-              }
-            });
+          this.situaciones = situaciones;
         }
-      });
+      }
+    });
+    this.aulaService.todo().subscribe({
+      next: ({ ok, aulas }) => {
+        if (ok) {
+          this.aulas = aulas;
+        }
+      }
+    });
 
-
-    }
-
-    this.institucion= this.institucionService.institucion;
+    this.institucion = this.institucionService.institucion;
   }
 
   ngOnInit(): void {
     this.asisForm = this.fb.group({
       periodoId: ['', Validators.required],
-      aulaId:['',Validators.required],
-      subareaId:['',Validators.required],
+      aulaId: ['', Validators.required],
       fechainicial: ['', Validators.required],
       fechafinal: ['', Validators.required]
     });
@@ -191,149 +129,167 @@ export class ReporteAsistenciaRangoComponent implements OnInit {
   buscarAsistencias() {
     this.formSubmitted = true;
     if (this.asisForm.valid) {
+      this.cargando = true;
       this.datos = [];
       let arrPeriodos = (this.asisForm.get('periodoId')?.value).split(',');
       let arrAulas = (this.asisForm.get('aulaId')?.value).split(',');
-      let arrSubareas = (this.asisForm.get('subareaId')?.value).split(',');
-      
-      this.periodonombre=arrPeriodos[1];
-      this.aulanombre=arrAulas[1];
-      this.subareanombre=arrSubareas[1];
-      this.fechai= this.asisForm.get('fechainicial')?.value;
-      this.fechaf= this.asisForm.get('fechafinal')?.value;
-      this.cargando= true;
+      this.periodonombre = arrPeriodos[1];
+      this.aulanombre = arrAulas[1];
+      this.fechai = moment(this.asisForm.get('fechainicial')?.value).format('DD/MM/yyyy');;
+      this.fechaf = moment(this.asisForm.get('fechafinal')?.value).format('DD/MM/yyyy');;
 
-      if(this.usuarioService.usuario.role.nombre==="APODERADO"){
-
-        this.asistenciaService.asistenciasRangoApoderado(
-          Number(arrPeriodos[0]),
-          Number(arrAulas[0]),
-          Number(arrSubareas[0]),
-          this.asisForm.get('fechainicial')?.value,
-          this.asisForm.get('fechafinal')?.value,
-          Number(this.apoderado.id)).subscribe({
-            next: ({ ok, asistencias }) => {
-              if (ok) {
-                if(asistencias.length>0){
-                  this.docentenombre=asistencias[0].matricula?.programacion?.docente?.persona?.nombres!+' '+
-                  asistencias[0].matricula?.programacion?.docente?.persona?.apellidopaterno!+' '+
-                  asistencias[0].matricula?.programacion?.docente?.persona?.apellidomaterno!;
-                }
-                const fecha1 = new Date(this.asisForm.get('fechainicial')?.value).getTime(); 
-                const fecha2 = new Date(this.asisForm.get('fechafinal')?.value).getTime(); 
-                let result = (fecha2 - fecha1) / (1000 * 60 * 60 * 24); 
-                
-                for(let i=0; i<=result;i++){
-                 let fecha= moment(this.asisForm.get('fechainicial')?.value).add(i, 'days').format('YYYY-MM-DD');
-                 let asis = 0;
-                 let fal = 0;
-                 let jus = 0;
-                 asistencias.forEach(asistencia=>{
-                  if(asistencia.fecha===fecha){
-                    if(asistencia.situacion?.id==4){
-                      fal = fal + 1;
-                    }else{
-                      if(asistencia.situacion?.id==14){
-                        asis = asis + 1;
-                      }else{
-                        jus = jus + 1;
-                      }
+      this.matriculadetalleService.matriculadetallesPeriodoAula(
+        Number(arrPeriodos[0]),
+        Number(arrAulas[0])).subscribe({
+          next: ({ ok, matriculadetalles }) => {
+            if (ok) {
+              this.matriculadetalles = matriculadetalles;
+              this.asistenciaService.asistenciasRango(Number(arrPeriodos[0]), Number(arrAulas[0]),
+                this.asisForm.get('fechainicial')?.value, this.asisForm.get('fechafinal')?.value)
+                .subscribe({
+                  next: ({ ok, asistencias }) => {
+                    this.total = asistencias.length;
+                    if (ok) {
+                      let a = 0;
+                      let f = 0;
+                      let j = 0;
+                      let t = 0;
+                      let nr = 0;
+                      this.matriculadetalles.forEach(matriculadetalle => {
+                        a = 0; f = 0; j = 0; t = 0; nr = 0;
+                        asistencias.forEach(asistencia => {
+                          if (matriculadetalle.matricula?.alumno?.id == asistencia.matriculadetalle?.matricula?.alumno?.id) {
+                            if (asistencia.situacion?.id == 4) {
+                              f = f + 1;
+                            } else {
+                              if (asistencia.situacion?.id == 14) {
+                                a = a + 1;
+                              } else {
+                                if (asistencia.situacion?.id == 24) {
+                                  j = j + 1;
+                                } else {
+                                  if (asistencia.situacion?.id == 34) {
+                                    t = t + 1;
+                                  } else {
+                                    nr = nr + 1;
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        });
+                        let objeto = {
+                          alumno: matriculadetalle,
+                          asistencia: a,
+                          falta: f,
+                          justifica: j,
+                          tardanza: t,
+                          noregistro: nr
+                        };
+                        this.datos.push(objeto);
+                      });
+                      this.calcularTotales(this.datos);
+                      this.cargando = false;
                     }
                   }
-                 });
-                 let obj={
-                   fecha: fecha,
-                   asistio: asis,
-                   falto: fal,
-                   justifico: jus,
-                   total: asis+fal+jus
-                 }
-                 this.datos.push(obj);
-                }
-                let ast=0;
-                let fat=0;
-                let just=0;
-                this.datos.forEach(dato=>{
-                  ast= ast+dato.asistio;
-                  fat= fat+dato.falto;
-                  just= just+dato.justifico;
                 });
-                this.asistiototal= ast;
-                this.faltototal=  fat;
-                this.justificototal= just;
-                this.cargando= false;
-              }
             }
-          });
+          }
+        });
+    }
+  }
 
+  calcularTotales(vector: any[]) {
+    this.asistiototal = 0;
+    this.faltototal = 0;
+    this.justificototal = 0;
+    this.tardanzatotal = 0;
+    this.noregistrototal = 0;
 
+    vector.forEach(item => {
+      this.asistiototal = this.asistiototal + item.asistencia;
+      this.faltototal = this.faltototal + item.falta;
+      this.justificototal = this.justificototal + item.justifica;
+      this.tardanzatotal = this.tardanzatotal + item.tardanza;
+      this.noregistrototal = this.noregistrototal + item.noregistro;
+    });
 
-      }else{
-
-        this.asistenciaService.asistenciasRango(
-          Number(arrPeriodos[0]),
-          Number(arrAulas[0]),
-          Number(arrSubareas[0]),
-          this.asisForm.get('fechainicial')?.value,
-          this.asisForm.get('fechafinal')?.value).subscribe({
-            next: ({ ok, asistencias }) => {
-              if (ok) {
-                if(asistencias.length>0){
-                  this.docentenombre=asistencias[0].matricula?.programacion?.docente?.persona?.nombres!+' '+
-                  asistencias[0].matricula?.programacion?.docente?.persona?.apellidopaterno!+' '+
-                  asistencias[0].matricula?.programacion?.docente?.persona?.apellidomaterno!;
-                }
-                const fecha1 = new Date(this.asisForm.get('fechainicial')?.value).getTime(); 
-                const fecha2 = new Date(this.asisForm.get('fechafinal')?.value).getTime(); 
-                let result = (fecha2 - fecha1) / (1000 * 60 * 60 * 24); 
-                
-                for(let i=0; i<=result;i++){
-                 let fecha= moment(this.asisForm.get('fechainicial')?.value).add(i, 'days').format('YYYY-MM-DD');
-                 let asis = 0;
-                 let fal = 0;
-                 let jus = 0;
-                 asistencias.forEach(asistencia=>{
-                  if(asistencia.fecha===fecha){
-                    if(asistencia.situacion?.id==4){
-                      fal = fal + 1;
-                    }else{
-                      if(asistencia.situacion?.id==14){
-                        asis = asis + 1;
-                      }else{
-                        jus = jus + 1;
-                      }
-                    }
-                  }
-                 });
-                 let obj={
-                   fecha: fecha,
-                   asistio: asis,
-                   falto: fal,
-                   justifico: jus,
-                   total: asis+fal+jus
-                 }
-                 this.datos.push(obj);
-                }
-                let ast=0;
-                let fat=0;
-                let just=0;
-                this.datos.forEach(dato=>{
-                  ast= ast+dato.asistio;
-                  fat= fat+dato.falto;
-                  just= just+dato.justifico;
-                });
-                this.asistiototal= ast;
-                this.faltototal=  fat;
-                this.justificototal= just;
-                this.cargando= false;
-              }
-            }
-          });
-
+    this.situaciones.forEach(situacion => {
+      let objeto = {
+        situacion: situacion,
+        total: 0,
+        porcentaje: 0
       }
+      this.graficos.push(objeto);
+    });
+    this.graficos.forEach(grafico=>{
+      if(grafico.situacion?.abreviatura=="F"){
+        grafico.total= this.faltototal;
+        grafico.porcentaje= Math.round((this.faltototal / this.total) * 100);
+      }else{
+        if(grafico.situacion?.abreviatura=="A"){
+          grafico.total= this.asistiototal;
+          grafico.porcentaje= Math.round((this.asistiototal / this.total) * 100);
+        }else{
+          if(grafico.situacion?.abreviatura=="J"){
+            grafico.total= this.justificototal;
+            grafico.porcentaje= Math.round((this.justificototal / this.total) * 100);
+          }else{
+            if(grafico.situacion?.abreviatura=="T"){
+              grafico.total= this.tardanzatotal;
+              grafico.porcentaje= Math.round((this.tardanzatotal / this.total) * 100);
+            }else{
+              grafico.total= this.noregistrototal;
+              grafico.porcentaje= Math.round((this.noregistrototal / this.total) * 100);
+            }
+          }
+        }
+      }
+    });
+  }
 
-
-
+  generarBarras() {
+    let etiquetas: any[] = [];
+    let datas: any[] = [];
+    this.situaciones.forEach(situacion => {
+      let label = situacion.nombre;
+      etiquetas.push(label);
+    });
+    this.graficos.forEach(grafico => {
+      let label = grafico.porcentaje;
+      datas.push(label);
+    });
+    this.salesData = {
+      labels: etiquetas,
+      datasets: [
+        {
+          label: 'Porcentajes',
+          backgroundColor: [
+            this.chartColors.red,
+            this.chartColors.green,
+            this.chartColors.blue,
+            this.chartColors.yellow,
+            this.chartColors.grey
+          ],
+          hoverBackgroundColor: [
+            this.chartColors.red,
+            this.chartColors.green,
+            this.chartColors.blue,
+            this.chartColors.yellow,
+            this.chartColors.grey
+          ],
+          hoverBorderColor: [
+            this.chartColors.red,
+            this.chartColors.green,
+            this.chartColors.blue,
+            this.chartColors.yellow,
+            this.chartColors.grey
+          ],
+          hoverBorderWidth: 2,
+          data: datas,
+          tension: 0.5,
+        }
+      ],
     }
   }
 
@@ -363,10 +319,9 @@ export class ReporteAsistenciaRangoComponent implements OnInit {
     if (this.asisForm.valid) {
       let url = this.institucionService.getImageUrlInstitucion(this.institucion.img!);
       let nombreArchivo = 'REPORTE: ' + moment().format('DD/MM/yyyy') + '.pdf';
-     
+
       let arrPeriodos = (this.asisForm.get('periodoId')?.value).split(',');
       let arrAulas = (this.asisForm.get('aulaId')?.value).split(',');
-      let arrSubareas = (this.asisForm.get('subareaId')?.value).split(',');
 
       var docDefinition: any = {
         content: [
@@ -424,25 +379,7 @@ export class ReporteAsistenciaRangoComponent implements OnInit {
           },
           {
             text: [
-              { text: 'AULA: ', bold: true, }, arrAulas[1]
-            ],
-            fontSize: 12,
-            color: '#0000',
-            width: 'auto',
-            margin: [0, 1, 0, 1],
-          },
-          {
-            text: [
-              { text: 'SUBAREA: ', bold: true }, arrSubareas[1]
-            ],
-            fontSize: 12,
-            color: '#0000',
-            width: 'auto',
-            margin: [0, 1, 0, 1],
-          },
-          {
-            text: [
-              { text: 'RANGO : ', bold: true, }, 'DESDE: '+moment(this.asisForm.get('fechainicial')?.value).format('DD/MM/yyyy')+' HASTA: '+moment(this.asisForm.get('fechafinal')?.value).format('DD/MM/yyyy')
+              { text: 'RANGO : ', bold: true, }, 'DESDE: ' + moment(this.asisForm.get('fechainicial')?.value).format('DD/MM/yyyy') + ' HASTA: ' + moment(this.asisForm.get('fechafinal')?.value).format('DD/MM/yyyy')
             ],
             fontSize: 12,
             color: '#0000',
@@ -458,35 +395,37 @@ export class ReporteAsistenciaRangoComponent implements OnInit {
           },
 
           {
-            //layout: 'lightHorizontalLines',
             margin: [0, 10, 0, 15],
             table: {
               headerRows: 1,
-              widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+              widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto','auto','auto'],
               body: [
                 [
                   { text: 'N°', bold: true, alignment: 'center' },
-                  { text: 'FECHA', bold: true, alignment: 'center' },
-                  { text: 'ASISTENCIAS', bold: true, alignment: 'center' },
-                  { text: 'FALTAS', bold: true, alignment: 'center' },
-                  { text: 'JUSTIFICACIONES', bold: true, alignment: 'center' },
-                  { text: 'TOTAL', bold: true, alignment: 'center' },
+                  { text: 'APELLIDOS Y NOMBRES', bold: true, alignment: 'center' },
+                  { text: 'AULA', bold: true, alignment: 'center' },
+                  { text: 'A', bold: true, alignment: 'center' },
+                  { text: 'F', bold: true, alignment: 'center' },
+                  { text: 'J', bold: true, alignment: 'center' },
+                  { text: 'T', bold: true, alignment: 'center' },
+                  { text: 'NR', bold: true, alignment: 'center' },
                 ],
                 ...this.datos.map(p => (
                   [
                     this.datos.indexOf(p) + 1,
-                    moment(p.fecha).format('DD/MM/yyyy'),
-                    p.asistio,
-                    p.falto,
-                    p.justifico,
-                    p.total
+                    p.alumno.matricula?.alumno?.persona?.apellidopaterno+' '+
+                    p.alumno.matricula?.alumno?.persona?.apellidopaterno+' '+
+                    p.alumno.matricula?.alumno?.persona?.apellidomaterno,
+                    p.alumno.programacion?.aula?.nombre,
+                    p.asistencia,
+                    p.falta,
+                    p.justifica,
+                    p.tardanza,
+                    p.noregistro
                   ])),
               ]
             }
           },
-
-
-          /*
           {
             text: [
               { text: 'RESUMEN: ', bold: true, }
@@ -496,28 +435,30 @@ export class ReporteAsistenciaRangoComponent implements OnInit {
             width: 'auto',
             margin: [0, 5, 0, 2],
           },
-
           {
-            //layout: 'lightHorizontalLines',
+           
             margin: [0, 1, 0, 5],
             table:{
-              widths: [100, 'auto'],
+              widths: ['auto', 'auto','auto'],
               body: [
                 [
-                  'ASISTIÓ: ', this.asistiototal,
+                  'ASISTENCIAS: ', this.asistiototal, (this.asistiototal/this.total)*100+' % '
                 ],
                 [
-                  'FALTÓ: ', this.faltototal
+                  'FALTAS: ', this.faltototal,(this.faltototal/this.total)*100+' % '
                 ],
                 [
-                  'JUSTIFICÓ: ', this.justificototal
+                  'JUSTIFICACIONES: ', this.justificototal,(this.justificototal/this.total)*100+' % '
+                ],
+                [
+                  'TARDANZAS: ', this.tardanzatotal,(this.tardanzatotal/this.total)*100+' % '
+                ],
+                [
+                  'NO REGISTRADOS: ', this.noregistrototal,(this.noregistrototal/this.total)*100+' % '
                 ]
               ],
             }
-          },
-          */
-
-
+          }
         ],
         styles: {
           header: {

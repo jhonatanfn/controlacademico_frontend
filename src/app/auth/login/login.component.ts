@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Institucion } from 'src/app/models/institucion.model';
 import { InstitucionService } from 'src/app/services/institucion.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -24,6 +23,7 @@ export class LoginComponent implements OnInit {
   };
 
   public cargando:boolean= false;
+  public control:boolean= false;
 
   public loginForm = this.fb.group({
     email: [localStorage.getItem('email') || '', [Validators.required,  Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
@@ -34,7 +34,6 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private router: Router, private usuarioService: UsuarioService,
     private institucionService:InstitucionService) {
-
     this.institucion= this.institucionService.institucion;
 
   }
@@ -44,23 +43,27 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.formSubmitted = true;
-    this.cargando= true;
-    this.usuarioService.login(this.loginForm.value).subscribe({
-      next: (resp) => {
-        if (this.loginForm.get('recordarme')?.value) {
-          localStorage.setItem('email', this.loginForm.get('email')?.value);
-        } else {
-          localStorage.removeItem('email');
+    if(this.loginForm.valid){
+      this.control= true;
+      this.cargando= true;
+      this.usuarioService.login(this.loginForm.value).subscribe({
+        next: (resp) => {
+          if (this.loginForm.get('recordarme')?.value) {
+            localStorage.setItem('email', this.loginForm.get('email')?.value);
+          } else {
+            localStorage.removeItem('email');
+          }
+          this.router.navigateByUrl('dashboard');
+        },
+        error: (error) => {
+          Swal.fire('Error', "Se produjo un error. Intentale mas tarde.", 'error');
+          this.cargando= false;
+          this.control= false;
         }
-        //this.cargando= false;
-        this.router.navigateByUrl('dashboard');
-      },
-      error: (error) => {
-        Swal.fire('Error', "Usuario y contraseña no son válidos.", 'error');
-        this.cargando= false;
-      }
+      });
+    }
+    
 
-    });
   }
 
   campoNoValido(campo: string) {

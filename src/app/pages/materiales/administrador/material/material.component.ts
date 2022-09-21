@@ -54,7 +54,6 @@ export class MaterialComponent implements OnInit {
           if (ok) {
             this.periodonombre = programacion.periodo?.nombre!;
             this.aulanombre = programacion.aula?.nombre!;
-            this.subareanombre = programacion.subarea?.nombre!;
             this.docentenombre = programacion.docente?.persona?.nombres! + ' ' +
               programacion.docente?.persona?.apellidopaterno! + ' ' +
               programacion.docente?.persona?.apellidomaterno!;

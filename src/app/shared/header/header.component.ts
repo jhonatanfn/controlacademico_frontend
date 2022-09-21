@@ -12,7 +12,8 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 })
 export class HeaderComponent implements OnInit {
 
-  menuItems:any[];
+  menuItems:any[]=[];
+  menuItemsAux:any[]=[];
   public usuario!: Usuario;
   public institucion:Institucion={
     nombre: "",
@@ -24,7 +25,14 @@ export class HeaderComponent implements OnInit {
 
   constructor(private institucionService:InstitucionService, 
   private menuServices:MenuService,private usuarioService:UsuarioService) {
-    this.menuItems= this.menuServices.menu;
+    
+    this.menuItemsAux= this.menuServices.menu;
+    this.menuItemsAux.forEach(menuItem=>{
+      if(menuItem.bandera==1){
+        this.menuItems.push(menuItem);
+      }
+    });
+    
     this.usuario = this.usuarioService.usuario;
     this.institucion= this.institucionService.institucion;
   }

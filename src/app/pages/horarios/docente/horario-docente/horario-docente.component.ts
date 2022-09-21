@@ -130,7 +130,7 @@ export class HorarioDocenteComponent implements OnInit {
                     id: resultado.id,
                     dia: objd,
                     hora: objh,
-                    subareaId: resultado.subareaId,
+                    areaId: resultado.areaId,
                     programacionId: resultado.programacionId,
                     programacion: resultado.programacion
                   }
@@ -163,7 +163,7 @@ export class HorarioDocenteComponent implements OnInit {
   obtenerObjetoHorario(vector: any[], dia: string, hora: number) {
     let retorno = {
       id: 0,
-      subareaId: 0,
+      areaId: 0,
       programacionId: 0,
       programacion: ""
     };
@@ -171,7 +171,7 @@ export class HorarioDocenteComponent implements OnInit {
       if (item.dia === dia && item.horaId === hora) {
         retorno = {
           id: item.id,
-          subareaId: item.programacion.subarea.id,
+          areaId: item.programacion.area.id,
           programacionId: item.programacion.id,
           programacion: item.programacion
         }
@@ -204,7 +204,7 @@ export class HorarioDocenteComponent implements OnInit {
     this.formSubmitted = true;
     if (this.horarioForm.valid) {
       let url = this.institucionService.getImageUrlInstitucion(this.institucion.img!);
-      let nombreArchivo = 'REPORTE: ' + moment().format('DD/MM/yyyy') + '.pdf';
+      let nombreArchivo = 'HORARIO: ' + moment().format('DD/MM/yyyy') + '.pdf';
       let arrPeriodos = (this.horarioForm.get('periodoId')?.value).split(',');
 
       var docDefinition: any = {
@@ -260,45 +260,16 @@ export class HorarioDocenteComponent implements OnInit {
             width: 'auto',
             margin: [0, 1, 0, 1],
           },
-
-          /*
           {
             text: [
-              { text: 'AULA: ', bold: true, }, this.aulanombre
+              { text: 'DOCENTE: ', bold: true, }, this.docentenombre
             ],
             fontSize: 12,
             color: '#0000',
             width: 'auto',
             margin: [0, 1, 0, 1],
           },
-          {
-            text: [
-              { text: 'NIVEL: ', bold: true, }, this.nivelnombre
-            ],
-            fontSize: 12,
-            color: '#0000',
-            width: 'auto',
-            margin: [0, 1, 0, 1],
-          },
-          {
-            text: [
-              { text: 'GRADO: ', bold: true, }, this.gradonombre
-            ],
-            fontSize: 12,
-            color: '#0000',
-            width: 'auto',
-            margin: [0, 1, 0, 1],
-          },
-          {
-            text: [
-              { text: 'SECCION: ', bold: true, }, this.seccionnombre
-            ],
-            fontSize: 12,
-            color: '#0000',
-            width: 'auto',
-            margin: [0, 1, 0, 1],
-          },
-          */
+        
           {
             margin: [0, 10, 0, 15],
             table: {
@@ -320,23 +291,23 @@ export class HorarioDocenteComponent implements OnInit {
                       { text: intervalo.rango.inicio + '-' + intervalo.rango.fin, alignment: 'center' },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio].programacion?.subarea?.nombre, alignment: 'center',bold: true },
+                      { text: this.datos[intervalo.inicio].programacion?.area?.nombre, alignment: 'center',bold: true, fontSize: 10 },
                       { text: this.datos[intervalo.inicio].programacion?.aula?.nombre, alignment: 'center' }
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 1].programacion?.subarea?.nombre, alignment: 'center',bold: true },
+                      { text: this.datos[intervalo.inicio + 1].programacion?.area?.nombre, alignment: 'center',bold: true, fontSize: 10 },
                       { text: this.datos[intervalo.inicio + 1].programacion?.aula?.nombre, alignment: 'center' }
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 2].programacion?.subarea?.nombre, alignment: 'center',bold: true },
+                      { text: this.datos[intervalo.inicio + 2].programacion?.area?.nombre, alignment: 'center',bold: true, fontSize: 10 },
                       { text: this.datos[intervalo.inicio + 2].programacion?.aula?.nombre, alignment: 'center' }
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 3].programacion?.subarea?.nombre, alignment: 'center',bold: true },
+                      { text: this.datos[intervalo.inicio + 3].programacion?.area?.nombre, alignment: 'center',bold: true, fontSize: 10 },
                       { text: this.datos[intervalo.inicio + 3].programacion?.aula?.nombre, alignment: 'center' }
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 4].programacion?.subarea?.nombre, alignment: 'center',bold: true },
+                      { text: this.datos[intervalo.inicio + 4].programacion?.area?.nombre, alignment: 'center',bold: true, fontSize: 10 },
                       { text: this.datos[intervalo.inicio + 4].programacion?.aula?.nombre, alignment: 'center' }
                     ],
                   ]

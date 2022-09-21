@@ -1,73 +1,29 @@
 <div class="row">
-    <div class="col-12 col-lg-4">
-        <div class="row">
-            <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-header">
-                        <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <form [formGroup]="asisForm" (submit)="guardarAsistencias()">
-                                    <div class="row">
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="fecha" class="form-label">Fecha</label>
-                                                <input type="date" class="form-control" formControlName="fecha"
-                                                    [ngClass]="{ isDisabled: true }">
-                                                <div *ngIf="campoRequerido('fecha')" id="fecha"
-                                                    class="form-text text-danger">
-                                                    La fecha es requerida
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary me-2" [disabled]="datos.length==0">
-                                        <i class="bi bi-hdd"></i>
-                                        Guardar
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-header">
-                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card w-100">
-                                    <div class="card-body">
-                                        <h6 class="card-title">Periodo:</h6>
-                                        <p class="card-text"> {{ periodonombre | uppercase }}</p>
-                                        <h6 class="card-title">Aula:</h6>
-                                        <p class="card-text">{{ aulanombre | uppercase }}</p>
-                                        <h6 class="card-title">Area:</h6>
-                                        <p class="card-text"> {{ areanombre | uppercase }}</p>
-                                        <h6 class="card-title">Subarea:</h6>
-                                        <p class="card-text"> {{ subareanombre | uppercase }}</p>
-                                        <h6 class="card-title">Docente:</h6>
-                                        <p class="card-text"> {{ docentenombre | uppercase }}</p>
+    <div class="col-12 col-lg-8 mb-2 mb-lg-0">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center 
+                gap-3">
+                    <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                    <div class="mb-0">
+                        <form [formGroup]="asisForm" (submit)="guardarAsistencias()">
+                            <div class="d-flex  gap-3">
+                                <div class="mb-0">
+                                    <input type="date" class="form-control" formControlName="fecha"
+                                        [ngClass]="{ isDisabled: true }">
+                                    <div *ngIf="campoRequerido('fecha')" id="fecha" 
+                                    class="form-text text-danger">
+                                        La fecha es requerida
                                     </div>
                                 </div>
+                                <button type="submit" class="btn btn-primary" [disabled]="datos.length==0">
+                                    <i class="bi bi-hdd"></i>
+                                    Guardar
+                                </button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-lg-8">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -80,12 +36,12 @@
                                 <p>Por favor espera</p>
                             </div>
                         </div>
-                      
+
                         <div class="table-responsive" *ngIf="!cargando">
                             <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
                                 {{messageInfo}}
                             </div>
-                            <table class="table table-bordered table-hover" *ngIf="datos.length>0">
+                            <table class="table  table-hover" *ngIf="datos.length>0">
                                 <thead>
                                     <tr>
                                         <th scope="col" class="w70">N°</th>
@@ -96,11 +52,10 @@
                                 <tbody>
                                     <tr *ngFor="let dato of datos; let i= index">
                                         <th>{{i+1}}</th>
-                                        <td>{{dato.matricula?.alumno?.persona?.apellidopaterno | uppercase}}
-                                            {{dato.matricula?.alumno?.persona?.apellidomaterno | uppercase}}
-                                            {{dato.matricula?.alumno?.persona?.nombres | uppercase}}
+                                        <td>{{dato.matriculadetalle.matricula?.alumno?.persona?.apellidopaterno | uppercase}}
+                                            {{dato.matriculadetalle.matricula?.alumno?.persona?.apellidomaterno | uppercase}}
+                                            {{dato.matriculadetalle.matricula?.alumno?.persona?.nombres | uppercase}}
                                         </td>
-
                                         <td>
                                             <span class="badge rounded-pill bg-{{dato.color}} cursor"
                                                 (click)="cambiarEstado(dato)">
@@ -111,6 +66,34 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-color-primary  contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Periodo</div>
+                                    {{ periodonombre | uppercase}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Aula</div>
+                                    {{ aulanombre | uppercase}}
+                                </div>
+
+                            </li>
+                        </ol>
                     </div>
                 </div>
             </div>

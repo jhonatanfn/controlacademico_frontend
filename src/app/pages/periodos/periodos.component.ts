@@ -36,7 +36,9 @@ export class PeriodosComponent implements OnInit {
     this.listarPeriodos();
     this.periodoForm = this.fb.group({
       periodoId: [''],
-      nombre: ['', [Validators.required, Validators.maxLength(30)]]
+      nombre: ['', [Validators.required, Validators.maxLength(30)]],
+      fechainicial: ['', Validators.required],
+      fechafinal: ['', Validators.required]
     });
   }
 
@@ -102,63 +104,102 @@ export class PeriodosComponent implements OnInit {
     this.tituloperiodo = "Nuevo Periodo";
   }
 
+  validaRango(fechainicial: string, fechafinal: string, periodo: Periodo) {
+
+    if (fechainicial >= periodo.fechainicial && fechainicial <= periodo.fechafinal) {
+      return false;
+    }
+    if (fechafinal >= periodo.fechainicial && fechafinal <= periodo.fechafinal) {
+      return false;
+    }
+    if (fechainicial <= periodo.fechainicial && fechafinal >= periodo.fechafinal) {
+      return false;
+    }
+    return true;
+  }
+
+  existePeriodo() {
+    let resultado = false;
+    this.periodos.forEach(periodo => {
+      if (!this.validaRango(this.periodoForm.get('fechainicial')?.value,
+        this.periodoForm.get('fechafinal')?.value, periodo)) {
+        resultado = true;
+      }
+    });
+    return resultado;
+  }
+
   guardarPeriodo() {
     this.formSubmitted = true;
+
     if (this.periodoForm.valid) {
-      if (this.isSave) {
-        this.periodoService.crear(this.periodoForm.value)
-          .subscribe({
-            next: ({ ok, msg }) => {
-              if (ok) {
-                this.closebutton.nativeElement.click();
-                this.listarPeriodos();
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'success',
-                  title: msg,
-                  showConfirmButton: false,
-                  timer: 1000
-                })
-              }
-            },
-            error: (error) => {
-              Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: error.error.msg,
-                showConfirmButton: false,
-                timer: 1500
+      if (!this.existePeriodo()) {
+        if (this.periodoForm.valid) {
+          if (this.isSave) {
+            this.periodoService.crear(this.periodoForm.value)
+              .subscribe({
+                next: ({ ok, msg }) => {
+                  if (ok) {
+                    this.closebutton.nativeElement.click();
+                    this.listarPeriodos();
+                    Swal.fire({
+                      position: 'top-end',
+                      icon: 'success',
+                      title: msg,
+                      showConfirmButton: false,
+                      timer: 1000
+                    })
+                  }
+                },
+                error: (error) => {
+                  Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: error.error.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                }
               });
-            }
-          });
+          } else {
+            this.periodoService.actualizar(this.periodoForm.get('periodoId')?.value, this.periodoForm.value)
+              .subscribe({
+                next: ({ ok, msg }) => {
+                  if (ok) {
+                    this.closebutton.nativeElement.click();
+                    this.listarPeriodos();
+                    Swal.fire({
+                      position: 'top-end',
+                      icon: 'success',
+                      title: msg,
+                      showConfirmButton: false,
+                      timer: 1000
+                    });
+                  }
+                },
+                error: (error) => {
+                  Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: error.error.msg,
+                    showConfirmButton: false,
+                    timer: 1000
+                  });
+                }
+              });
+          }
+        }
       } else {
-        this.periodoService.actualizar(this.periodoForm.get('periodoId')?.value, this.periodoForm.value)
-          .subscribe({
-            next: ({ ok, msg }) => {
-              if (ok) {
-                this.closebutton.nativeElement.click();
-                this.listarPeriodos();
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'success',
-                  title: msg,
-                  showConfirmButton: false,
-                  timer: 1000
-                });
-              }
-            },
-            error: (error) => {
-              Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: error.error.msg,
-                showConfirmButton: false,
-                timer: 1000
-              });
-            }
-          });
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: "Ya existe un periodo entre esas fechas",
+          showConfirmButton: false,
+          timer: 2000
+        })
       }
     }
+
   }
 
   eliminarPeriodo(periodo: Periodo) {
@@ -196,7 +237,7 @@ export class PeriodosComponent implements OnInit {
                         title: msg,
                         showConfirmButton: false,
                         timer: 1000
-                      })
+                      });
                     }
                   })
               }
@@ -209,6 +250,8 @@ export class PeriodosComponent implements OnInit {
   editarPeriodo(periodo: Periodo) {
     this.periodoForm.controls['periodoId'].setValue(periodo.id);
     this.periodoForm.controls['nombre'].setValue(periodo.nombre.toUpperCase());
+    this.periodoForm.controls['fechainicial'].setValue(periodo.fechainicial);
+    this.periodoForm.controls['fechafinal'].setValue(periodo.fechafinal);
     this.boton = "Actualizar";
     this.isSave = false;
     this.tituloperiodo = "Editar Periodo";
@@ -219,7 +262,7 @@ export class PeriodosComponent implements OnInit {
       this.listarPeriodos();
     } else {
       this.periodoService.buscarPorNombre(termino)
-        .subscribe((resp: Nivel[]) => {
+        .subscribe((resp: Periodo[]) => {
           this.periodos = resp;
           this.totalRegistros = resp.length;
           this.cargando = false;

@@ -1,17 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import Swal from 'sweetalert2';
-import { environment } from 'src/environments/environment';
-
 import { Usuario } from 'src/app/models/usuario.model';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { PersonaService } from 'src/app/services/persona.service';
-import { MenuService } from 'src/app/services/menu.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleService } from 'src/app/services/role.service';
-
 import { Role } from 'src/app/models/role.model';
 import { Persona } from 'src/app/models/persona.model';
-
 
 @Component({
   selector: 'app-usuarios',
@@ -48,11 +43,10 @@ export class UsuariosComponent implements OnInit {
   public persona_apellidomaterno: string = "";
   public existePersona: boolean = false;
   public personaObj!: Persona;
-  public usuariologin!:Usuario;
+  public usuariologin!: Usuario;
+  public rolseleccionado: any = "";
 
-  public rolseleccionado: any="";
-
-  constructor(public usuarioServices: UsuarioService,private fb: FormBuilder, 
+  constructor(public usuarioServices: UsuarioService, private fb: FormBuilder,
     private roleService: RoleService, private personaService: PersonaService) {
 
     this.roleService.listar().subscribe(({ ok, roles }) => {
@@ -62,16 +56,16 @@ export class UsuariosComponent implements OnInit {
     });
 
     this.personaService.listar().subscribe({
-      next: ({ok,personas})=>{
-        if(ok){
-          this.personas= personas;
+      next: ({ ok, personas }) => {
+        if (ok) {
+          this.personas = personas;
         }
       }
     })
   }
 
   ngOnInit(): void {
-    this.usuariologin= this.usuarioServices.usuario;
+    this.usuariologin = this.usuarioServices.usuario;
     this.listarUsuarios();
     this.usuarioForm = this.fb.group({
       id: [''],
@@ -90,8 +84,8 @@ export class UsuariosComponent implements OnInit {
 
   listarUsuarios() {
     this.cargando = true;
-    if(this.rolseleccionado){
-     
+    if (this.rolseleccionado) {
+
       this.usuarioServices.listarUsuariosPorRol(this.desde, Number(this.rolseleccionado))
         .subscribe(({ usuarios, total }) => {
           this.usuarios = usuarios;
@@ -100,7 +94,7 @@ export class UsuariosComponent implements OnInit {
           this.cargando = false;
           this.controlBotonesPaginacion();
         });
-    }else{
+    } else {
       this.usuarioServices.listarUsuarios(this.desde)
         .subscribe(({ usuarios, total }) => {
           this.usuarios = usuarios;
@@ -149,7 +143,7 @@ export class UsuariosComponent implements OnInit {
     this.usuarioForm.controls['personaId'].setValue('');
     this.usuarioForm.controls['password'].setValue('123456');
     this.usuarioForm.controls['id'].setValue('');
-   
+
     this.existePersona = false;
     this.selectedPersona = null;
 
@@ -211,29 +205,29 @@ export class UsuariosComponent implements OnInit {
 
   buscarUsuarios(termino: string) {
 
-    if(this.rolseleccionado){
-      if(termino.length===0){
+    if (this.rolseleccionado) {
+      if (termino.length === 0) {
         this.listarUsuarios();
-      }else{
-        this.usuarioServices.buscarporrol(termino,Number(this.rolseleccionado))
-        .subscribe((resp: Usuario[]) => {
-          this.usuarios = resp;
-          this.totalRegistros = resp.length;
-          this.cargando = false;
-          this.controlBotonesPaginacion();
-        });
+      } else {
+        this.usuarioServices.buscarporrol(termino, Number(this.rolseleccionado))
+          .subscribe((resp: Usuario[]) => {
+            this.usuarios = resp;
+            this.totalRegistros = resp.length;
+            this.cargando = false;
+            this.controlBotonesPaginacion();
+          });
       }
-    }else{
-      if(termino.length===0){
+    } else {
+      if (termino.length === 0) {
         this.listarUsuarios();
-      }else{
+      } else {
         this.usuarioServices.buscar(termino)
-        .subscribe((resp: Usuario[]) => {
-          this.usuarios = resp;
-          this.totalRegistros = resp.length;
-          this.cargando = false;
-          this.controlBotonesPaginacion();
-        });
+          .subscribe((resp: Usuario[]) => {
+            this.usuarios = resp;
+            this.totalRegistros = resp.length;
+            this.cargando = false;
+            this.controlBotonesPaginacion();
+          });
       }
     }
   }
@@ -267,7 +261,6 @@ export class UsuariosComponent implements OnInit {
   }
 
   editarUsuario(usuario: Usuario) {
-
     this.titleModal = "Editar Usuario";
     this.titleButton = "Actualizar";
     this.band = 2;
@@ -279,23 +272,22 @@ export class UsuariosComponent implements OnInit {
     this.usuarioForm.controls['roleId'].setValue(usuario.role.id);
     this.usuarioForm.controls['personaId'].setValue(usuario.persona.id);
     this.usuarioForm.controls['id'].setValue(usuario.id);
-    //this.cargarPersona();
     return true;
   }
 
-  cargarPersona(){
-    
-    this.personas.forEach(persona=>{
-      if(persona.id===this.usuarioForm.get('personaId')?.value){
+  cargarPersona() {
+
+    this.personas.forEach(persona => {
+      if (persona.id === this.usuarioForm.get('personaId')?.value) {
         this.existePersona = true;
-        this.persona_numero = persona.numero!;
+        this.persona_numero = persona.dni!;
         this.persona_nombres = persona.nombres!;
         this.persona_apellidopaterno = persona.apellidopaterno!;
         this.persona_apellidomaterno = persona.apellidomaterno!;
         return;
       }
     });
-    
+
   }
 
 
@@ -303,9 +295,7 @@ export class UsuariosComponent implements OnInit {
     this.formSubmitted = true;
     console.log(this.usuarioForm.valid);
     if (this.usuarioForm.valid) {
-
       if (this.band === 1) {
-
         Swal.fire({
           title: 'Guardar',
           text: "¿Desea crear el usuario? ",
@@ -319,33 +309,36 @@ export class UsuariosComponent implements OnInit {
           if (result.isConfirmed) {
             this.closebutton.nativeElement.click();
             this.usuarioServices.crearUsuario(this.usuarioForm.value)
-              .subscribe(({ ok, msg }) => {
-                if (ok) {
-                  this.listarUsuarios();
+              .subscribe({
+                next: ({ ok, msg }) => {
+                  if (ok) {
+                    this.listarUsuarios();
+                    Swal.fire({
+                      position: 'top-end',
+                      icon: 'success',
+                      title: msg,
+                      showConfirmButton: false,
+                      timer: 1500
+                    });
+                  } else {
+                    Swal.fire({
+                      position: 'top-end',
+                      icon: 'info',
+                      title: msg,
+                      showConfirmButton: false,
+                      timer: 1500
+                    });
+                  }
+                },
+                error: (error) => {
                   Swal.fire({
                     position: 'top-end',
-                    icon: 'success',
-                    title: msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                  })
-                }else{
-                  Swal.fire({
-                    position: 'top-end',
-                    icon: 'info',
-                    title: msg,
+                    icon: 'error',
+                    title: error.error.msg,
                     showConfirmButton: false,
                     timer: 1500
                   })
                 }
-              }, (error) => {
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'error',
-                  title: error.error.msg,
-                  showConfirmButton: false,
-                  timer: 1500
-                })
               });
           }
         })
@@ -364,27 +357,28 @@ export class UsuariosComponent implements OnInit {
           if (result.isConfirmed) {
             this.closebutton.nativeElement.click();
             this.usuarioServices.actualizarUsuario(this.usuarioForm.value)
-              .subscribe(({ ok, msg }) => {
-                if (ok) {
-
-                  this.listarUsuarios();
+              .subscribe({
+                next: ({ ok, msg }) => {
+                  if (ok) {
+                    this.listarUsuarios();
+                    Swal.fire({
+                      position: 'top-end',
+                      icon: 'success',
+                      title: msg,
+                      showConfirmButton: false,
+                      timer: 1500
+                    });
+                  }
+                },
+                error: (error) => {
                   Swal.fire({
                     position: 'top-end',
-                    icon: 'success',
-                    title: msg,
+                    icon: 'error',
+                    title: error.error.msg,
                     showConfirmButton: false,
                     timer: 1500
-                  })
+                  });
                 }
-
-              }, (error) => {
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'error',
-                  title: error.error.msg,
-                  showConfirmButton: false,
-                  timer: 1500
-                })
               });
           }
         })
@@ -393,11 +387,9 @@ export class UsuariosComponent implements OnInit {
   }
 
   resetearImagen(usuario: Usuario) {
-
     if (usuario.id === this.usuarioServices.id) {
       return Swal.fire('No puede resetear imagen de perfil de este usuario');
     }
-
     Swal.fire({
       title: 'Resetear foto de perfil',
       text: "Desea resetear la imagen de perfil de: " + usuario.persona.nombres,
@@ -409,31 +401,31 @@ export class UsuariosComponent implements OnInit {
       confirmButtonText: 'Si'
     }).then((result) => {
       if (result.isConfirmed) {
-
         this.persona = usuario.persona;
         this.persona.img = '';
         this.personaService.actualizar(this.persona.id!, this.persona)
-          .subscribe(({ ok, msg }) => {
-            this.listarUsuarios();
-            if (ok) {
+        .subscribe({
+          next: ({ok,msg})=>{
+            if(ok){
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
                 title: msg,
                 showConfirmButton: false,
                 timer: 2500
-              })
+              });
             }
-          }, (error) => {
+          },
+          error: (error)=>{
             Swal.fire({
               position: 'top-end',
               icon: 'error',
               title: error.error.msg,
               showConfirmButton: false,
               timer: 2500
-            })
-          });
-
+            });
+          }
+        });
       }
     });
     return true;
@@ -448,9 +440,7 @@ export class UsuariosComponent implements OnInit {
     if (this.contrasenasNoValidas()) {
       this.passForm.controls['password2'].setErrors({ NoEsIgual: true });
     }
-
     if (this.passForm.valid) {
-
       Swal.fire({
         title: 'Actualizar',
         text: "Desea actualizar su password",
@@ -464,17 +454,19 @@ export class UsuariosComponent implements OnInit {
         if (result.isConfirmed) {
           this.closebutton2.nativeElement.click();
           this.usuarioServices.resetearPassword(this.passForm.get('id')?.value, this.passForm.value)
-            .subscribe(({ ok, msg }) => {
-              if (ok) {
+          .subscribe({
+            next: ({ok,msg})=>{
+              if(ok){
                 Swal.fire({
                   position: 'top-end',
                   icon: 'success',
                   title: msg,
                   showConfirmButton: false,
                   timer: 2500
-                })
+                });
               }
-            }, (error) => {
+            },
+            error: (error)=>{
               Swal.fire({
                 position: 'top-end',
                 icon: 'error',
@@ -482,7 +474,8 @@ export class UsuariosComponent implements OnInit {
                 showConfirmButton: false,
                 timer: 2500
               })
-            });
+            }
+          });
         }
       })
     }
@@ -497,41 +490,35 @@ export class UsuariosComponent implements OnInit {
       return false;
     }
   }
-
-
   guardarUsuario() {
 
   }
-
-  cambiarSituacion(usuario:Usuario){
+  cambiarSituacion(usuario: Usuario) {
     let accion: boolean;
-    if(usuario.habilitado){
-      accion= false;
-    }else{
-      accion= true;
+    if (usuario.habilitado) {
+      accion = false;
+    } else {
+      accion = true;
     }
-    let obj={
+    let obj = {
       accion: accion
     };
-   this.usuarioServices.bloquearUsuario(usuario.id!,obj)
-   .subscribe({
-     next: ({ok})=>{
-       if(ok){
-         this.listarUsuarios();
-       }
-     },
-     error: (error)=>{
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: "Se produjo un error. Hable con el administrador",
-        showConfirmButton: false,
-        timer: 2500
+    this.usuarioServices.bloquearUsuario(usuario.id!, obj)
+      .subscribe({
+        next: ({ ok }) => {
+          if (ok) {
+            this.listarUsuarios();
+          }
+        },
+        error: (error) => {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: "Se produjo un error. Hable con el administrador",
+            showConfirmButton: false,
+            timer: 2500
+          })
+        }
       })
-     }
-   })
-
-
   }
-
 }

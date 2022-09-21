@@ -36,11 +36,11 @@ export class EditarApoderadoComponent implements OnInit {
       .subscribe(({ ok, apoderado }) => {
         if (ok) {
           this.apoderadoForm.controls['tipodocumentoId'].setValue(apoderado.persona?.tipodocumento.id);
-          this.apoderadoForm.controls['numero'].setValue(apoderado.persona?.numero);
+          this.apoderadoForm.controls['numero'].setValue(apoderado.persona?.dni);
           this.apoderadoForm.controls['nombres'].setValue(apoderado.persona?.nombres.toUpperCase());
           this.apoderadoForm.controls['apellidopaterno'].setValue(apoderado.persona?.apellidopaterno.toUpperCase());
           this.apoderadoForm.controls['apellidomaterno'].setValue(apoderado.persona?.apellidomaterno.toUpperCase());
-          this.apoderadoForm.controls['direccion'].setValue(apoderado.persona?.direccion?.toUpperCase());
+          this.apoderadoForm.controls['direccion'].setValue(apoderado.persona?.domicilio?.toUpperCase());
           this.apoderadoForm.controls['telefono'].setValue(apoderado.persona?.telefono);
           this.apoderadoForm.controls['id'].setValue(apoderado.persona?.id);
         }
@@ -51,7 +51,7 @@ export class EditarApoderadoComponent implements OnInit {
 
   ngOnInit(): void {
     this.apoderadoForm = this.fb.group({
-      tipodocumentoId: ['', Validators.required],
+      tipodocumentoId: [''],
       numero: ['', [Validators.required, 
         Validators.maxLength(8), 
         Validators.minLength(8),
@@ -128,7 +128,7 @@ export class EditarApoderadoComponent implements OnInit {
                 this.apoderadoForm.controls['nombres'].setValue(persona?.nombres.toUpperCase());
                 this.apoderadoForm.controls['apellidopaterno'].setValue(persona?.apellidopaterno.toUpperCase());
                 this.apoderadoForm.controls['apellidomaterno'].setValue(persona?.apellidomaterno.toUpperCase());
-                this.apoderadoForm.controls['direccion'].setValue(persona?.direccion?.toUpperCase());
+                this.apoderadoForm.controls['direccion'].setValue(persona?.domicilio?.toUpperCase());
                 Swal.fire({
                   position: 'top-end',
                   icon: 'success',

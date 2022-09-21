@@ -1,0 +1,329 @@
+<div class="row">
+    <div class="col-12 col-md-4">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <form [formGroup]="formTipos" (submit)="buscarNotas()">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label for="tipoid" class="form-label">Tipo reporte</label>
+                                                <select class="form-select" id="tipoid" formControlName="tipoid"
+                                                    aria-label="Seleccionar tipo reporte" (change)="seleccionReporte()">
+                                                    <option value="">Seleccionar tipo reporte</option>
+                                                    <option *ngFor="let tipo of tipos" [value]="[tipo.id]">
+                                                        {{tipo.descripcion}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12" *ngIf="periodoV">
+                                            <div class="mb-3">
+                                                <label for="periodoid" class="form-label">Periodo</label>
+                                                <select class="form-select" id="periodoid"
+                                                    aria-label="Seleccionar periodo" formControlName="periodoid"
+                                                    (change)="cargarAlumnos()">
+                                                    <option value="">Seleccionar periodo</option>
+                                                    <option *ngFor="let periodo of periodos"
+                                                        [value]="[periodo.id,periodo.nombre]">
+                                                        {{periodo.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('periodoid')" id="periodoid"
+                                                    class="form-text text-danger">
+                                                    La periodo es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12" *ngIf="aulaV">
+                                            <div class="mb-3">
+                                                <label for="aulaid" class="form-label">Aula</label>
+                                                <select class="form-select" id="aulaid" formControlName="aulaid"
+                                                    aria-label="Seleccionar aula" (change)="cargarAlumnos()">
+                                                    <option value="">Seleccionar aula</option>
+                                                    <option *ngFor="let aula of aulas"
+                                                        [value]="[aula.id,aula.nombre,aula.tipovalor]">
+                                                        {{aula.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('aulaid')" id="aulaid"
+                                                    class="form-text text-danger">
+                                                    El aula es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12" *ngIf="fechaiV">
+                                            <div class="mb-3">
+                                                <label for="fechainicial" class="form-label">Fecha Inicial</label>
+                                                <input type="date" id="fechainicial" class="form-control"
+                                                    formControlName="fechainicial">
+                                                <div *ngIf="campoRequerido('fechainicial')" id="fechainicial"
+                                                    class="form-text text-danger">
+                                                    La fecha inicial es requerida
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12" *ngIf="fechafV">
+                                            <div class="mb-3">
+                                                <label for="fechafinal" class="form-label">Fecha Final</label>
+                                                <input type="date" id="fechafinal" class="form-control"
+                                                    formControlName="fechafinal">
+                                                <div *ngIf="campoRequerido('fechafinal')" id="fechafinal"
+                                                    class="form-text text-danger">
+                                                    La fecha final es requerida
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12" *ngIf="alumnoV">
+                                            <div class="mb-3">
+                                                <label for="alumnoid" class="form-label">Alumno</label>
+                                                <select class="form-select" id="alumnoid" formControlName="alumnoid"
+                                                    aria-label="Seleccionar alumno">
+                                                    <option value="">Seleccionar alumno</option>
+                                                    <option *ngFor="let matriculadetalle of matriculadetalles"
+                                                        [value]="[matriculadetalle.matricula?.alumno?.id]">
+                                                        {{matriculadetalle.matricula?.alumno?.persona?.apellidopaterno}}
+                                                        {{matriculadetalle.matricula?.alumno?.persona?.apellidomaterno}}
+                                                        {{matriculadetalle.matricula?.alumno?.persona?.nombres}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('alumnoid')" id="alumnoid"
+                                                    class="form-text text-danger">
+                                                    El alumno es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary me-2">
+                                                <i class="bi bi-search"></i>
+                                                Buscar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" *ngIf="datos.length>0">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <ol class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Periodo</div>
+                                            {{periodoNombre}}
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Aula</div>
+                                            {{aulaNombre}}
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Fecha inicial</div>
+                                            {{fechaiNombre}}
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Fecha final</div>
+                                            {{fechafNombre}}
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Alumno</div>
+                                            {{alumnoNombre}}
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Registros Procesados</div>
+                                            {{totalprocesados}}
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-8">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-1" *ngIf="cargando">
+                                    <div class="alert alert-info text-center" role="alert">
+                                        <h6 class="alert-heading">Cargando...</h6>
+                                        <div class="spinner-border" role="status">
+                                        </div>
+                                        <p>Por favor espera</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-2" *ngIf="datos.length>0">
+
+                                <button class="btn btn-sm btn-secondary me-2 mb-1 mb-md-0"
+                                    (click)="generatePDF('DOWNLOAD')">
+                                    <i class="bi bi-download"></i>
+                                    Descargar
+                                </button>
+                                <button class="btn btn-sm btn-primary me-2 mb-1 mb-md-0" (click)="generatePDF('OPEN')">
+                                    <i class="bi bi-printer"></i>
+                                    Imprimir
+                                </button>
+                                <button class="btn btn-sm btn-warning me-2 mb-1 mb-md-0" data-bs-toggle="modal"
+                                    data-bs-target="#barra" data-bs-placement="top" title="Gráfico de Barras"
+                                    (click)="generarBarras()">
+                                    <i class="bi bi-bar-chart-line"></i>
+                                    Barras
+                                </button>
+                                <button class="btn btn-sm btn-danger me-2 mb-1" data-bs-toggle="modal"
+                                    data-bs-target="#sector" data-bs-placement="top" title="Gráfico de Sectores"
+                                    (click)="generarBarras()">
+                                    <i class="bi bi-pie-chart"></i>
+                                    Sectores
+                                </button>
+                                <button class="btn btn-sm btn-info me-2 mb-1" data-bs-toggle="modal"
+                                    data-bs-target="#linea" data-bs-placement="top" title="Gráfico de Lineas"
+                                    (click)="generarBarras()">
+                                    <i class="bi bi-graph-up"></i>
+                                    Lineas
+                                </button>
+                            </div>
+                            <div class="col-12">
+                                <div class="table-responsive" *ngIf="!cargando">
+                                    <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
+                                        No hay registros.
+                                    </div>
+                                    <table class="table table-bordered table-hover" *ngIf="datos.length>0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="w70">N°</th>
+                                                <th scope="col">Situación</th>
+                                                <th scope="col">Total</th>
+                                                <th scope="col">%</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let dato of datos; let i= index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{dato.situacion.nombre}}</td>
+                                                <td>{{dato.total}}</td>
+                                                <td>
+                                                    <span class="badge rounded-pill bg-{{dato.situacion.color}}">
+                                                        {{dato.porcentaje}} %
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="barra" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Gráfico de Barras</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas baseChart [data]="salesData" [type]="'bar'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sector" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Gráfico de Sectores</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas baseChart [data]="salesData" [type]="'pie'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="linea" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Gráfico de Lineas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas baseChart [data]="salesData" [type]="'line'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Salir</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,68 +4,75 @@
             <div class="col-12">
                 <div class="caja-principal">
                     <div class="d-flex flex-column flex-sm-row justify-content-sm-between gap-3 gap-sm-5 p-5">
-                        <div class="my-auto mb-5 mb-sm-auto">
+                        <div class="my-auto mb-3 mb-sm-auto w200 mx-auto">
                             <div class="d-flex justify-content-center align-items-center">
                                 <img [src]="institucion.img! | imginstitucion" alt="logo app"
                                     class="img-fluid img-logo">
                             </div>
+                            <p class="fw-bold fs-6 text-center">
+                                {{institucion.nombre}}
+                            </p>
                         </div>
                         <div>
                             <form [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off"
-                                class="d-flex flex-column gap-4">
-                                <h1 class="text-center">Iniciar Sesión</h1>
-                                <div class="input-group">
-                                    <span class="input-group-text" id="basic-addon1">
-                                        <i class="bi bi-person-fill"></i>
+                                class="d-flex flex-column">
+                                <h1 class="text-center mb-4">Iniciar Sesión</h1>
+                                <div class="mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1">
+                                            <i class="bi bi-person-fill"></i>
+                                        </span>
+                                        <input type="email" class="form-control" formControlName="email"
+                                            placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
+                                    </div>
+                                    <span *ngIf="campoRequerido('email')" class="text-danger">
+                                        <p class="text-sm-start fs-6 m-0">El email es requerido</p>
                                     </span>
-                                    <input type="email" class="form-control" formControlName="email" placeholder="Email"
-                                        aria-label="Email" aria-describedby="basic-addon1">
-                                </div>
-                                <span *ngIf="campoRequerido('email')" class="text-danger">
-                                    <p class="text-sm-start fs-6 fst-italic">El email es requerido</p>
-                                </span>
-                                <span *ngIf="campoEmail('email')" class="text-danger">
-                                    <p class="text-sm-start fs-6 fst-italic">Formato no es válido</p>
-                                </span>
-
-                                <div class="input-group">
-                                    <span class="input-group-text" id="basic-addon1">
-                                        <i class="bi bi-key-fill"></i>
+                                    <span *ngIf="campoEmail('email')" class="text-danger">
+                                        <p class="text-sm-start fs-6 m-0">Formato no es válido</p>
                                     </span>
-                                    <input type="password" class="form-control" formControlName="password"
-                                        placeholder="Password" aria-label="Password" aria-describedby="basic-addon1"
-                                        autocomplete="on">
                                 </div>
-                                <span *ngIf="campoRequerido('password')" class="text-danger">
-                                    <p class="text-sm-start fs-6 fst-italic">El password es requerido</p>
-                                </span>
 
-                                <div class="form-check">
+                                <div class="mb-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1">
+                                            <i class="bi bi-key-fill"></i>
+                                        </span>
+                                        <input type="password" class="form-control" formControlName="password"
+                                            placeholder="Password" aria-label="Password" aria-describedby="basic-addon1"
+                                            autocomplete="on">
+                                    </div>
+                                    <span *ngIf="campoRequerido('password')" class="text-danger">
+                                        <p class="text-sm-start fs-6 m-0">El password es requerido</p>
+                                    </span>
+                                </div>
+
+                                <div class="form-check mb-3">
                                     <input class="form-check-input" formControlName="recordarme" type="checkbox"
                                         id="flexCheckDefault">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Recordarme
                                     </label>
                                 </div>
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-success">
+                                <div class="d-grid mb-2">
+                                    <button type="submit" class="btn btn-success" 
+                                    [disabled]="control">
                                         <span class="fs-5">
                                             <i class="bi bi-door-open-fill"></i>
                                         </span>
                                         Ingresar
                                     </button>
                                 </div>
-                                <div class="mb-1" *ngIf="cargando">
+                                <div class="mb-2" *ngIf="cargando">
                                     <div class="d-flex justify-content-center alert alert-info text-center"
                                         role="alert">
                                         <div class="spinner-border me-2" role="status">
                                         </div>
-                                        <h6 class="alert-heading">Iniciando sesión...</h6>
+                                        <h6 class="alert-heading m-0">Iniciando sesión...</h6>
                                     </div>
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>

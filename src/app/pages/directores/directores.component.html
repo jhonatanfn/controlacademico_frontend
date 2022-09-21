@@ -1,0 +1,112 @@
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <a routerLink="crear" type="button" class="d-flex btn btn-primary">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex align-items-start mb-2 buscador">
+                            <div class="input-group me-0">
+                                <span class="input-group-text" id="buscar-algo">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-search" viewBox="0 0 16 16">
+                                        <path
+                                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                    </svg>
+                                </span>
+                                <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                                    aria-describedby="buscar-algo" (keyup)="buscarDirector(txtTermino.value)"
+                                    #txtTermino>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-1" *ngIf="cargando">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h6 class="alert-heading">Cargando...</h6>
+                        <div class="spinner-border" role="status">
+                        </div>
+                        <p>Por favor espera</p>
+                    </div>
+                </div>
+                <div class="table-responsive mb-1" *ngIf="!cargando">
+                    <div class="alert alert-primary" role="alert" *ngIf="directores.length==0">
+                        No hay registros.
+                    </div>
+                    <table class="table table-bordered table-hover" *ngIf="directores.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col" class="w70"></th>
+                                <th scope="col" class="w70">DNI</th>
+                                <th scope="col">Nombres</th>
+                                <th scope="col">Apellido Paterno</th>
+                                <th scope="col">Apellido Materno</th>
+                                <th scope="col">Teléfono</th>
+                                <th scope="col">Cargo</th>
+                                <th scope="col">Vigente</th>
+                                <th scope="col" class="w100"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let director of directores; let i=index">
+                                <th>{{desde+i+1}}</th>
+                                <th class="text-center">
+                                    <img [src]="director.persona?.img! | imagen" class="imgTable" alt="foto director">
+                                </th>
+                                <td>{{director.persona?.dni}}</td>
+                                <td>{{director.persona?.nombres | uppercase}}</td>
+                                <td>{{director.persona?.apellidopaterno | uppercase}}</td>
+                                <td>{{director.persona?.apellidomaterno | uppercase}}</td>
+                                <td>{{director.persona?.telefono}}</td>
+                                <td>{{director.observacion | uppercase}}</td>
+                                <td>
+                                    <span *ngIf="director.vigente==1" class="badge rounded-pill bg-success">
+                                        SI
+                                    </span>
+                                    <span *ngIf="director.vigente==2" class="badge rounded-pill bg-danger">
+                                        NO
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group text-center">
+                                        <button [ngClass]="{ isDisabled: !director.estado }" type="button"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"
+                                            class="btn btn-success me-1" [routerLink]="['editar', director.id]">
+                                            <span>
+                                                <i class="bi bi-pen"></i>
+                                            </span>
+                                        </button>
+                                        <button [ngClass]="{ isDisabled: !director.estado }" type="button"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar"
+                                            class="btn btn-danger" (click)="eliminarDirector(director)">
+                                            <span>
+                                                <i class="bi bi-x-circle"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-between align-items-start" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

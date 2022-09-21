@@ -1,12 +1,16 @@
 <div class="row">
     <div class="col-12 col-lg-12">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <!--Encabezado-->
-                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearSeccion()">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo</button>
+                </div>
             </div>
             <div class="card-body">
-                <!-- Bucador y boto nuevo-->
                 <div class="d-flex align-items-start mb-2 buscador">
                     <div class="input-group me-1">
                         <span class="input-group-text" id="buscar-algo">
@@ -19,10 +23,6 @@
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                             aria-describedby="buscar-algo" (keyup)="buscarSeccion(txtTermino.value)" #txtTermino>
                     </div>
-                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
-                        (click)="crearSeccion()">
-                        <i class="bi bi-plus-square me-2"></i>
-                        Nuevo</button>
                 </div>
 
                 <!--Alerta-->
@@ -73,11 +73,15 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-start" *ngIf="!cargando">
+                <div class="d-flex justify-content-between align-items-center" *ngIf="!cargando">
                     <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
-                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                        class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
                     <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
-                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                        class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
                 </div>
             </div>
         </div>
@@ -88,8 +92,8 @@
 <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
                 <h5 class="modal-title" id="staticBackdropLabel">{{tituloseccion}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -105,11 +109,13 @@
                         <div class="form-text text-danger" *ngIf="campoMaxLengh('nombre',30)">
                             El campo nombre debe tener como maximo 30 caracteres
                         </div>
+                        <div class="form-text text-danger" *ngIf="nombrerepetido">
+                            El nombre ya esta registrado.
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        #closebutton>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
                         <i class="bi bi-x-lg"></i>
                         Cancelar</button>
                     <button type="submit" class="btn btn-primary">

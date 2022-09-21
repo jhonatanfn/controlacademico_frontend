@@ -1,14 +1,20 @@
 <div class="row">
     <div class="col-12 col-lg-12">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <!--Encabezado-->
-                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <button type="button" class="d-flex btn btn-primary" 
+                    data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearArea()">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo
+                    </button>
+                </div>
             </div>
             <div class="card-body">
-                <!-- Bucador y boto nuevo-->
                 <div class="d-flex align-items-start mb-2 buscador">
-                    <div class="input-group me-1">
+                    <div class="input-group me-0">
                         <span class="input-group-text" id="buscar-algo">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -17,18 +23,9 @@
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                             aria-describedby="buscar-algo" 
                             (keyup)="buscarArea(txtTermino.value)"
-                            #txtTermino
-                            >
+                            #txtTermino>
                     </div>
-                    <button type="button" class="d-flex btn btn-primary" 
-                    data-bs-toggle="modal" data-bs-target="#crear"
-                        (click)="crearArea()">
-                        <i class="bi bi-plus-square me-2"></i>
-                        Nuevo
-                    </button>
                 </div>
-
-                <!--Alerta-->
                 <div class="mb-1" *ngIf="cargando">
                     <div class="alert alert-info text-center" role="alert">
                         <h6 class="alert-heading">Cargando...</h6>
@@ -37,14 +34,10 @@
                         <p>Por favor espera</p>
                     </div>
                 </div>
-
-                <!--Tabla d contenido-->
                 <div class="table-responsive mb-1" *ngIf="!cargando">
-                    
                     <div class="alert alert-primary" role="alert" *ngIf="areas.length==0">
                         No hay registros.
                     </div>
-                    
                     <table class="table table-bordered table-hover" *ngIf="areas.length>0">
                         <thead>
                             <tr>
@@ -59,7 +52,8 @@
                                 <td>{{area.nombre | uppercase}}</td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-info me-1" 
+                                        <!--
+                                        <button type="button" class="btn btn-warning me-1" 
                                         data-bs-toggle="modal" data-bs-target="#imagen" 
                                         data-bs-placement="top" title="Imagen"
                                         (click)="cambiarImagenArea(area)">
@@ -67,6 +61,7 @@
                                                 <i class="bi bi-card-image"></i>
                                             </span>
                                         </button>
+                                        -->
                                         <button type="button" class="btn btn-success me-1" 
                                         data-bs-toggle="modal" data-bs-target="#crear"
                                         data-bs-placement="top" title="Editar" 
@@ -88,9 +83,15 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-start" *ngIf="!cargando">
-                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-secondary  btn-sm me-2">Anterior</button>
-                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-secondary  btn-sm">Siguiente</button>
+                <div class="d-flex justify-content-between align-items-center" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" 
+                    class="btn btn-dark  btn-sm me-2">
+                    <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" 
+                    class="btn btn-dark  btn-sm">
+                    <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
                 </div>
             </div>
         </div>
@@ -101,8 +102,8 @@
 <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
                 <h5 class="modal-title" id="staticBackdropLabel">{{tituloarea}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -115,8 +116,11 @@
                         <div class="form-text text-danger" *ngIf="campoRequerido('nombre')">
                             El campo nombre es requerido
                         </div>
-                        <div class="form-text text-danger" *ngIf="campoMaxLengh('nombre',30)">
+                        <div class="form-text text-danger" *ngIf="campoMaxLengh('nombre',50)">
                             El campo nombre debe tener como maximo 30 caracteres
+                        </div>
+                        <div class="form-text text-danger" *ngIf="nombrerepetido">
+                            El nombre ya esta registrado
                         </div>
                     </div>
                 </div>
@@ -138,8 +142,8 @@
 <div class="modal fade" id="imagen" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
                 <h5 class="modal-title" id="staticBackdropLabel">{{area.nombre}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

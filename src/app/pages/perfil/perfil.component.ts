@@ -16,7 +16,7 @@ export class PerfilComponent implements OnInit {
   public icono: string = 'bi bi-person';
   public titulo2: string = 'Imagen de Perfil';
   public icono2: string = 'bi bi-person-circle';
-  public titulo3: string = 'Cambiar password';
+  public titulo3: string = 'Cambiar Contraseña';
   public icono3: string = 'bi bi-unlock-fill';
   public titulo4: string = 'Datos Personales';
   public icono4: string = 'bi bi-person-check-fill';
@@ -34,27 +34,38 @@ export class PerfilComponent implements OnInit {
   public imagenSubir!: File;
   public imgTemp: any = null;
 
+  public flogo:boolean= false;
+  public fusuario:boolean= true;
+  public fpersonal:boolean= false;
+  public fcambiar:boolean= false;
+
+  public activologo:string= "";
+  public activousuario:string= "active";
+  public activopersonal:string= "";
+  public activocambiar:string= "";
+
+
   constructor(private fb: FormBuilder,
     private usuarioService: UsuarioService, private personaService: PersonaService) {
   }
 
   ngOnInit(): void {
     this.usuario = this.usuarioService.usuario;
-    
     this.perfilForm = this.fb.group({
       nombre: [this.usuario.nombre, [Validators.required, Validators.maxLength(15)]],
       email: [this.usuario.email, [Validators.required, Validators.pattern(this.emailPattern)]],
-      personaId: [this.usuario.persona.id]
+      personaId: [this.usuario.persona.id],
     });
 
     this.datosForm = this.fb.group({
-      numero: [this.usuario.persona.numero],
+      dni: [this.usuario.persona.dni],
       nombres: [this.usuario.persona.nombres, Validators.required],
       apellidopaterno: [this.usuario.persona.apellidopaterno, Validators.required],
       apellidomaterno: [this.usuario.persona.apellidomaterno, Validators.required],
-      direccion: [this.usuario.persona.direccion],
+      domicilio: [this.usuario.persona.domicilio],
       telefono: [this.usuario.persona.telefono],
-      tipodocumentoId: [this.usuario.persona.tipodocumento.id]
+      tipodocumentoId: [this.usuario.persona.tipodocumento.id],
+      sexo: [this.usuario.persona.sexo]
     });
 
     this.passForm= this.fb.group({
@@ -107,6 +118,50 @@ export class PerfilComponent implements OnInit {
     }
   }
 
+
+  verificarOpcion(termino:string){
+    if(termino=="flogo"){
+      this.flogo= true;
+      this.fusuario= false;
+      this.fpersonal= false;
+      this.fcambiar= false;
+      this.activologo= "active";
+      this.activousuario= "";
+      this.activopersonal= "";
+      this.activocambiar= "";
+    }
+    if(termino=="fusuario"){
+      this.flogo= false;
+      this.fusuario= true;
+      this.fpersonal= false;
+      this.fcambiar= false;
+      this.activologo= "";
+      this.activousuario= "active";
+      this.activopersonal= "";
+      this.activocambiar= "";
+    }
+    if(termino=="fpersonal"){
+      this.flogo= false;
+      this.fusuario= false;
+      this.fpersonal= true;
+      this.fcambiar= false;
+      this.activologo= "";
+      this.activousuario= "";
+      this.activopersonal= "active";
+      this.activocambiar= "";
+    }
+    if(termino=="fcambiar"){
+      this.flogo= false;
+      this.fusuario= false;
+      this.fpersonal= false;
+      this.fcambiar= true;
+      this.activologo= "";
+      this.activousuario= "";
+      this.activopersonal= "";
+      this.activocambiar= "active";
+    }
+  }
+
   actualizarPefil() {
     this.formSubmitted = true;
 
@@ -135,7 +190,7 @@ export class PerfilComponent implements OnInit {
                   icon: 'success',
                   title: msg,
                   showConfirmButton: false,
-                  timer: 2500
+                  timer: 1000
                 })
               } 
 
@@ -145,7 +200,7 @@ export class PerfilComponent implements OnInit {
                 icon: 'error',
                 title: error.error.msg,
                 showConfirmButton: false,
-                timer: 2500
+                timer: 1000
               })
             });
         }
@@ -154,16 +209,34 @@ export class PerfilComponent implements OnInit {
   }
 
   cambiarImagen(event: any) {
-    this.imagenSubir = event.target.files[0];
-    if (!event.target.files[0]) {
-      return this.imgTemp = null;
+
+    const extencionesValidas=['png','jpg','jpeg','gif','JPG','JPEG','PNG'];
+    if(extencionesValidas.includes(this.getFileExtension(event.target.files[0].name))){   
+      this.imagenSubir = event.target.files[0];
+      this.imagenSubir = event.target.files[0];
+      if (!event.target.files[0]) {
+        return this.imgTemp = null;
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onloadend = () => {
+        this.imgTemp = reader.result;
+      }
+    }else{
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: "La extensión  no es válida",
+        showConfirmButton: false,
+        timer: 1000
+      });
     }
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    reader.onloadend = () => {
-      this.imgTemp = reader.result;
-    }
+
     return true;
+  }
+
+  getFileExtension(filename:any) {
+    return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
   }
 
   subirImagen() {
@@ -179,17 +252,15 @@ export class PerfilComponent implements OnInit {
       confirmButtonText: 'Si'
     }).then((result) => {
       if (result.isConfirmed) {
-
         this.usuarioService.actualizarFoto(this.imagenSubir, this.usuario.id!)
           .then(img => {
-
             this.usuario.persona.img = img;
             Swal.fire({
               position: 'top-end',
               icon: 'success',
               title: 'Su foto de perfil fue actualizada',
               showConfirmButton: false,
-              timer: 2500
+              timer: 1000
             })
           });
       }
@@ -198,9 +269,7 @@ export class PerfilComponent implements OnInit {
 
   actualizarDatos() {
     this.formSubmitted2 = true;
-
     if (this.datosForm.valid) {
-
       Swal.fire({
         title: 'Actualizar',
         text: "Desea actualizar sus datos",
@@ -221,7 +290,7 @@ export class PerfilComponent implements OnInit {
                   icon: 'success',
                   title: msg,
                   showConfirmButton: false,
-                  timer: 2500
+                  timer: 1000
                 })
               } else {
                 Swal.fire({
@@ -229,7 +298,7 @@ export class PerfilComponent implements OnInit {
                   icon: 'error',
                   title: msg,
                   showConfirmButton: false,
-                  timer: 2500
+                  timer: 1000
                 })
               }
             });
@@ -266,7 +335,7 @@ export class PerfilComponent implements OnInit {
                   icon: 'success',
                   title: msg,
                   showConfirmButton: false,
-                  timer: 2500
+                  timer: 1000
                 })
               } else {
                 Swal.fire({
@@ -274,7 +343,7 @@ export class PerfilComponent implements OnInit {
                   icon: 'error',
                   title: msg,
                   showConfirmButton: false,
-                  timer: 2500
+                  timer: 1000
                 })
               }
             });

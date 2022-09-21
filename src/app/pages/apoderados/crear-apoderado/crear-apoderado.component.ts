@@ -35,6 +35,7 @@ export class CrearApoderadoComponent implements OnInit {
     this.tipodocuementoService.listar()
       .subscribe(({ tipodocumentos }) => {
         this.tipos = tipodocumentos;
+        this.apoderadoForm.controls['tipodocumentoId'].setValue(this.tipos[0].id);
       });
     this.usuarioService.todo().subscribe({
       next: ({ ok, usuarios }) => {
@@ -57,7 +58,7 @@ export class CrearApoderadoComponent implements OnInit {
 
   ngOnInit(): void {
     this.apoderadoForm = this.fb.group({
-      tipodocumentoId: ['', Validators.required],
+      tipodocumentoId: [''],
       numero: ['', [Validators.required,
       Validators.maxLength(8),
       Validators.minLength(8),

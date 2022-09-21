@@ -1,15 +1,17 @@
 <div class="row">
-    <div class="col-12 col-lg-3">
+    <div class="col-12 mb-3">
         <div class="row">
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-body">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <form [formGroup]="repForm" (submit)="buscarNotas()">
                                     <div class="row">
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="periodoId" class="form-label">Periodo</label>
                                                 <select class="form-select" aria-label="Seleccionar periodo"
@@ -26,7 +28,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="aulaId" class="form-label">Aula</label>
                                                 <select class="form-select" aria-label="Seleccionar aula"
@@ -42,13 +44,12 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="areaId" class="form-label">Area</label>
                                                 <select class="form-select" aria-label="Seleccionar area"
                                                     formControlName="areaId" (change)="cargarMatriculas()">
-                                                    <option value="">Seleccionar Subarea</option>
+                                                    <option value="">Seleccionar area</option>
                                                     <option *ngFor="let area of areas" [value]="[area.id,area.nombre]">
                                                         {{area.nombre}}
                                                     </option>
@@ -59,8 +60,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-12 col-md-12">
+                                        <div class="col-12 col-md-3">
                                             <div class="mb-3">
                                                 <label for="cicloId" class="form-label">Ciclo</label>
                                                 <select class="form-select" aria-label="Seleccionar ciclo"
@@ -78,7 +78,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <button type="submit" class="btn btn-primary me-2">
                                         <i class="bi bi-search"></i>
                                         Buscar
@@ -89,59 +88,26 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12" *ngIf="datos.length>0">
-                <div class="card contenido-principal">
-                    <div class="card-body">
-                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card w-100">
-                                    <div class="card-body">
-                                        <h6 class="card-title">Periodo:</h6>
-                                        <p class="card-text"> {{ periodonombre | uppercase }}</p>
-                                        <h6 class="card-title">Aula:</h6>
-                                        <p class="card-text">{{ aulanombre | uppercase }}</p>
-                                        <h6 class="card-title">Area:</h6>
-                                        <p class="card-text"> {{ areanombre | uppercase }}</p>
-                                        <h6 class="card-title">Ciclo:</h6>
-                                        <p class="card-text"> {{ ciclonombre | uppercase }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-
-    <div class="col-12 col-lg-9">
+    <div class="col-12">
         <div class="row">
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-body">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
                         <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
-                                <div class="d-lg-flex d-flex-column justify-content-end mt-1" *ngIf="datos.length>0">
-                                    <button type="button" class="btn btn-success btn-sm me-2" (click)="coversionNotas()"
-                                        data-bs-toggle="tooltip" data-bs-placement="top" title="{{mensajeboton}}">
-                                        <i class="bi bi-arrow-repeat"></i>
-                                        Convertir
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm me-2"
+                                <div class="d-lg-flex d-flex-column justify-content-start mt-1" *ngIf="datos.length>0">
+                                    <button type="button" class="btn btn-primary btn-sm me-2 mb-1"
                                         (click)="generatePDF('OPEN')" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Visualizar PDF">
-                                        <i class="bi bi-file-earmark-pdf"></i>
-                                        Visualizar
-                                    </button>
-                                    <button type="button" class="btn btn-primary btn-sm me-2"
-                                        (click)="generatePDF('PRINT')" data-bs-toggle="tooltip" data-bs-placement="top"
                                         title="Imprimir PDF">
                                         <i class="bi bi-printer"></i>
                                         Imprimir
                                     </button>
-                                    <button type="button" class="btn btn-secondary btn-sm me-2"
+                                    <button type="button" class="btn btn-secondary btn-sm me-2 mb-1"
                                         (click)="generatePDF('DOWNLOAD')" data-bs-toggle="tooltip"
                                         data-bs-placement="top" title="Descargar PDF">
                                         <i class="bi bi-arrow-down-circle"></i>
@@ -164,51 +130,69 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="w70">N°</th>
-                                                <th scope="col">Alumno</th>
+                                                <th scope="col">Apellidos y nombres</th>
                                                 <th scope="col">Area</th>
-                                                <th scope="col">Subareas</th>
-                                                <th scope="col">Promedio</th>
-                                                <th scope="col">Situación</th>
+                                                <th scope="col"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let dato of datos; let i= index">
                                                 <td>{{ i+1 }}</td>
-                                                <td>{{ dato.matricula?.alumno?.persona?.apellidopaterno}} 
-                                                    {{ dato.matricula?.alumno?.persona?.apellidomaterno}}
-                                                    {{ dato.matricula?.alumno?.persona?.nombres}}
+                                                <td>{{ dato.alumno.matricula?.alumno?.persona?.apellidopaterno}}
+                                                    {{ dato.alumno.matricula?.alumno?.persona?.apellidomaterno}}
+                                                    {{ dato.alumno.matricula?.alumno?.persona?.nombres}}
                                                 </td>
-                                                <td>{{ dato.area}}</td>
+                                                <td>{{ dato.alumno.programacion?.area?.nombre}}</td>
                                                 <td>
-                                            <tr *ngFor="let prom of dato.promedios">
-                                                <table class="table table-bordered table-hover">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{prom.subarea}}</td>
-                                                            <td>
-                                                                <small *ngIf="bandBoton===0">{{prom.promedioA}}</small>
-                                                                <small *ngIf="bandBoton===1">{{prom.promedioL}}</small>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </tr>
-                                            </td>
-                                            <td>
-                                                <small *ngIf="bandBoton==0"
-                                                    style="font-size: 1rem;">{{dato.promedioarea}}</small>
-                                                <small *ngIf="bandBoton==1"
-                                                    style="font-size: 1rem;">{{dato.promedioL}}</small>
-                                            </td>
-                                            <td>
-                                                <span class="badge rounded-pill bg-{{dato.color}}">
-                                                    {{dato.situacion}}
-                                                </span>
-                                            </td>
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Competencia</th>
+                                                                <th>Evaluacion</th>
+                                                                <th>Nota</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let item of dato.notas">
+                                                                <td>{{item.competencia?.descripcion}}</td>
+                                                                <td>{{item.evaluacion?.nombre}}</td>
+                                                                <td>{{item.valor}}</td>
+                                                            </tr>
+                                                            <tr *ngIf="dato.notas.length==0">
+                                                                <td colspan="3">No hay registros.</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6" *ngIf="datos.length>0">
+        <div class="card contenido-principal">
+            <div class="card-header">
+                <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <h6 class="card-title">Periodo:</h6>
+                                <p class="card-text"> {{ periodonombre | uppercase }}</p>
+                                <h6 class="card-title">Aula:</h6>
+                                <p class="card-text">{{ aulanombre | uppercase }}</p>
+                                <h6 class="card-title">Area:</h6>
+                                <p class="card-text"> {{ areanombre | uppercase }}</p>
+                                <h6 class="card-title">Ciclo:</h6>
+                                <p class="card-text"> {{ ciclonombre | uppercase }}</p>
                             </div>
                         </div>
                     </div>

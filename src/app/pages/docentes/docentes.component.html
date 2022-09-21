@@ -1,16 +1,20 @@
 <div class="row">
     <div class="col-12 col-lg-12">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <!--Encabezado-->
-                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <a routerLink="crear" type="button" class="d-flex btn btn-primary">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo
+                    </a>
+                </div>
             </div>
             <div class="card-body">
-                <!-- Bucador y boto nuevo-->
                 <div class="row">
                     <div class="col-12">
                         <div class="d-flex align-items-start mb-2 buscador">
-                            <div class="input-group me-1">
+                            <div class="input-group me-0">
                                 <span class="input-group-text" id="buscar-algo">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-search" viewBox="0 0 16 16">
@@ -20,13 +24,15 @@
                                 </span>
                                 <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                                     aria-describedby="buscar-algo"
-                                    onkeyup="javascript:this.value=this.value.toUpperCase();"
                                     (keyup)="buscarDocente(txtTermino.value)" #txtTermino>
                             </div>
+                            <!--
+                            onkeyup="javascript:this.value=this.value.toUpperCase();"
                             <a routerLink="crear" type="button" class="d-flex btn btn-primary">
                                 <i class="bi bi-plus-square me-2"></i>
                                 Nuevo
                             </a>
+                            -->
                         </div>
                     </div>
                 </div>
@@ -50,20 +56,26 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="w70">N°</th>
+                                <th scope="col" class="w70"></th>
                                 <th scope="col" class="w70">DNI</th>
+                                <th scope="col">Nombres</th>
                                 <th scope="col">Apellido Paterno</th>
                                 <th scope="col">Apellido Materno</th>
-                                <th scope="col">Nombres</th>
+                                <th scope="col">Teléfono</th>
                                 <th scope="col" class="w100"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let docente of docentes; let i=index">
                                 <th>{{desde+i+1}}</th>
-                                <td>{{docente.persona?.numero}}</td>
+                                <th class="text-center">
+                                    <img [src]="docente.persona?.img! | imagen" class="imgTable" alt="foto docente">
+                                </th>
+                                <td>{{docente.persona?.dni}}</td>
+                                <td>{{docente.persona?.nombres | uppercase}}</td>
                                 <td>{{docente.persona?.apellidopaterno | uppercase}}</td>
                                 <td>{{docente.persona?.apellidomaterno | uppercase}}</td>
-                                <td>{{docente.persona?.nombres | uppercase}}</td>
+                                <td>{{docente.persona?.telefono}}</td>
                                 <td>
                                     <div class="btn-group text-center">
                                         <button [ngClass]="{ isDisabled: !docente.estado }" type="button"
@@ -86,11 +98,15 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-start" *ngIf="!cargando">
+                <div class="d-flex justify-content-between align-items-start" *ngIf="!cargando">
                     <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
-                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                        class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
                     <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
-                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                        class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
                 </div>
             </div>
         </div>

@@ -26,7 +26,7 @@ export class AreaService {
     }
   }
   todo(){
-    const base= `${base_url}/areas`;
+    const base= `${base_url}/areas/todo`;
     return this.http.get<listarAreas>(base, this.headers);
   }
   listar(desde:number=0){
@@ -88,6 +88,24 @@ export class AreaService {
   tieneSubareas(areaId:number){
     const base= `${base_url}/areas/tienesubareas/${areaId}`;
     return this.http.get<crudArea>(base,this.headers);
+  }
+
+  tieneCompetencias(areaId:number){
+    const base= `${base_url}/areas/tienecompetencias/${areaId}`;
+    return this.http.get<crudArea>(base,this.headers);
+  }
+
+  existeNombreArea(areaNombre:string){
+    const base= `${base_url}/areas/nombrerepetido/${areaNombre}`;
+    return this.http.get<crudArea>(base,this.headers);
+  }
+  existeNombreAreaEditar(areaId:number,areaNombre:string){
+    const base= `${base_url}/areas/nombrerepetidoeditar/${areaId}/${areaNombre}`;
+    return this.http.get<crudArea>(base,this.headers);
+  }
+  listaAreasCompetencias(){
+    const base= `${base_url}/areas/competencias`;
+    return this.http.get<listarAreas>(base, this.headers);
   }
 
 }

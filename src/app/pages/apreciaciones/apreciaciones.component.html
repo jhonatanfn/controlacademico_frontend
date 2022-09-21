@@ -1,0 +1,240 @@
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearApreciacion()">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Nuevo
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-2 buscador">
+                    <div class="input-group me-0">
+                        <span class="input-group-text" id="buscar-algo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </span>
+                        <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                            aria-describedby="buscar-algo" (keyup)="buscarApreciacion(txtTermino.value)" #txtTermino>
+                    </div>
+                </div>
+                <div class="mb-1" *ngIf="cargando">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h6 class="alert-heading">Cargando...</h6>
+                        <div class="spinner-border" role="status">
+                        </div>
+                        <p>Por favor espera</p>
+                    </div>
+                </div>
+                <div class="table-responsive mb-1" *ngIf="!cargando">
+                    <div class="alert alert-primary" role="alert" *ngIf="apreciaciones.length==0">
+                        No hay registros.
+                    </div>
+                    <table class="table table-bordered table-hover" *ngIf="apreciaciones.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Descripcion</th>
+                                <th scope="col">Alumno</th>
+                                <th scope="col" class="w100"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let apreciacion of apreciaciones; let i=index">
+                                <th>{{desde+i+1}}</th>
+                                <td>{{apreciacion.nombre | uppercase}}</td>
+                                <td>{{apreciacion.descripcion | uppercase}}</td>
+                                <td>{{apreciacion.alumno?.persona?.nombres}}
+                                    {{apreciacion.alumno?.persona?.apellidopaterno}}
+                                    {{apreciacion.alumno?.persona?.apellidomaterno}}
+                                </td>
+                                <td>
+                                    <div class="btn-group text-center">
+
+                                        <button type="button" class="btn btn-success me-1" data-bs-toggle="modal"
+                                            data-bs-target="#editar" data-bs-placement="top" title="Editar"
+                                            (click)="editarApreciacion(apreciacion)">
+                                            <span>
+                                                <i class="bi bi-pen"></i>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-danger" data-bs-placement="top"
+                                            title="Eliminar" (click)="eliminarApreciacion(apreciacion)">
+                                            <span>
+                                                <i class="bi bi-x-circle"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-between align-items-center" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Crear Apreciacion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="apreciacionForm" autocomplete="off" (submit)="guardarApreciacion()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="periodoId" class="form-label">Periodo</label>
+                        <select class="form-select" aria-label="Seleccionar periodo" formControlName="periodoId"
+                            (change)="cargarAlumnos()">
+                            <option value="">Seleccionar Periodo</option>
+                            <option *ngFor="let periodo of periodos" [value]="[periodo.id,periodo.nombre]">
+                                {{periodo.nombre}}
+                            </option>
+                        </select>
+                        <div *ngIf="campoRequerido('periodoId')" id="periodoId" class="form-text text-danger">
+                            La periodo es requerido
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12">
+                        <div class="mb-3">
+                            <label for="aulaId" class="form-label">Aula</label>
+                            <select class="form-select" aria-label="Seleccionar aula" formControlName="aulaId"
+                                (change)="cargarAlumnos()">
+                                <option value="">Seleccionar Aula</option>
+                                <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre]">
+                                    {{aula.nombre}}
+                                </option>
+                            </select>
+                            <div *ngIf="campoRequerido('aulaId')" id="aulaId" class="form-text text-danger">
+                                La aula es requerida
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12">
+                        <div class="mb-3">
+                            <label for="alumnoId" class="form-label">Alumnos</label>
+                            <select class="form-select" aria-label="Seleccionar alumno" formControlName="alumnoId">
+                                <option value="">Seleccionar alumno</option>
+                                <option *ngFor="let matriculadetalle of matriculadetalles" [value]="[matriculadetalle.matricula?.alumno?.id,
+                                    matriculadetalle.matricula?.alumno?.persona?.apellidopaterno,
+                                    matriculadetalle.matricula?.alumno?.persona?.apellidomaterno,
+                                    matriculadetalle.matricula?.alumno?.persona?.nombres]">
+                                    {{matriculadetalle.matricula?.alumno?.persona?.apellidopaterno}}
+                                    {{matriculadetalle.matricula?.alumno?.persona?.apellidomaterno}}
+                                    {{matriculadetalle.matricula?.alumno?.persona?.nombres}}
+                                </option>
+                            </select>
+                            <div *ngIf="campoRequerido('alumnoId')" id="alumnoId" class="form-text text-danger">
+                                El alumno es requerido
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" formControlName="nombre"
+                            placeholder="Nombre apreciacion">
+                        <div class="form-text text-danger" *ngIf="campoRequerido('nombre')">
+                            El campo nombre es requerido
+                        </div>
+                        <div class="form-text text-danger" *ngIf="campoMaxLengh('nombre',100)">
+                            El campo nombre debe tener como maximo 100 caracteres
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripcion</label>
+                        <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="10"
+                            formControlName="descripcion">
+                        </textarea>
+                        <div class="form-text text-danger" *ngIf="campoRequerido('descripcion')">
+                            El campo descripcion es requerido
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="responsabilidad" class="form-label">Responsabilidad del Padre</label>
+                        <input type="text" class="form-control" id="esponsabilidad" formControlName="responsabilidad"
+                            placeholder="Responsabilidad del padre">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                        <i class="bi bi-x-lg"></i>
+                        Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-hdd"></i>
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Editar Apreciacion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="apreciacionForm" autocomplete="off" (submit)="actualizarApreciacion()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" formControlName="nombre"
+                            placeholder="Nombre apreciacion">
+                        <div class="form-text text-danger" *ngIf="campoRequerido('nombre')">
+                            El campo nombre es requerido
+                        </div>
+                        <div class="form-text text-danger" *ngIf="campoMaxLengh('nombre',100)">
+                            El campo nombre debe tener como maximo 100 caracteres
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripcion</label>
+                        <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="10"
+                            formControlName="descripcion">
+                        </textarea>
+                        <div class="form-text text-danger" *ngIf="campoRequerido('descripcion')">
+                            El campo descripcion es requerido
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="responsabilidad" class="form-label">Responsabilidad del Padre</label>
+                        <input type="text" class="form-control" id="responsabilidad" formControlName="responsabilidad"
+                            placeholder="Responsabilidad del padre">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton2>
+                        <i class="bi bi-x-lg"></i>
+                        Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-hdd"></i>
+                        Actualizar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

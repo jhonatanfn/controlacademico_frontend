@@ -1,15 +1,16 @@
 <div class="row">
-    <div class="col-12 col-lg-3">
+    <div class="col-12 col-lg-3 mb-3 mb-lg-0">
         <div class="row">
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-body">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <form [formGroup]="asisForm" (submit)="buscarAsistencias()">
                                     <div class="row">
-        
                                         <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="periodoId" class="form-label">Periodo</label>
@@ -33,8 +34,7 @@
                                                 <select class="form-select" aria-label="Seleccionar aula"
                                                     formControlName="aulaId">
                                                     <option value="">Seleccionar Aula</option>
-                                                    <option *ngFor="let aula of aulas"
-                                                        [value]="[aula.id,aula.nombre]">
+                                                    <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre]">
                                                         {{aula.nombre}}
                                                     </option>
                                                 </select>
@@ -44,37 +44,16 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="subareaId" class="form-label">Subarea</label>
-                                                <select class="form-select" aria-label="Seleccionar aula"
-                                                    formControlName="subareaId">
-                                                    <option value="">Seleccionar Subarea</option>
-                                                    <option *ngFor="let subarea of subareas" 
-                                                    [value]="[subarea.id,subarea.nombre]">
-                                                        {{subarea.nombre}}
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="campoRequerido('subareaId')" id="subareaId"
-                                                    class="form-text text-danger">
-                                                    La subarea es requerida
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="fechainicial" class="form-label">Fecha Inicial</label>
-                                                <input type="date" class="form-control" 
-                                                formControlName="fechainicial">
+                                                <input type="date" class="form-control" formControlName="fechainicial">
                                                 <div *ngIf="campoRequerido('fechainicial')" id="fechainicial"
                                                     class="form-text text-danger">
                                                     La Fecha Inicial es requerida
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="fechafinal" class="form-label">Fecha Final</label>
@@ -85,14 +64,12 @@
                                                 </div>
                                             </div>
                                         </div>
-        
                                     </div>
-        
+
                                     <button type="submit" class="btn btn-primary me-2">
                                         <i class="bi bi-search"></i>
                                         Buscar
                                     </button>
-        
                                 </form>
                             </div>
                         </div>
@@ -101,9 +78,11 @@
             </div>
             <div class="col-12">
                 <div class="col-12" *ngIf="datos.length>0">
-                    <div class="card contenido-principal">
-                        <div class="card-body">
+                    <div class="card card-color-primary contenido-principal">
+                        <div class="card-header card-color-header">
                             <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                        </div>
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card w-100">
@@ -112,16 +91,10 @@
                                             <p class="card-text"> {{ periodonombre | uppercase }}</p>
                                             <h6 class="card-title">Aula:</h6>
                                             <p class="card-text">{{ aulanombre | uppercase }}</p>
-                                            <h6 class="card-title">Subarea:</h6>
-                                            <p class="card-text">  {{ subareanombre | uppercase }}</p>  
-                                            <h6 class="card-title">Docente:</h6>
-                                            <p class="card-text">  {{ docentenombre | uppercase }}</p>                             
-                                            
                                             <h6 class="card-title">Rango Fechas:</h6>
-                                            <p class="card-text"> Desde: {{ fechai | date:'dd/MM/yyyy' }} Hasta: {{fechaf | date:'dd/MM/yyyy'}}</p>      
-
+                                            <p class="card-text"> Desde: {{ fechai }} Hasta: {{fechaf }}</p>
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -131,20 +104,16 @@
         </div>
     </div>
     <div class="col-12 col-lg-9">
-
-        <div class="card contenido-principal">
-            <div class="card-body">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                       
-                        <div class="d-lg-flex d-flex-column justify-content-end mt-1" *ngIf="datos.length>0">
-                            <button type="button" class="btn btn-danger btn-sm me-2" (click)="generatePDF('OPEN')"
-                                data-bs-toggle="tooltip" data-bs-placement="top" title="Visualizar PDF">
-                                <i class="bi bi-file-earmark-pdf"></i>
-                                Visualizar
-                            </button>
-                            <button type="button" class="btn btn-primary btn-sm me-2" (click)="generatePDF('PRINT')"
+
+                        <div class="d-lg-flex d-flex-column justify-content-start mt-1" *ngIf="datos.length>0">
+                            <button type="button" class="btn btn-primary btn-sm me-2" (click)="generatePDF('OPEN')"
                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Imprimir PDF">
                                 <i class="bi bi-printer"></i>
                                 Imprimir
@@ -154,6 +123,23 @@
                                 title="Descargar PDF">
                                 <i class="bi bi-arrow-down-circle"></i>
                                 Descargar
+                            </button>
+                            <button class="btn btn-sm btn-warning me-2 mb-1 mb-md-0" data-bs-toggle="modal"
+                                data-bs-target="#barra" data-bs-placement="top" title="Gráfico de Barras"
+                                (click)="generarBarras()">
+                                <i class="bi bi-bar-chart-line"></i>
+                                Barras
+                            </button>
+                            <button class="btn btn-sm btn-danger me-2 mb-1" data-bs-toggle="modal"
+                                data-bs-target="#sector" data-bs-placement="top" title="Gráfico de Sectores"
+                                (click)="generarBarras()">
+                                <i class="bi bi-pie-chart"></i>
+                                Sectores
+                            </button>
+                            <button class="btn btn-sm btn-info me-2 mb-1" data-bs-toggle="modal" data-bs-target="#linea"
+                                data-bs-placement="top" title="Gráfico de Lineas" (click)="generarBarras()">
+                                <i class="bi bi-graph-up"></i>
+                                Lineas
                             </button>
                         </div>
 
@@ -173,26 +159,30 @@
                             <table class="table table-bordered table-hover" *ngIf="datos.length>0">
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="w70">N°</th>                                        
-                                        <th scope="col">Fecha</th>
-                                        <th scope="col">Subarea</th>
-                                        <th scope="col" class="w100">Asistencias</th>
-                                        <th scope="col" class="w100">Faltas</th>
-                                        <th scope="col" class="w100">Justificaciones</th>
-                                        <th scope="col" class="w100">Total</th>
+                                        <th scope="col" class="w70">N°</th>
+                                        <th scope="col">Apellidos y nombres</th>
+                                        <th scope="col">Aula</th>
+                                        <th scope="col" class="w70">A</th>
+                                        <th scope="col" class="w70">F</th>
+                                        <th scope="col" class="w70">J</th>
+                                        <th scope="col" class="w70">T</th>
+                                        <th scope="col" class="w70">NR</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let dato of datos; let i= index">
-                                        <th>{{i+1}}</th>   
+                                        <th>{{i+1}}</th>
                                         <td>
-                                            {{dato.fecha | date:'dd/MM/yyyy'}}
+                                            {{dato.alumno.matricula?.alumno?.persona?.apellidopaterno}}
+                                            {{dato.alumno.matricula?.alumno?.persona?.apellidomaterno}}
+                                            {{dato.alumno.matricula?.alumno?.persona?.nombres}}
                                         </td>
-                                        <td>{{subareanombre | uppercase}}</td>
-                                        <td>{{dato.asistio}}</td>
-                                        <td>{{dato.falto}}</td>
-                                        <td>{{dato.justifico}}</td>
-                                        <td>{{dato.total}}</td>                    
+                                        <td>{{dato.alumno.programacion?.aula?.nombre}}</td>
+                                        <td>{{dato.asistencia}}</td>
+                                        <td>{{dato.falta}}</td>
+                                        <td>{{dato.justifica}}</td>
+                                        <td>{{dato.tardanza}}</td>
+                                        <td>{{dato.noregistro}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -200,34 +190,119 @@
                     </div>
                 </div>
 
-                <!--
                 <div class="row">
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-sm-6">
                         <div class="table-responsive mt-2 mb-1" *ngIf="datos.length>0">
                             <table class="table table-bordered table-hover">
                                 <tbody>
                                     <tr>
-                                        <th colspan="2" class="text-center">RESUMEN</th>
+                                        <th colspan="3" class="text-center">RESUMEN</th>
                                     </tr>
                                     <tr>
-                                        <th scope="col" class="w70">Asistió</th>
+                                        <th scope="col">Asistencias</th>
                                         <td class="text-center">{{asistiototal}}</td>
+                                        <td class="text-center">{{ (asistiototal/total)*100 }} %</td>
                                     </tr>
                                     <tr>
-                                        <th scope="col" class="w70">Faltó</th>
+                                        <th scope="col">Faltas</th>
                                         <td class="text-center">{{faltototal}}</td>
+                                        <td class="text-center">{{ (faltototal/total)*100 }} %</td>
                                     </tr>
                                     <tr>
-                                        <th scope="col" class="w70">Justificó</th>
+                                        <th scope="col">Justificaciones</th>
                                         <td class="text-center">{{justificototal}}</td>
+                                        <td class="text-center">{{ (justificototal/total)*100 }} %</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Tardanzas</th>
+                                        <td class="text-center">{{tardanzatotal}}</td>
+                                        <td class="text-center">{{ (tardanzatotal/total)*100 }} %</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">No registrado</th>
+                                        <td class="text-center">{{noregistrototal}}</td>
+                                        <td class="text-center">{{ (noregistrototal/total)*100 }} %</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                -->
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" id="barra" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Gráfico de Barras</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas baseChart [data]="salesData" [type]="'bar'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sector" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Gráfico de Sectores</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas baseChart [data]="salesData" [type]="'pie'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="linea" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Gráfico de Lineas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <canvas baseChart [data]="salesData" [type]="'line'" [options]="chartOptions">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                    <i class="bi bi-x-lg"></i>
+                    Salir</button>
             </div>
         </div>
     </div>

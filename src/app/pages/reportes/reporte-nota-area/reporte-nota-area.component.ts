@@ -133,6 +133,8 @@ export class ReporteNotaAreaComponent implements OnInit {
 
     if (this.usuarioService.usuario.role.nombre === "DOCENTE") {
 
+
+/*
       this.usuarioService.docentePorPersona().subscribe({
         next: ({ ok, docente }) => {
           if (ok) {
@@ -170,6 +172,8 @@ export class ReporteNotaAreaComponent implements OnInit {
           }
         }
       });
+*/
+
     }
 
     if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
@@ -269,6 +273,8 @@ export class ReporteNotaAreaComponent implements OnInit {
 
       if (this.usuarioService.usuario.role.nombre === "APODERADO") {
 
+
+        /*
         this.matriculaService.matriculasPeriodoAulaApoderadoArea(
           Number(arrPeriodos[0]), Number(arrAulas[0]), Number(arrAreas[0]),
           Number(this.apoderado.id)).subscribe({
@@ -295,13 +301,15 @@ export class ReporteNotaAreaComponent implements OnInit {
             }
           });
 
+          */
       } else {
 
         if (this.usuarioService.usuario.role.nombre === "ALUMNO") {
 
+          /*
           this.matriculaService.matriculasPeriodoAulaApoderadoArea(
             Number(arrPeriodos[0]), Number(arrAulas[0]), Number(arrAreas[0]),
-            Number(this.alumno.apoderadoId)).subscribe({
+            Number(this.alumno.padreId)).subscribe({
               next: ({ ok, matriculas }) => {
                 if (ok) {
                   this.matriculas = matriculas;
@@ -323,8 +331,11 @@ export class ReporteNotaAreaComponent implements OnInit {
                 }
               }
             });
+            */
 
         } else {
+
+          /*
           this.matriculaService.matriculasPeriodoAulaArea(
             Number(arrPeriodos[0]), Number(arrAulas[0]), Number(arrAreas[0]))
             .subscribe({
@@ -353,6 +364,8 @@ export class ReporteNotaAreaComponent implements OnInit {
                 }
               }
             });
+
+*/
         }
       }
     }
@@ -452,6 +465,8 @@ export class ReporteNotaAreaComponent implements OnInit {
   }
 
   buscarNotas() {
+
+/*
     this.formSubmitted = true;
     if (this.repForm.valid) {
       this.datos = [];
@@ -532,6 +547,8 @@ export class ReporteNotaAreaComponent implements OnInit {
         }
       });
     }
+*/
+
   }
 
   getBase64ImageFromURL(url: any) {

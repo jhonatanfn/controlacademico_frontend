@@ -1,0 +1,16 @@
+.contenedor .icono{
+    font-size: 2.6rem;
+}
+.contenedor .piepagina i{
+    font-size: 1.5rem;
+}
+.contenedor .carta{
+    border: 1px solid rgb(204, 198, 198);
+}
+.contenedor .tarjeta{
+    background-color: rgba(229, 234, 238, 0.897);
+}
+
+.contenedor .imagen-fondo{
+    object-fit: cover;
+}

@@ -1,11 +1,23 @@
 <div class="row">
     <div class="col-12 col-lg-12">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <div class="mb-0">
+                        <select class="form-select" aria-label="Default select example"
+                            [(ngModel)]="periodoseleccionado" (change)="listarProgramaciones()">
+                            <option value="">TODOS</option>
+                            <option *ngFor="let periodo of periodos" [value]="periodo.id">
+                                {{periodo.nombre}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
+                    <!--
                     <div class="col-12 col-lg-2">
                         <div class="mb-3">
                             <select class="form-select" aria-label="Default select example"
@@ -17,9 +29,10 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-10">
+                    -->
+                    <div class="col-12 col-lg-12">
                         <div class="d-flex align-items-start mb-2 buscador">
-                            <div class="input-group me-1">
+                            <div class="input-group me-0">
                                 <span class="input-group-text" id="buscar-algo">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-search" viewBox="0 0 16 16">
@@ -35,8 +48,6 @@
                     </div>
                 </div>
 
-
-                <!--Alerta-->
                 <div class="mb-1" *ngIf="cargando">
                     <div class="alert alert-info text-center" role="alert">
                         <h6 class="alert-heading">Cargando...</h6>
@@ -46,7 +57,6 @@
                     </div>
                 </div>
 
-                <!--Tabla d contenido-->
                 <div class="table-responsive mb-1" *ngIf="!cargando">
                     <div class="alert alert-primary" role="alert" *ngIf="programaciones.length==0">
                         No hay registros.
@@ -56,10 +66,10 @@
                             <tr>
                                 <th scope="col" class="w70">N°</th>
                                 <th scope="col">Periodo</th>
-                                <th scope="col">Subarea</th>
                                 <th scope="col">Aula</th>
+                                <th scope="col">Area</th>
                                 <th scope="col">Docente</th>
-                                <th scope="col">N° Matriculas</th>
+                                <th scope="col">N° Inscritos</th>
                                 <th scope="col" class="w100"></th>
                             </tr>
                         </thead>
@@ -67,8 +77,8 @@
                             <tr *ngFor="let programacion of programaciones; let i=index">
                                 <th>{{desde+i+1}}</th>
                                 <td>{{programacion.periodo?.nombre}}</td>
-                                <td>{{programacion.subarea?.nombre}}</td>
                                 <td>{{programacion.aula?.nombre}}</td>
+                                <td>{{programacion.area?.nombre}}</td>
                                 <td>{{programacion.docente?.persona?.nombres}}
                                     {{programacion.docente?.persona?.apellidopaterno}}
                                     {{programacion.docente?.persona?.apellidomaterno}}
@@ -89,11 +99,15 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-start" *ngIf="!cargando">
+                <div class="d-flex justify-content-between align-items-start" *ngIf="!cargando">
                     <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
-                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                        class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
                     <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
-                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                        class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
                 </div>
             </div>
         </div>
@@ -103,8 +117,8 @@
 <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Lista de alumnos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -115,17 +129,17 @@
                             <thead>
                                 <tr>
                                     <th scope="col" class="w70">N°</th>
-                                    <th scope="col">Documento</th>
+                                    <th scope="col">DNI</th>
                                     <th scope="col">Apellidos y Nombres</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let matricula of matriculas; let i=index">
+                                <tr *ngFor="let matriculadetalle of matriculadetalles; let i=index">
                                     <td>{{i+1}}</td>
-                                    <td>{{matricula.alumno?.persona?.numero}}</td>
-                                    <td>{{matricula.alumno?.persona?.apellidopaterno}}
-                                        {{matricula.alumno?.persona?.apellidomaterno}}
-                                        {{matricula.alumno?.persona?.nombres}}
+                                    <td>{{matriculadetalle.matricula?.alumno?.persona?.dni}}</td>
+                                    <td>{{matriculadetalle.matricula?.alumno?.persona?.apellidopaterno}}
+                                        {{matriculadetalle.matricula?.alumno?.persona?.apellidomaterno}}
+                                        {{matriculadetalle.matricula?.alumno?.persona?.nombres}}
                                     </td>
                                 </tr>
                             </tbody>

@@ -19,7 +19,7 @@ export class AdmindocenteapoderadoGuard implements CanActivate, CanLoad {
       this.usuarioService.usuario.role.nombre === 'APODERADO') {
       return true;
     } else {
-      this.router.navigateByUrl('login');
+      this.router.navigateByUrl('dashboard');
       return false;
     }
 
@@ -27,13 +27,13 @@ export class AdmindocenteapoderadoGuard implements CanActivate, CanLoad {
   canLoad(
     route: Route,
     segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    
+
     if (this.usuarioService.usuario.role.nombre === 'DOCENTE' ||
       this.usuarioService.usuario.role.nombre === 'ADMINISTRADOR' ||
       this.usuarioService.usuario.role.nombre === 'APODERADO') {
       return true;
     } else {
-      this.router.navigateByUrl('login');
+      this.router.navigateByUrl('dashboard');
       return false;
     }
 

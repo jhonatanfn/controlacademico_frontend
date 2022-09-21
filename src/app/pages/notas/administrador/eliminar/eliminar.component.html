@@ -1,115 +1,85 @@
 <div class="row">
-    <div class="col-12 col-lg-4">
-        <div class="row">
-            <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-header">
-                        <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <form [formGroup]="notaForm" >
-                                    <div class="row">
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="cicloId" class="form-label">Ciclo</label>
-                                                <select class="form-select" aria-label="Default select example"
-                                                    formControlName="cicloId" (change)="buscarMatriculas()">
-                                                    <option value="">Seleccionar ciclo</option>
-                                                    <option *ngFor="let ciclo of ciclos" 
-                                                    [value]="ciclo.id">
-                                                        {{ciclo.nombre}} 
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="campoRequerido('cicloId')" id="periodoId"
-                                                    class="form-text text-danger">
-                                                    La ciclo es requerido
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="evaluacionId" class="form-label">Evaluacion</label>
-                                                <select class="form-select" aria-label="Default select example"
-                                                    formControlName="evaluacionId" (change)="buscarMatriculas()">
-                                                    <option value="">Seleccionar evaluacion</option>
-                                                    <option *ngFor="let evaluacion of evaluaciones" 
-                                                    [value]="evaluacion.id">
-                                                        {{evaluacion.nombre}} 
-                                                    </option>
-                                                </select>
-                                                <div *ngIf="campoRequerido('evaluacionId')" id="evaluacionId"
-                                                    class="form-text text-danger">
-                                                    La evaluacion es requerida
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-12">
-                                            <div class="mb-3">
-                                                <label for="fechaIn" class="form-label">Fecha</label>
-                                                <input type="date" class="form-control"
-                                                formControlName="fecha" 
-                                                (change)="buscarMatriculas()">
-                                                <div *ngIf="campoRequerido('fecha')" id="fecha"
-                                                    class="form-text text-danger">
-                                                    La fecha es requerida
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                    <!--
-                                    <button type="submit" class="btn btn-primary me-2">Buscar</button>
-                                    -->
-                                    <button type="button" class="btn btn-primary me-2" 
-                                    (click)="eliminarNotas()" [disabled]="datos.length==0">
-                                    <i class="bi bi-hdd"></i>
-                                    Eliminar
-                                    </button>
-                                    
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+    <div class="col-12 col-lg-8 mb-3 mb-lg-0">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
             </div>
-            <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-header">
-                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card w-100">
-                                    <div class="card-body">
-                                        <h6 class="card-title">Periodo:</h6>
-                                        <p class="card-text"> {{ periodonombre | uppercase }}</p>
-                                        <h6 class="card-title">Aula:</h6>
-                                        <p class="card-text">{{ aulanombre | uppercase }}</p>
-                                        <h6 class="card-title">Area:</h6>
-                                        <p class="card-text"> {{ areanombre | uppercase }}</p>
-                                        <h6 class="card-title">Subarea:</h6>
-                                        <p class="card-text"> {{ subareanombre | uppercase }}</p>
-                                        <h6 class="card-title">Docente:</h6>
-                                        <p class="card-text"> {{ docentenombre | uppercase }}</p>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <form [formGroup]="notaForm" (submit)="buscarMatriculas()">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="mb-3">
+                                        <label for="cicloId" class="form-label">Ciclo</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="cicloId">
+                                            <option value="">Seleccionar ciclo</option>
+                                            <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
+                                                {{ciclo.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('cicloId')" id="periodoId"
+                                            class="form-text text-danger">
+                                            La ciclo es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="mb-3">
+                                        <label for="evaluacionId" class="form-label">Evaluacion</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="evaluacionId">
+                                            <option value="">Seleccionar evaluacion</option>
+                                            <option *ngFor="let evaluacion of evaluaciones" [value]="evaluacion.id">
+                                                {{evaluacion.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('evaluacionId')" id="evaluacionId"
+                                            class="form-text text-danger">
+                                            La evaluacion es requerida
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8">
+                                    <div class="mb-3">
+                                        <label for="competenciaId" class="form-label">Competencia</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="competenciaId">
+                                            <option value="">Seleccionar competencia</option>
+                                            <option *ngFor="let competencia of competencias" [value]="competencia.id">
+                                                {{competencia.descripcion}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('competenciaId')" id="competenciaId"
+                                            class="form-text text-danger">
+                                            La competencia es requerida
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="mb-3">
+                                        <label for="fechaIn" class="form-label">Fecha</label>
+                                        <input type="date" class="form-control" formControlName="fecha">
+                                        <div *ngIf="campoRequerido('fecha')" id="fecha" class="form-text text-danger">
+                                            La fecha es requerida
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-search"></i>
+                                Buscar
+                            </button>
+                            <button type="button" class="btn btn-primary me-2" (click)="eliminarNotas()"
+                                [disabled]="datos.length==0">
+                                <i class="bi bi-hdd"></i>
+                                Eliminar
+                            </button>
+                        </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-lg-8">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
-            </div>
-            <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <div class="mb-1" *ngIf="cargando">
@@ -124,33 +94,38 @@
                             <div class="alert alert-primary" role="alert" *ngIf="datos.length==0">
                                 No hay registros.
                             </div>
-                            <table class="table table-bordered table-hover" *ngIf="datos.length>0">
+                            <table class="table table-hover" *ngIf="datos.length>0">
                                 <thead>
                                     <tr>
                                         <th scope="col" class="w70">N°</th>
                                         <th scope="col">Apellidos y Nombres</th>
-                                        <th scope="col"> Evaluación</th>
-                                        <th scope="col">Fecha</th>
-                                        <th scope="col" class="w70">Nota</th>
+                                        <th scope="col">Competencia</th>
+                                        <th scope="col" class="w100">Nota</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let dato of datos; let i= index">
                                         <th>{{i+1}}</th>
-                                        <td>{{dato.matricula?.alumno?.persona?.apellidopaterno | uppercase}} 
-                                            {{dato.matricula?.alumno?.persona?.apellidomaterno | uppercase}}
-                                            {{dato.matricula?.alumno?.persona?.nombres | uppercase}}
+                                        <td>{{dato.matriculadetalle?.matricula?.alumno?.persona?.apellidopaterno |
+                                            uppercase}}
+                                            {{dato.matriculadetalle?.matricula?.alumno?.persona?.apellidomaterno |
+                                            uppercase}}
+                                            {{dato.matriculadetalle?.matricula?.alumno?.persona?.nombres | uppercase}}
                                         </td>
-                                        <td>{{dato.evaluacion.nombre | uppercase}}</td>
-                                        <td>{{dato.fecha | date:'dd/MM/yyyy' }}</td>
-                                        <td>
-                                            <input 
-                                            (keypress)="numberOnly($event)"
-                                            oninput="if(this.value > 20 || this.value.length>2) this.value = 0;"
-                                            type="text" 
-                                            [(ngModel)]="dato.valor"  
-                                            [disabled]="true"
-                                            class="form-control">    
+                                        <td>{{dato.competencia?.descripcion}}</td>
+                                        <td *ngIf="vigesimal">
+                                            <input (keypress)="numberOnly($event)"
+                                                oninput="if(this.value > 20 || this.value.length>2) this.value = 0;"
+                                                type="text" [(ngModel)]="dato.valor" class="form-control"
+                                                [disabled]="true">
+                                        </td>
+                                        <td *ngIf="literal">
+                                            <select class="form-select" aria-label="Default select example"
+                                                name="letraId" id="letraId" [(ngModel)]="dato.valor">
+                                                <option *ngFor="let letra of letras" value="{{letra.nombre}}"
+                                                    [disabled]="true">
+                                                    {{letra.nombre}}</option>
+                                            </select>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -161,7 +136,49 @@
             </div>
         </div>
     </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
+
+                        <ol class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Periodo</div>
+                                    {{ periodonombre | uppercase}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Aula</div>
+                                    {{ aulanombre | uppercase}}
+                                </div>
+
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Area</div>
+                                    {{ areanombre | uppercase}}
+                                </div>
+
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Docente</div>
+                                    {{ docentenombre | uppercase}}
+                                </div>
+
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-

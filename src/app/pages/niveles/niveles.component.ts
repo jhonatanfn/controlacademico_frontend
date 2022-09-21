@@ -11,33 +11,34 @@ import Swal from 'sweetalert2';
 })
 export class NivelesComponent implements OnInit {
 
-  public niveles:Nivel[]=[];
-  public cargando:boolean= true;
-  public titulo:string='Tabla Niveles';
-  public icono:string='bi bi-table';
-  public desde:number=0;
-  public totalRegistros:number=0;
-  public numeropaginas=0;
-  public ds:boolean= true;
-  public da:boolean=true;
+  public niveles: Nivel[] = [];
+  public cargando: boolean = true;
+  public titulo: string = 'Tabla Niveles';
+  public icono: string = 'bi bi-table';
+  public desde: number = 0;
+  public totalRegistros: number = 0;
+  public numeropaginas = 0;
+  public ds: boolean = true;
+  public da: boolean = true;
 
-  public nivelForm!:FormGroup;
-  public formSubmitted:boolean= false;
-  public boton:string="";
-  public isSave:boolean=true;
-  public titulonivel:string="";
+  public nivelForm!: FormGroup;
+  public formSubmitted: boolean = false;
+  public boton: string = "";
+  public isSave: boolean = true;
+  public titulonivel: string = "";
+  public nombrerepetido: boolean = false;
 
-  @ViewChild('closebutton') closebutton:any;
+  @ViewChild('closebutton') closebutton: any;
 
-  constructor(private nivelService:NivelService,
-    private fb:FormBuilder) {
+  constructor(private nivelService: NivelService,
+    private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.listarNiveles();
-    this.nivelForm= this.fb.group({
-        nivelId:[''],
-        nombre:['',[Validators.required,Validators.maxLength(30)]]
+    this.nivelForm = this.fb.group({
+      id: [''],
+      nombre: ['', [Validators.required, Validators.maxLength(30)]]
     });
   }
 
@@ -59,171 +60,206 @@ export class NivelesComponent implements OnInit {
       return false;
     }
   }
-  controlBotonesPaginacion(){
-      if(this.niveles.length !==5){
-        this.ds= true;
-      }else{
-        this.ds= false;
-      }
-      if(this.desde===0){
-        this.da= true;
-      }else{
-        this.da= false;
-      }
-  }
-  
-  listarNiveles(){
-    this.cargando= true;
-    this.nivelService.listar(this.desde)
-    .subscribe(({niveles,total})=>{
-      this.niveles=niveles;
-      this.totalRegistros=total;
-      this.numeropaginas= Math.ceil(this.totalRegistros/5);
-      this.cargando= false;
-      this.controlBotonesPaginacion();
-    });
+  controlBotonesPaginacion() {
+    if (this.niveles.length !== 5) {
+      this.ds = true;
+    } else {
+      this.ds = false;
+    }
+    if (this.desde === 0) {
+      this.da = true;
+    } else {
+      this.da = false;
+    }
   }
 
-  cambiarPagina(valor:number){
+  listarNiveles() {
+    this.cargando = true;
+    this.nivelService.listar(this.desde)
+      .subscribe(({ niveles, total }) => {
+        this.niveles = niveles;
+        this.totalRegistros = total;
+        this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+        this.cargando = false;
+        this.controlBotonesPaginacion();
+      });
+  }
+
+  cambiarPagina(valor: number) {
     this.desde += valor;
-    if(this.desde<0){
-      this.desde=0;
-    }else{
-      if(this.desde>this.totalRegistros){
-        this.desde -=valor;
+    if (this.desde < 0) {
+      this.desde = 0;
+    } else {
+      if (this.desde > this.totalRegistros) {
+        this.desde -= valor;
       }
     }
     this.listarNiveles();
   }
-  crearNivel(){
-    this.formSubmitted= false;
+  crearNivel() {
+    this.formSubmitted = false;
     this.nivelForm.controls['nombre'].setValue('');
-    this.boton="Guardar";
-    this.isSave= true;
-    this.titulonivel="Nuevo Nivel";
+    this.nivelForm.controls['id'].setValue('');
+    this.boton = "Guardar";
+    this.isSave = true;
+    this.titulonivel = "Nuevo Nivel";
+    this.nombrerepetido = false;
   }
-  
-  guardarNivel(){
 
-    this.formSubmitted= true;
-
-      if(this.nivelForm.valid){
-
-        if(this.isSave){
-          this.nivelService.crear(this.nivelForm.value)
-          .subscribe(({ok,msg})=>{
-            if(ok){
-              this.closebutton.nativeElement.click();
-              this.listarNiveles();
+  guardarNivel() {
+    this.formSubmitted = true;
+    this.nombrerepetido = false;
+    if (this.nivelForm.valid) {
+      if (this.isSave) {
+        this.nivelService.existeNombreNivel((this.nivelForm.get('nombre')?.value).trim()).subscribe({
+          next: ({ ok }) => {
+            if (ok) {
+              this.nombrerepetido = true;
+            } else {
               Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: msg,
-                showConfirmButton: false,
-                timer: 1000
-              })
-            }
-          },(error)=>{
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: error.error.msg,
-              showConfirmButton: false,
-              timer: 1500
-            })
-          })
-        }else{
+                title: 'Guardar',
+                text: "¿Desea crear el nivel?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Guardar'
+              }).then((result) => {
+                if (result.isConfirmed) {
 
-         this.nivelService.actualizar(this.nivelForm.get('nivelId')?.value,this.nivelForm.value)
-         .subscribe(({ok,msg})=>{
-           if(ok){
-            this.closebutton.nativeElement.click();
-            this.listarNiveles();
+                  this.nivelService.crear(this.nivelForm.value)
+                    .subscribe({
+                      next: ({ ok, msg }) => {
+                        if (ok) {
+                          this.closebutton.nativeElement.click();
+                          this.listarNiveles();
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: msg,
+                            showConfirmButton: false,
+                            timer: 1000
+                          });
+                        }
+                      }
+                    });
+                }
+              });
+            }
+          }
+        });
+
+      } else {
+
+        this.nivelService.existeNombreNivelEditar(this.nivelForm.get('id')?.value,
+          (this.nivelForm.get('nombre')?.value).trim()).subscribe({
+            next: ({ ok }) => {
+              if (ok) {
+                this.nombrerepetido = true;
+              } else {
+
+                Swal.fire({
+                  title: 'Actualizar',
+                  text: "¿Desea actualizar el nivel?",
+                  icon: 'question',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  cancelButtonText: 'Cancelar',
+                  confirmButtonText: 'Actualizar'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.nivelService.actualizar(this.nivelForm.get('id')?.value, this.nivelForm.value)
+                      .subscribe({
+                        next: ({ ok, msg }) => {
+                          if (ok) {
+                            this.closebutton.nativeElement.click();
+                            this.listarNiveles();
+                            Swal.fire({
+                              position: 'top-end',
+                              icon: 'success',
+                              title: msg,
+                              showConfirmButton: false,
+                              timer: 1000
+                            })
+                          }
+                        }
+                      });
+                  }
+                });
+              }
+            }
+          });
+      }
+    }
+  }
+
+  eliminarNivel(nivel: Nivel) {
+
+    this.nivelService.tieneAulas(nivel.id!)
+      .subscribe({
+        next: ({ ok, msg }) => {
+          if (ok) {
             Swal.fire({
               position: 'top-end',
-              icon: 'success',
+              icon: 'info',
               title: msg,
               showConfirmButton: false,
               timer: 1000
             })
-           }
-         },(error)=>{
-          Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: error.error.msg,
-            showConfirmButton: false,
-            timer: 1000
-          })
-         })
-        }
-      }
-  }
-
-  eliminarNivel(nivel:Nivel){
-  
-    this.nivelService.tieneAulas(nivel.id!)
-    .subscribe({
-      next: ({ok,msg})=>{
-        if(ok){
-          Swal.fire({
-            position: 'top-end',
-            icon: 'info',
-            title: msg,
-            showConfirmButton: false,
-            timer: 1000
-          })
-        }else{
-          Swal.fire({
-            title: 'Borrar Nivel',
-            text: "Desea borrar a: "+nivel.nombre,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Cancelar',
-            confirmButtonText: 'Borrar'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.nivelService.borrar(nivel.id!)
-              .subscribe(({ok,msg})=>{
-                if(ok){
-                  this.listarNiveles();
-                  Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: msg,
-                    showConfirmButton: false,
-                    timer: 1000
+          } else {
+            Swal.fire({
+              title: 'Borrar Nivel',
+              text: "Desea borrar a: " + nivel.nombre,
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Borrar'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.nivelService.borrar(nivel.id!)
+                  .subscribe(({ ok, msg }) => {
+                    if (ok) {
+                      this.listarNiveles();
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1000
+                      })
+                    }
                   })
-                }
-              })
-            }
-          })
+              }
+            })
+          }
         }
-      }
-    })
+      })
   }
 
-  editarNivel(nivel:Nivel){
-    this.nivelForm.controls['nivelId'].setValue(nivel.id);
+  editarNivel(nivel: Nivel) {
+    this.nivelForm.controls['id'].setValue(nivel.id);
     this.nivelForm.controls['nombre'].setValue(nivel.nombre.toUpperCase());
-    this.boton="Actualizar";
-    this.isSave= false;
-    this.titulonivel= "Editar Nivel";
+    this.boton = "Actualizar";
+    this.isSave = false;
+    this.titulonivel = "Editar Nivel";
+    this.nombrerepetido= false;
   }
 
-  buscarNivel(termino:string){
-    if(termino.length==0){
+  buscarNivel(termino: string) {
+    if (termino.length == 0) {
       this.listarNiveles();
-    }else{
+    } else {
       this.nivelService.buscarPorNombre(termino)
-      .subscribe((resp:Nivel[])=>{
-        this.niveles=resp;
-        this.totalRegistros=resp.length;
-        this.cargando= false;
-        this.controlBotonesPaginacion();
-      });
+        .subscribe((resp: Nivel[]) => {
+          this.niveles = resp;
+          this.totalRegistros = resp.length;
+          this.cargando = false;
+          this.controlBotonesPaginacion();
+        });
     }
   }
 

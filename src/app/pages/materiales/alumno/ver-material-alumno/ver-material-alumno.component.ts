@@ -14,7 +14,7 @@ export class VerMaterialAlumnoComponent implements OnInit {
 
   public titulo: string = 'Lista Materiales';
   public icono: string = 'bi bi-list';
-  public titulo3: string = 'Detalle';
+  public titulo3: string = 'Datos Generales';
   public icono3: string = 'bi bi-card-checklist';
   public cargando: boolean = true;
   public desde: number = 0;
@@ -25,10 +25,9 @@ export class VerMaterialAlumnoComponent implements OnInit {
   public materiales:Material[]=[];
   public material!:Material;
   @ViewChild('closebutton') closebutton: any;
-
   public periodonombre: string = "";
   public aulanombre: string = "";
-  public subareanombre: string = "";
+  public areanombre: string = "";
   public docentenombre: string = "";
   public totalmateriales: number = 0;
   public archivoAux: string = "";
@@ -42,7 +41,7 @@ export class VerMaterialAlumnoComponent implements OnInit {
           if (ok) {
             this.periodonombre = programacion.periodo?.nombre!;
             this.aulanombre = programacion.aula?.nombre!;
-            this.subareanombre = programacion.subarea?.nombre!;
+            this.areanombre = programacion.area?.nombre!;
             this.docentenombre = programacion.docente?.persona?.nombres! + ' ' +
               programacion.docente?.persona?.apellidopaterno! + ' ' +
               programacion.docente?.persona?.apellidomaterno!;

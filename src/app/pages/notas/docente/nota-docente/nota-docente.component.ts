@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Docente } from 'src/app/models/docente.model';
-import { Matricula } from 'src/app/models/matricula.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
-import { MatriculaService } from 'src/app/services/matricula.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -26,32 +24,30 @@ export class NotaDocenteComponent implements OnInit {
   public ds: boolean = true;
   public da: boolean = true;
   public docente!: Docente;
-  public matriculas:Matricula[]=[];
-  public periodoseleccionado:any="";
-  public periodos:Periodo[]=[];
+  public periodoseleccionado: any = "";
+  public periodos: Periodo[] = [];
 
   constructor(private usuarioService: UsuarioService,
     private programacionService: ProgramacionService,
-    private matriculaService:MatriculaService,
-    private periodoService:PeriodoService) {
+    private periodoService: PeriodoService) {
 
     this.periodoService.todo().subscribe({
-        next: ({ok,periodos})=>{
-          if(ok){
-            this.periodos=periodos;
-          }
+      next: ({ ok, periodos }) => {
+        if (ok) {
+          this.periodos = periodos;
         }
+      }
     });
 
   }
 
   ngOnInit(): void {
-    this.usuarioService.docentePorPersona().subscribe(({ok,docente})=>{
-      if(ok){
-        this.docente=docente;
+    this.usuarioService.docentePorPersona().subscribe(({ ok, docente }) => {
+      if (ok) {
+        this.docente = docente;
         this.listarProgramaciones();
       }
-    }); 
+    });
   }
 
   controlBotonesPaginacion() {
@@ -70,24 +66,24 @@ export class NotaDocenteComponent implements OnInit {
   listarProgramaciones() {
     this.cargando = true;
 
-    if(this.periodoseleccionado){
+    if (this.periodoseleccionado) {
 
       this.programacionService.programacionesPorDocentePeriodoPaginado(Number(this.docente.id),
-      Number(this.periodoseleccionado), Number(this.desde))
-      .subscribe({
-        next: ({ok, programaciones, total})=>{
-          if(ok){
-            this.programaciones = programaciones;
-            this.totalRegistros = total;
-            this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-            this.cargando = false;
-            this.controlBotonesPaginacion();
+        Number(this.periodoseleccionado), Number(this.desde))
+        .subscribe({
+          next: ({ ok, programaciones, total }) => {
+            if (ok) {
+              this.programaciones = programaciones;
+              this.totalRegistros = total;
+              this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+              this.cargando = false;
+              this.controlBotonesPaginacion();
+            }
           }
-        }
-      });
+        });
 
-    }else{
-      this.programacionService.programacionesPorDocente(Number(this.docente.id),Number(this.desde))
+    } else {
+      this.programacionService.programacionesPorDocente(Number(this.docente.id), Number(this.desde))
         .subscribe(({ ok, programaciones, total }) => {
           if (ok) {
             this.programaciones = programaciones;
@@ -112,67 +108,55 @@ export class NotaDocenteComponent implements OnInit {
     this.listarProgramaciones();
   }
 
-  matriculasProgramacion(programacion: Programacion) {
-   this.matriculaService.matriculasPorProgramacion(Number(programacion.id))
-   .subscribe(({ok,matriculas})=>{
-     if(ok){
-       this.matriculas= matriculas;
-     }
-   })
-  }
 
-  buscarProgramaciones(nombre:string){
-    
-    if(this.periodoseleccionado){
-
-      if(nombre.length==0){
+  buscarProgramaciones(nombre: string) {
+    if (this.periodoseleccionado) {
+      if (nombre.length == 0) {
         this.listarProgramaciones();
-      }else{
+      } else {
         this.programacionService.buscarProgramacionesDocentePeriodo(nombre,
-          Number(this.docente.id),Number(this.periodoseleccionado))
-        .subscribe({
-          next: (resp:Programacion[])=>{
-            this.programaciones=resp;
-            this.totalRegistros=resp.length;
-            this.numeropaginas= Math.ceil(this.totalRegistros/5);
-            this.controlBotonesPaginacion();
-          },
-          error:(error)=>{
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title:'Se produjo un error. Hable con el administrador.',
-              showConfirmButton: false,
-              timer: 1000
-            })
-          }
-        });
+          Number(this.docente.id), Number(this.periodoseleccionado))
+          .subscribe({
+            next: (resp: Programacion[]) => {
+              this.programaciones = resp;
+              this.totalRegistros = resp.length;
+              this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+              this.controlBotonesPaginacion();
+            },
+            error: (error) => {
+              Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Se produjo un error. Hable con el administrador.',
+                showConfirmButton: false,
+                timer: 1000
+              })
+            }
+          });
       }
-    }else{
-      if(nombre.length==0){
+    } else {
+      if (nombre.length == 0) {
         this.listarProgramaciones();
-      }else{
-        this.programacionService.buscarProgramacionesDocente(nombre,Number(this.docente.id))
-        .subscribe({
-          next: (resp:Programacion[])=>{
-            this.programaciones=resp;
-            this.totalRegistros=resp.length;
-            this.numeropaginas= Math.ceil(this.totalRegistros/5);
-            this.controlBotonesPaginacion();
-          },
-          error:(error)=>{
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title:'Se produjo un error. Hable con el administrador.',
-              showConfirmButton: false,
-              timer: 1000
-            })
-          }
-        });
+      } else {
+        this.programacionService.buscarProgramacionesDocente(nombre, Number(this.docente.id))
+          .subscribe({
+            next: (resp: Programacion[]) => {
+              this.programaciones = resp;
+              this.totalRegistros = resp.length;
+              this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+              this.controlBotonesPaginacion();
+            },
+            error: (error) => {
+              Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Se produjo un error. Hable con el administrador.',
+                showConfirmButton: false,
+                timer: 1000
+              })
+            }
+          });
       }
     }
-
   }
-
 }

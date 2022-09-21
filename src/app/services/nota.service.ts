@@ -46,23 +46,55 @@ export class NotaService {
     const base = `${base_url}/notas/${id}`;
     return this.http.delete<crudNota>(base, this.headers);
   }
-
   notasProgramacionFechaEvaluacionCiclo(programacionId: number, fecha: string, evaluacionId: number, cicloId: number) {
     const base = `${base_url}/notas/programacion/fecha/evaluacion/ciclo/${programacionId}/${fecha}/${evaluacionId}/${cicloId}`
     return this.http.get<listarNotas>(base, this.headers);
   }
-
+  notasProgramacionFechaEvaluacionCicloCompetencia(programacionId: number, fecha: string, 
+  evaluacionId: number, cicloId: number, competenciaId:number) {
+    const base = `${base_url}/notas/programacion/fecha/evaluacion/ciclo/competencia/${programacionId}/${fecha}/${evaluacionId}/${cicloId}/${competenciaId}`
+    return this.http.get<listarNotas>(base, this.headers);
+  }
   notasMatriculaCicloEvaluacion(matriculaId: number, cicloId: number, evaluacionId: number) {
     const base = `${base_url}/notas/${matriculaId}/${cicloId}/${evaluacionId}`;
     return this.http.get<listarNotas>(base, this.headers);
   }
-
   notasArea(periodoId:number,aulaId:number,areaId:number,cicloId:number,alumnoId:number) {
-    const base = `${base_url}/notas/area/${periodoId}/${aulaId}/${areaId}/${cicloId}/${alumnoId}`
+    const base = `${base_url}/notas/area/${periodoId}/${aulaId}/${areaId}/${cicloId}/${alumnoId}`;
     return this.http.get<listarNotas>(base, this.headers);
   }
-
-
+  notasPeriodo(periodoId:number){
+    const base = `${base_url}/notas/porperiodo/${periodoId}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
+  notasPeriodoAula(periodoId:number, aulaId:number){
+    const base = `${base_url}/notas/reportedos/porperiodoaula/${periodoId}/${aulaId}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
+  notasPeriodoAulaArea(periodoId:number, aulaId:number,areaId:number){
+    const base = `${base_url}/notas/reportetres/porperiodoaulaarea/${periodoId}/${aulaId}/${areaId}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
+  notasPeriodoAulaAreaSubarea(periodoId:number, aulaId:number,areaId:number, subareaId:number){
+    const base = `${base_url}/notas/porperiodoaulaareasubarea/${periodoId}/${aulaId}/${areaId}/${subareaId}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
+  notasPeriodoAulaAreaCiclo(periodoId:number, aulaId:number,areaId:number, cicloId:number){
+    const base = `${base_url}/notas/porperiodoaulaareaciclo/${periodoId}/${aulaId}/${areaId}/${cicloId}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
+  notasPeriodoAulaAreaCicloAlumno(periodoId:number, aulaId:number,areaId:number,cicloId:number,alumnoId:number){
+    const base = `${base_url}/notas/porperiodoaulaareacicloalumno/${periodoId}/${aulaId}/${areaId}/${cicloId}/${alumnoId}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
+  notasHoyLiteral(periodoId:number, fecha:string){
+    const base = `${base_url}/notas/parahoynotasliteral/${periodoId}/${fecha}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
+  notasHoyVigesimal(periodoId:number, fecha:string){
+    const base = `${base_url}/notas/parahoynotasvigesimal/${periodoId}/${fecha}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
   buscarPorSubarea(termino:string){
     const base=`${base_url}/notas/busqueda/${termino}`;
     return this.http.get<any[]>(base,this.headers)
@@ -76,6 +108,15 @@ export class NotaService {
     return busquedas.map(
       nota=>new Nota(nota.matriculaId,nota.evaluacionId,nota.cicloId,nota.valor,nota.fecha)
     );
+  }
+  notasPeriodoAulaCicloAlumno(periodoId:number, aulaId:number, cicloId:number, alumnoId:number){
+    const base = `${base_url}/notas/reportealumno/${periodoId}/${aulaId}/${cicloId}/${alumnoId}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
+
+  notasPeriodoAulaAlumno(periodoId:number, aulaId:number, alumnoId:number){
+    const base = `${base_url}/notas/notasperiodoaulaalumno/${periodoId}/${aulaId}/${alumnoId}`;
+    return this.http.get<listarNotas>(base, this.headers);
   }
 
 }

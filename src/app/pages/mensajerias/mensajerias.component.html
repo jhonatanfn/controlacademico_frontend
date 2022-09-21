@@ -1,0 +1,241 @@
+<div class="row">
+    <div class="col-12 col-sm-4">
+        <div class="list-group mb-3 card-color-primary">
+            <button type="button" class="list-group-item list-group-item-action" data-bs-toggle="modal"
+                data-bs-target="#crear" data-bs-placement="top" (click)="iniciarMensaje()">
+                <i class="bi bi-pen"></i>
+                Nuevo Mensaje
+            </button>
+        </div>
+        <ul class="list-group card-color-primary">
+            <li class="list-group-item d-flex justify-content-between align-items-start cursor {{activo1}}"
+                (click)="activar('rec')">
+                <div class="me-auto fs-6">
+                    <i class="bi bi-envelope-check"></i>
+                    Recibidos
+                </div>
+                <!--<span class="badge bg-secondary rounded-pill">4</span>-->
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start cursor {{activo2}}"
+                (click)="activar('env')">
+                <div class="me-auto fs-6">
+                    <i class="bi bi-send"></i>
+                    Enviados
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start cursor {{activo3}}"
+                (click)="activar('elim')">
+                <div class="me-auto fs-6">
+                    <i class="bi bi-trash"></i>
+                    Eliminados
+                </div>
+            </li>
+        </ul>
+
+    </div>
+    <div class="col-12 col-sm-8">
+        <div class="card mt-3 mt-sm-0 card-color-primary">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-2 buscador">
+                    <div class="input-group">
+                        <span class="input-group-text" id="buscar-algo">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                            aria-describedby="buscar-algo" (keyup)="buscarMensajes(txtTermino.value)" #txtTermino>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-1" *ngIf="cargando">
+                        <div class="alert alert-info text-center" role="alert">
+                            <h6 class="alert-heading">Cargando...</h6>
+                            <div class="spinner-border" role="status">
+                            </div>
+                            <p>Por favor espera</p>
+                        </div>
+                    </div>
+                    <div class="col-12" *ngIf="!cargando">
+                        <div class="alert alert-primary" role="alert" *ngIf="mensajerias.length==0">
+                            No hay registros.
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3" *ngIf="mensajerias.length>0">
+                        <div class="list-group" *ngFor="let mensaje of mensajerias">
+                            <a class="list-group-item list-group-item-action mb-2 cursor" aria-current="true"
+                                [ngClass]="titulo=='Recibidos' ? mensaje.creceptor : mensaje.cemisor">
+                                <div class="d-flex w-100 justify-content-between" data-bs-toggle="modal"
+                                    data-bs-target="#ver" data-bs-placement="top" (click)="verMensaje(mensaje)">
+                                    <h5 class="mb-1">{{mensaje.asunto}}</h5>
+                                    <small>{{mensaje.fecha | date:'dd/MM/yyyy' }}, {{mensaje.hora}}</small>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <small *ngIf="titulo=='Enviados'">Para: {{mensaje.receptor}}</small>
+                                    <small *ngIf="titulo=='Recibidos'">De: {{mensaje.emisor}}</small>
+                                    <small *ngIf="titulo=='Eliminados'">
+                                        De: {{mensaje.emisor}} <br>
+                                        Para: {{mensaje.receptor}}
+                                    </small>
+                                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                        <div class="btn-group" role="group" aria-label="First group">
+                                            <button type="button" class="btn btn-danger"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                title="Eliminar Mensaje" (click)="eliminarMensaje(mensaje)"
+                                                *ngIf="botoncito">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-success"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                title="{{estaleido}}" (click)="NoLeido(mensaje)" *ngIf="botoncito">
+                                                <i class="{{estaleidoicono}}"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-warning"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Restaurar"
+                                                (click)="restaurar(mensaje)" *ngIf="!botoncito">
+                                                <i class="bi bi-arrow-counterclockwise"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-12" *ngIf="mensajerias.length>0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button [disabled]="da" (click)="cambiarPagina(-10)" type="button"
+                                class="btn btn-dark  btn-sm me-2">
+                                <i class="bi bi-arrow-left-square"></i> Anterior
+                            </button>
+                            <button [disabled]="ds" (click)="cambiarPagina(10)" type="button"
+                                class="btn btn-dark  btn-sm">
+                                <i class="bi bi-arrow-right-square"></i> Siguiente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ver" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
+                <h5 class="modal-title" id="staticBackdropLabel">{{mensaje.asunto}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-start">
+                    <div class="d-flex align-items-center gap-2 mb-md-3 mb-2">
+                        <img class="img-fluid imagen-mensaje" [src]="imagenMensaje | imagen" alt="imagen">
+                        <div class="d-flex flex-column">
+                            <h5 class="m-0">{{personaMensaje}}</h5>
+                            <p class="m-0">{{mensaje.emisor}}</p>
+                        </div>
+                    </div>
+                    <small class="m-0"><span>{{mensaje.fecha | date:'dd/MM/yyyy'}}, {{mensaje.hora}}</span></small>
+                </div>
+                <div class="row mt-2 mt-md-0">
+                    <div class="col-12">
+                        <h6>Para: <small>{{mensaje.receptor}}</small></h6>
+                    </div>
+                </div>
+                <div class="row mt-3 mt-md-0">
+                    <p>
+                        {{mensaje.contenido}}
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg"></i> Salir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Nuevo Mensaje</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body mb-0">
+                <div class="mb-3">
+                    <label for="buscaremail" class="form-label">Buscar Email</label>
+                    <ng-select [(ngModel)]="selectedUsuario" (change)="usuarioSeleccionado()" placeholder="Buscar email"
+                        id="buscaremail">
+                        <ng-option *ngFor="let usuario of usuarios" [value]="[usuario.id,usuario.email]">
+                            {{usuario.email}}
+                        </ng-option>
+                    </ng-select>
+                    <div class="form-text text-danger" *ngIf="emails.length==0 && formSubmitted">
+                        Seleccionar un destinatario
+                    </div>
+                </div>
+
+                <div class="mb-0 barra" *ngIf="emails.length>0">
+                    <ul class="list-group" *ngFor="let item of emails">
+                        <li class="list-group-item d-flex justify-content-between align-items-center 
+                        list-group-item-success">
+                            {{item.email}}
+                            <button class="btn btn-danger btn-sm" (click)="eliminarItem(item)">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+
+            <form [formGroup]="mensajeriaForm" autocomplete="off" (submit)="enviarMensaje()">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="asunto" class="form-label">Asunto</label>
+                        <input type="text" class="form-control" id="asunto" formControlName="asunto"
+                            placeholder="Escribir el asunto">
+                        <div class="form-text text-danger" *ngIf="campoRequerido('asunto')">
+                            El campo asunto es requerido
+                        </div>
+                        <div class="form-text text-danger" *ngIf="campoMaxLengh('asunto',20)">
+                            El campo asunto debe tener como maximo 20 caracteres
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contenido" class="form-label">Contenido</label>
+                        <textarea class="form-control" name="contenido" id="contenido" rows="4"
+                            formControlName="contenido" style="height:150px;">
+                        </textarea>
+                        <div class="form-text text-danger" *ngIf="campoRequerido('contenido')">
+                            El campo contenido es requerido
+                        </div>
+                        <div class="form-text text-danger" *ngIf="campoMaxLengh('contenido',255)">
+                            El campo contenido debe tener como maximo 255 caracteres.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
+                        <i class="bi bi-x-lg"></i>
+                        Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-hdd"></i>
+                        Enviar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

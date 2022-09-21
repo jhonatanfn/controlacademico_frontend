@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Docente } from 'src/app/models/docente.model';
-import { Matricula } from 'src/app/models/matricula.model';
+import { Matriculadetalle } from 'src/app/models/matriculadetalle';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
-import { MatriculaService } from 'src/app/services/matricula.service';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class ListaDocenteComponent implements OnInit {
 
-  public titulo: string = 'Tabla Programaciones';
+  public titulo: string = 'Tabla Asignaciones';
   public icono: string = 'bi bi-table';
   public cargando: boolean = true;
   public programaciones: Programacion[] = [];
@@ -26,14 +26,14 @@ export class ListaDocenteComponent implements OnInit {
   public ds: boolean = true;
   public da: boolean = true;
   public docente!: Docente;
-  public matriculas:Matricula[]=[];
+  public matriculadetalles:Matriculadetalle[]=[];
   public periodoseleccionado:any="";
   public periodos:Periodo[]=[];
 
   constructor(private usuarioService: UsuarioService,
     private programacionService: ProgramacionService,
-    private matriculaService:MatriculaService,
-    private periodoService:PeriodoService) {
+    private periodoService:PeriodoService, 
+    private matriculadetalleService:MatriculadetalleService) {
 
       this.periodoService.todo().subscribe({
         next: ({ok,periodos})=>{
@@ -109,18 +109,19 @@ export class ListaDocenteComponent implements OnInit {
   }
 
   matriculasProgramacion(programacion: Programacion) {
-   this.matriculaService.matriculasPorProgramacion(Number(programacion.id))
-   .subscribe(({ok,matriculas})=>{
-     if(ok){
-       this.matriculas= matriculas;
-     }
-   })
+   this.matriculadetalleService.listadoAlumnosProgramacion(Number(programacion.id))
+    .subscribe({
+      next: ({ok,matriculadetalles})=>{
+        if(ok){
+          this.matriculadetalles= matriculadetalles;
+        }
+      }
+    });
   }
 
   buscarProgramaciones(nombre:string){
     
     if(this.periodoseleccionado){
-
       if(nombre.length==0){
         this.listarProgramaciones();
       }else{
@@ -168,7 +169,5 @@ export class ListaDocenteComponent implements OnInit {
         });
       }
     }
-
   }
-
 }

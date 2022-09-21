@@ -1,15 +1,15 @@
 <div class="row">
-    <div class="col-12 col-lg-4">
-        <div class="card contenido-principal">
-            <div class="card-header">
+    <div class="col-12 col-lg-12 mb-3">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo1" [icono]="icono1"></app-headertable>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <form [formGroup]="programacionForm" (submit)="agregarProgramacion2()">
+                        <form [formGroup]="programacionForm" (submit)="agregarProgramacion()">
                             <div class="row">
-                                <div class="col-12 col-md-12">
+                                <div class="col-12 col-md-2">
                                     <div class="mb-3">
                                         <label for="periodoId" class="form-label">Periodo</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -26,7 +26,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-12">
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
                                         <label for="aulaId" class="form-label">Aula</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -41,42 +41,23 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-12 col-md-12">
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
                                         <label for="areaId" class="form-label">Area</label>
                                         <select class="form-select" aria-label="Default select example"
-                                            formControlName="areaId" (change)="listarSubareas()">
+                                            formControlName="areaId">
                                             <option value="">Seleccionar area</option>
                                             <option *ngFor="let area of areas" [value]="[area.id,area.nombre]">
                                                 {{area.nombre}}
                                             </option>
                                         </select>
                                         <div *ngIf="campoRequerido('areaId')" id="areaId" class="form-text text-danger">
-                                            El Area es requerido
+                                            El Area es requerida
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-12">
-                                    <div class="mb-3">
-                                        <label for="subareaId" class="form-label">Subarea</label>
-                                        <select class="form-select" aria-label="Default select example"
-                                            formControlName="subareaId">
-                                            <option value="">Seleccionar subarea</option>
-                                            <option *ngFor="let subarea of subareas"
-                                                [value]="[subarea.id,subarea.nombre]">
-                                                {{subarea.nombre}}
-                                            </option>
-                                        </select>
-                                        <div *ngIf="campoRequerido('subareaId')" id="subareaId"
-                                            class="form-text text-danger">
-                                            El SubArea es requerido
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-12">
+                                <div class="col-12 col-md-4">
                                     <div class="mb-3">
                                         <label for="docenteId" class="form-label">Docente</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -96,12 +77,10 @@
                                     </div>
                                 </div>
                             </div>
-
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-arrow-right-square"></i>
                                 Agregar
                             </button>
-
                         </form>
                     </div>
                 </div>
@@ -109,9 +88,9 @@
         </div>
     </div>
 
-    <div class="col-12 col-lg-8">
-        <div class="card contenido-principal">
-            <div class="card-header">
+    <div class="col-12 col-lg-12">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
             </div>
             <div class="card-body">
@@ -128,7 +107,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class="w70">Periodo</th>
-                                        <th scope="col">Subarea</th>
+                                        <th scope="col">Area</th>
                                         <th scope="col">Aula</th>
                                         <th scope="col">Docente</th>
                                         <th scope="col" class="w70"></th>
@@ -138,7 +117,7 @@
                                     <tr *ngFor="let p of programaciones">
 
                                         <td>{{p.periodoNombre}}</td>
-                                        <td>{{p.subareaNombre}}</td>
+                                        <td>{{p.areaNombre}}</td>
                                         <td>{{p.aulaNombre}}</td>
                                         <td>{{p.docenteNombres}}
                                             {{p.docenteApellidoP}}
@@ -168,5 +147,4 @@
             </div>
         </div>
     </div>
-
 </div>

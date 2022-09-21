@@ -10,6 +10,7 @@ export class Aula{
         public nivel:Nivel,
         public grado:Grado,
         public seccion:Seccion,
+        public tipovalor?:string,
         public id?:number
     ){}
 }

@@ -70,4 +70,13 @@ export class NivelService {
     const base= `${base_url}/niveles/tieneaulas/${nivelId}`;
     return this.http.get<crudNivel>(base,this.headers);
   }
+
+  existeNombreNivel(nivelNombre:string){
+    const base= `${base_url}/niveles/nombrerepetido/${nivelNombre}`;
+    return this.http.get<crudNivel>(base,this.headers);
+  }
+  existeNombreNivelEditar(nivelId:number,nivelNombre:string){
+    const base= `${base_url}/niveles/nombrerepetidoeditar/${nivelId}/${nivelNombre}`;
+    return this.http.get<crudNivel>(base,this.headers);
+  }
 }

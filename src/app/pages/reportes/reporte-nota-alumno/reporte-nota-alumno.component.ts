@@ -112,6 +112,8 @@ export class ReporteNotaAlumnoComponent implements OnInit {
 
     if (this.usuarioService.usuario.role.nombre === "DOCENTE") {
 
+
+      /*
       this.usuarioService.docentePorPersona().subscribe({
         next: ({ ok, docente }) => {
           if (ok) {
@@ -147,6 +149,8 @@ export class ReporteNotaAlumnoComponent implements OnInit {
           }
         }
       });
+      */
+
     }
 
     if (this.usuarioService.usuario.role.nombre === "ADMINISTRADOR") {
@@ -284,7 +288,7 @@ export class ReporteNotaAlumnoComponent implements OnInit {
 
           this.matriculaService.matriculasPeriodoAulaSubareaApoderado(
             Number(arrPeriodos[0]), Number(arrAulas[0]), Number(arrSubareas[0]),
-            Number(this.alumno.apoderadoId)).subscribe({
+            Number(this.alumno.padreId)).subscribe({
               next: ({ ok, matriculas }) => {
                 if (ok) {
                   this.matriculas = matriculas;
@@ -401,6 +405,8 @@ export class ReporteNotaAlumnoComponent implements OnInit {
   }
 
   buscarNotas() {
+
+    /*
     this.formSubmitted = true;
     if (this.repForm.valid) {
       this.datos = [];
@@ -478,6 +484,7 @@ export class ReporteNotaAlumnoComponent implements OnInit {
           }
         });
     }
+    */
   }
 
   getBase64ImageFromURL(url: any) {

@@ -70,4 +70,12 @@ export class GradoService {
     const base= `${base_url}/grados/tieneaulas/${gradoId}`;
     return this.http.get<crudGrado>(base,this.headers);
   }
+  existeNombreGrado(gradoNombre:string){
+    const base= `${base_url}/grados/nombrerepetido/${gradoNombre}`;
+    return this.http.get<crudGrado>(base,this.headers);
+  }
+  existeNombreGradoEditar(gradoId:number,gradoNombre:string){
+    const base= `${base_url}/grados/nombrerepetidoeditar/${gradoId}/${gradoNombre}`;
+    return this.http.get<crudGrado>(base,this.headers);
+  }
 }

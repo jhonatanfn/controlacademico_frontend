@@ -62,10 +62,8 @@ import { ReporteNotaComponent } from './reportes/reporte-nota/reporte-nota.compo
 import { ReporteAsistenciaComponent } from './reportes/reporte-asistencia/reporte-asistencia.component';
 import { ListaMatriculaApoderadoComponent } from './matriculas/apoderado/lista-matricula-apoderado/lista-matricula-apoderado.component';
 import { VerNotaApoderadoComponent } from './matriculas/apoderado/ver-nota-apoderado/ver-nota-apoderado.component';
-import { VerAsistenciaApoderadoComponent } from './matriculas/apoderado/ver-asistencia-apoderado/ver-asistencia-apoderado.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { InstitucionComponent } from './institucion/institucion.component';
-import { VerAsistenciaAlumnoComponent } from './matriculas/alumno/ver-asistencia-alumno/ver-asistencia-alumno.component';
 import { ReporteAnualNotaComponent } from './reportes/reporte-anual-nota/reporte-anual-nota.component';
 import { ReporteAsistenciaRangoComponent } from './reportes/reporte-asistencia-rango/reporte-asistencia-rango.component';
 import { ReporteNotaAlumnoComponent } from './reportes/reporte-nota-alumno/reporte-nota-alumno.component';
@@ -83,6 +81,38 @@ import { HorarioDocenteComponent } from './horarios/docente/horario-docente/hora
 import { RangosComponent } from './rangos/rangos.component';
 import { ReporteNotaAreaComponent } from './reportes/reporte-nota-area/reporte-nota-area.component';
 import { ReporteNotaAreaTotalComponent } from './reportes/reporte-nota-area-total/reporte-nota-area-total.component';
+import { ReporteNotaConsolidadoComponent } from './reportes/reporte-nota-consolidado/reporte-nota-consolidado.component';
+import { NgChartsModule } from 'ng2-charts';
+import { ReporteAsistenciaConsolidadoComponent } from './reportes/reporte-asistencia-consolidado/reporte-asistencia-consolidado.component';
+import { MensajeriasComponent } from './mensajerias/mensajerias.component';
+import { PadresComponent } from './padres/padres.component';
+import { MadresComponent } from './madres/madres.component';
+import { CrearPadreComponent } from './padres/crear-padre/crear-padre.component';
+import { EditarPadreComponent } from './padres/editar-padre/editar-padre.component';
+import { CrearMadreComponent } from './madres/crear-madre/crear-madre.component';
+import { EditarMadreComponent } from './madres/editar-madre/editar-madre.component';
+import { FichaAlumnoComponent } from './alumnos/ficha-alumno/ficha-alumno.component';
+import { CompetenciasComponent } from './competencias/competencias.component';
+import { VerAsistenciaComponent } from './asistencias/alumno/ver-asistencia/ver-asistencia.component';
+import { AuxiliaresComponent } from './auxiliares/auxiliares.component';
+import { CrearAuxiliarComponent } from './auxiliares/crear-auxiliar/crear-auxiliar.component';
+import { EditarAuxiliarComponent } from './auxiliares/editar-auxiliar/editar-auxiliar.component';
+import { ListaAsistenciaComponent } from './asistencias/auxiliar/lista-asistencia/lista-asistencia.component';
+import { CrearAsistenciaAuxiliarComponent } from './asistencias/auxiliar/crear-asistencia-auxiliar/crear-asistencia-auxiliar.component';
+import { EditarAsistenciaAuxiliarComponent } from './asistencias/auxiliar/editar-asistencia-auxiliar/editar-asistencia-auxiliar.component';
+import { EliminarAsistenciaAuxiliarComponent } from './asistencias/auxiliar/eliminar-asistencia-auxiliar/eliminar-asistencia-auxiliar.component';
+import { ConsultarHorarioAuxiliarComponent } from './horarios/auxiliar/consultar-horario-auxiliar/consultar-horario-auxiliar.component';
+import { ConsultarHorarioDocenteComponent } from './auxiliares/consultar-horario-docente/consultar-horario-docente.component';
+import { VerAsistenciaPadreComponent } from './asistencias/padre/ver-asistencia-padre/ver-asistencia-padre.component';
+import { ListaMatriculaMadreComponent } from './matriculas/apoderado/lista-matricula-madre/lista-matricula-madre.component';
+import { VerNotaMadreComponent } from './matriculas/apoderado/ver-nota-madre/ver-nota-madre.component';
+import { VerAsistenciaMadreComponent } from './asistencias/madre/ver-asistencia-madre/ver-asistencia-madre.component';
+import { DirectoresComponent } from './directores/directores.component';
+import { CrearDirectorComponent } from './directores/crear-director/crear-director.component';
+import { EditarDirectorComponent } from './directores/editar-director/editar-director.component';
+import { InformesComponent } from './informes/informes.component';
+import { ApreciacionesComponent } from './apreciaciones/apreciaciones.component';
+
 
 @NgModule({
   declarations: [
@@ -143,9 +173,7 @@ import { ReporteNotaAreaTotalComponent } from './reportes/reporte-nota-area-tota
     ReporteAsistenciaComponent,
     ListaMatriculaApoderadoComponent,
     VerNotaApoderadoComponent,
-    VerAsistenciaApoderadoComponent,
     InstitucionComponent,
-    VerAsistenciaAlumnoComponent,
     ReporteAnualNotaComponent,
     ReporteAsistenciaRangoComponent,
     ReporteNotaAlumnoComponent,
@@ -162,7 +190,37 @@ import { ReporteNotaAreaTotalComponent } from './reportes/reporte-nota-area-tota
     HorarioDocenteComponent,
     RangosComponent,
     ReporteNotaAreaComponent,
-    ReporteNotaAreaTotalComponent
+    ReporteNotaAreaTotalComponent,
+    ReporteNotaConsolidadoComponent,
+    ReporteAsistenciaConsolidadoComponent,
+    MensajeriasComponent,
+    PadresComponent,
+    MadresComponent,
+    CrearPadreComponent,
+    EditarPadreComponent,
+    CrearMadreComponent,
+    EditarMadreComponent,
+    FichaAlumnoComponent,
+    CompetenciasComponent,
+    VerAsistenciaComponent,
+    AuxiliaresComponent,
+    CrearAuxiliarComponent,
+    EditarAuxiliarComponent,
+    ListaAsistenciaComponent,
+    CrearAsistenciaAuxiliarComponent,
+    EditarAsistenciaAuxiliarComponent,
+    EliminarAsistenciaAuxiliarComponent,
+    ConsultarHorarioAuxiliarComponent,
+    ConsultarHorarioDocenteComponent,
+    VerAsistenciaPadreComponent,
+    ListaMatriculaMadreComponent,
+    VerNotaMadreComponent,
+    VerAsistenciaMadreComponent,
+    DirectoresComponent,
+    CrearDirectorComponent,
+    EditarDirectorComponent,
+    InformesComponent,
+    ApreciacionesComponent
   ],
   imports: [
     RouterModule,
@@ -172,7 +230,8 @@ import { ReporteNotaAreaTotalComponent } from './reportes/reporte-nota-area-tota
     PipesModule,
     ComponentsModule,
     FormsModule,
-    NgSelectModule
+    NgSelectModule,
+    NgChartsModule
   ]
 })
 export class PagesModule { }

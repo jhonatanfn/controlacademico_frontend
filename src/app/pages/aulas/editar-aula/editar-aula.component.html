@@ -1,8 +1,7 @@
 <div class="row">
     <div class="col-12 col-lg-6">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <!--Encabezado-->
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
             </div>
             <div class="card-body">
@@ -11,7 +10,6 @@
                         <form [formGroup]="aulaForm" (submit)="actualizarAula()" autocomplete="off">
                             <div class="row">
                                 <div class="col-12 col-md-12">
-
                                     <div class="mb-3">
                                         <label for="nivelId" class="form-label">Nivel</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -26,7 +24,6 @@
                                             El nivel es requerido
                                         </div>
                                     </div>
-
                                     <div class="mb-3">
                                         <label for="gradoId" class="form-label">Grado</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -41,7 +38,6 @@
                                             El grado es requerido
                                         </div>
                                     </div>
-
                                     <div class="mb-3">
                                         <label for="seccionId" class="form-label">Seccion</label>
                                         <select class="form-select" aria-label="Default select example"
@@ -56,7 +52,6 @@
                                             La seccion es requerida
                                         </div>
                                     </div>
-
                                     <div class="mb-3">
                                         <label for="nombre" class="form-label">Nombre</label>
                                         <input type="text" class="form-control" formControlName="nombre" id="nombre"
@@ -67,6 +62,19 @@
                                         <div id="nombre" class="form-text text-danger"
                                             *ngIf="campoMaxLengh('nombre',20)">
                                             El campo nombre debe tener como maximo 40 caracteres
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tipovalor" class="form-label">Tipo Evaluación</label>
+                                        <select class="form-select" name="tipovalor" id="tipovalor" 
+                                        formControlName="tipovalor">
+                                            <option value="">Seleccionar tipo evaluacion</option>
+                                            <option *ngFor="let tipovalor of tipovalores" value="{{tipovalor.id}}">
+                                                {{tipovalor.nombre}}
+                                            </option>
+                                        </select>
+                                        <div id="nombre" class="form-text text-danger" *ngIf="campoRequerido('tipovalor')">
+                                            El campo tipo evaluacion es requerido
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary">

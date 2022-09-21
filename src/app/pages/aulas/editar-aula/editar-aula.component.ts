@@ -24,11 +24,15 @@ export class EditarAulaComponent implements OnInit {
   public secciones: Seccion[] = [];
   public aulaForm!: FormGroup;
   public formSubmitted: boolean = false;
+  public tipovalores: any[] = [
+    { id: 1, nombre: "LITERAL" },
+    { id: 2, nombre: "VIGESIMAL" }
+  ];
 
   constructor(private nivelService: NivelService,
     private gradoService: GradoService, private seccionService: SeccionService,
     private fb: FormBuilder, private aulaService: AulaService,
-    private route:ActivatedRoute) {
+    private route: ActivatedRoute) {
 
     this.nivelService.todo()
       .subscribe(({ niveles }) => {
@@ -45,13 +49,14 @@ export class EditarAulaComponent implements OnInit {
         this.secciones = secciones;
       });
 
-      this.aulaService.obtener(Number(this.route.snapshot.paramMap.get('id')))
-      .subscribe(({ok,aula})=>{
-        if(ok){
+    this.aulaService.obtener(Number(this.route.snapshot.paramMap.get('id')))
+      .subscribe(({ ok, aula }) => {
+        if (ok) {
           this.aulaForm.controls['nombre'].setValue(aula.nombre.toUpperCase());
           this.aulaForm.controls['nivelId'].setValue(aula.nivel.id);
           this.aulaForm.controls['gradoId'].setValue(aula.grado.id);
           this.aulaForm.controls['seccionId'].setValue(aula.seccion.id);
+          this.aulaForm.controls['tipovalor'].setValue(aula.tipovalor);
           this.aulaForm.controls['id'].setValue(aula.id);
         }
       });
@@ -64,7 +69,8 @@ export class EditarAulaComponent implements OnInit {
       nivelId: ['', Validators.required],
       gradoId: ['', Validators.required],
       seccionId: ['', Validators.required],
-      id:['']
+      tipovalor: ['', Validators.required],
+      id: ['']
     });
   }
 
@@ -92,35 +98,52 @@ export class EditarAulaComponent implements OnInit {
     this.formSubmitted = true;
     if (this.aulaForm.valid) {
 
-      Swal.fire({
-        title: 'Actualizar',
-        text: "¿Desea actualizar el aula?",
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Guardar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-
-          this.aulaService.actualizar(this.aulaForm.get('id')?.value,this.aulaForm.value)
-            .subscribe(({ ok, msg, aula }) => {
-              if (ok) {
-                console.log(aula);
-                this.aulaForm.controls['nombre'].setValue(aula.nombre.toUpperCase());
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'success',
-                  title: msg,
-                  showConfirmButton: false,
-                  timer: 1500
-                })
-              }
+      this.aulaService.existeAulaEditar(
+        this.aulaForm.get('nivelId')?.value,
+        this.aulaForm.get('gradoId')?.value,
+        this.aulaForm.get('seccionId')?.value,
+        this.aulaForm.get('id')?.value
+      ).subscribe({
+        next: ({ ok, msg }) => {
+          if (ok) {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'info',
+              title: msg,
+              showConfirmButton: false,
+              timer: 1000
             });
+          } else {
+
+            Swal.fire({
+              title: 'Actualizar',
+              text: "¿Desea actualizar el aula?",
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Actualizar'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.aulaService.actualizar(this.aulaForm.get('id')?.value, this.aulaForm.value)
+                  .subscribe(({ ok, msg, aula }) => {
+                    if (ok) {
+                      this.aulaForm.controls['nombre'].setValue(aula.nombre.toUpperCase());
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                    }
+                  });
+              }
+            })
+          }
         }
-      })
+      });
     }
   }
-
 }

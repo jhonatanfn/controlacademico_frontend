@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-12 col-md-6">
+
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between mb-2 mt-2">
+                        <img [src]="alumno_img | imagen" class="rounded-circle mt-4 border border-2 me-2" alt=""
+                            style="width: 95px; height: 95px;">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <h6 class="card-title">DNI:</h6>
+                                <p class="card-text">{{alumno_dni}}</p>
+                                <h6 class="card-title">Nombres y Apellidos:</h6>
+                                <p class="card-text">
+                                    {{alumno_nombres_apellidos}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-success me-2" [routerLink]="['/dashboard/alumnos/editar', alumno_id]">
+                            <i class="bi bi-pen"></i>
+                            Editar
+                        </button>
+                        <button class="btn btn-primary" (click)="generatePDF('OPEN')">
+                            <i class="bi bi-printer"></i>
+                            Imprimir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,28 +1,31 @@
 <div class="row">
     <div class="col-12 col-lg-12">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <!--Encabezado-->
-                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-            </div>
-            <div class="card-body">
-                <!-- Bucador y boto nuevo-->
-                <div class="row">
-                    <div class="col-12 col-lg-2">
-                        <div class="mb-3">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center
+                gap-3 gap-md-0">
+                    <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                    <div class="d-flex">
+                        <div class="mb-0 me-2">
                             <select class="form-select" aria-label="Default select example"
-                                [(ngModel)]="periodoseleccionado" 
-                                (change)="listarProgramaciones()">
-                                <option value="">Seleccionar Periodo</option>
+                                [(ngModel)]="periodoseleccionado" (change)="listarProgramaciones()">
+                                <option value="">TODOS</option>
                                 <option *ngFor="let periodo of periodos" [value]="periodo.id">
                                     {{periodo.nombre}}
                                 </option>
                             </select>
                         </div>
+                        <a type="button" class="d-flex btn btn-primary" routerLink="crear">
+                            <i class="bi bi-plus-square me-2"></i>
+                            Nuevo</a>
                     </div>
-                    <div class="col-12 col-lg-10">
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-lg-12">
                         <div class="d-flex align-items-start mb-2 buscador">
-                            <div class="input-group me-1">
+                            <div class="input-group me-0">
                                 <span class="input-group-text" id="buscar-algo">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-search" viewBox="0 0 16 16">
@@ -30,13 +33,10 @@
                                             d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                                     </svg>
                                 </span>
-                                <input type="search" class="form-control" placeholder="Buscar"
-                                    aria-label="Buscar" aria-describedby="buscar-algo"
-                                    (keyup)="buscarMatriculas(txtnombre.value)" #txtnombre>
+                                <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                                    aria-describedby="buscar-algo" (keyup)="buscarMatriculas(txtnombre.value)"
+                                    #txtnombre>
                             </div>
-                            <a type="button" class="d-flex btn btn-primary" routerLink="crear">
-                                <i class="bi bi-plus-square me-2"></i>
-                                Nuevo</a>
                         </div>
                     </div>
                 </div>
@@ -61,10 +61,10 @@
                             <tr>
                                 <th scope="col" class="w70">N°</th>
                                 <th scope="col">Periodo</th>
-                                <th scope="col">Subarea</th>
                                 <th scope="col">Aula</th>
+                                <th scope="col">Area</th>
                                 <th scope="col">Docente</th>
-                                <th scope="col">N° Matriculas</th>
+                                <th scope="col">N° Inscritos</th>
                                 <th scope="col" class="w100"></th>
                             </tr>
                         </thead>
@@ -72,8 +72,8 @@
                             <tr *ngFor="let programacion of programaciones; let i=index">
                                 <th>{{desde+i+1}}</th>
                                 <td>{{programacion.periodo?.nombre | uppercase}}</td>
-                                <td>{{programacion.subarea?.nombre | uppercase}}</td>
                                 <td>{{programacion.aula?.nombre | uppercase}}</td>
+                                <td>{{programacion.area?.nombre | uppercase}}</td>
                                 <td>{{programacion.docente?.persona?.nombres | uppercase}}
                                     {{programacion.docente?.persona?.apellidopaterno | uppercase}}
                                     {{programacion.docente?.persona?.apellidomaterno | uppercase}}
@@ -81,18 +81,14 @@
                                 <td>{{programacion.numeromat}} de {{programacion.numeromaxmat}}</td>
                                 <td>
                                     <div class="btn-group text-center">
-                                        <button type="button" class="btn btn-success me-1"
-                                        data-bs-placement="top"
-                                        title="Editar" 
-                                            [routerLink]="['editar',programacion.id]">
+                                        <button type="button" class="btn btn-success me-1" data-bs-placement="top"
+                                            title="Editar" [routerLink]="['editar',programacion.id]">
                                             <span>
                                                 <i class="bi bi-pen"></i>
                                             </span>
                                         </button>
-                                        <button type="button" class="btn btn-danger"
-                                        data-bs-placement="top"
-                                        title="Eliminar" 
-                                            (click)="eliminarProgramacion(programacion)">
+                                        <button type="button" class="btn btn-danger" data-bs-placement="top"
+                                            title="Eliminar" (click)="eliminarProgramacion(programacion)">
                                             <span>
                                                 <i class="bi bi-x-circle"></i>
                                             </span>
@@ -103,11 +99,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex align-items-start" *ngIf="!cargando">
-                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
-                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
-                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
-                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                <div class="d-flex justify-content-md-between align-items-center" *ngIf="!cargando">
+                    <button [disabled]="da" (click)="cambiarPagina(-5)" type="button" class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
+                    <button [disabled]="ds" (click)="cambiarPagina(5)" type="button" class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
                 </div>
             </div>
         </div>

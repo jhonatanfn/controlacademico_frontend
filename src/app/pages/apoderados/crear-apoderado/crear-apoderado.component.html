@@ -3,15 +3,15 @@
         <form [formGroup]="apoderadoForm" (ngSubmit)="guardarApoderado()" autocomplete="off">
             <div class="row">
                 <div class="col-12 col-lg-6">
-                    <div class="card contenido-principal">
-                        <div class="card-header">
-                            <!--Encabezado-->
+                    <div class="card card-color-primary contenido-principal mt-0">
+                        <div class="card-header card-color-header">
                             <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="row">
+                                        <!--
                                         <div class="col-12 col-md-6">
                                             <div class="mb-3">
                                                 <label for="dni" class="form-label">Tipo Documento</label>
@@ -28,7 +28,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6">
+                                        -->
+                                        <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="dni" class="form-label">N° Documento</label>
                                                 <input type="text" class="form-control" formControlName="numero"
@@ -54,7 +55,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="nombre" class="form-label">Nombres</label>
                                                 <input type="text" class="form-control" formControlName="nombres"
@@ -69,7 +70,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="apellidopaterno" class="form-label">Apellido Paterno</label>
                                                 <input type="text" class="form-control"
@@ -87,7 +88,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="apellidomaterno" class="form-label">Apellido Materno</label>
                                                 <input type="text" class="form-control"
@@ -103,7 +104,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-12 col-md-12">
                                             <div class="mb-3">
                                                 <label for="telefono" class="form-label">Teléfono</label>
                                                 <input type="text" class="form-control" formControlName="telefono"

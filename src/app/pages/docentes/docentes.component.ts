@@ -121,7 +121,7 @@ export class DocentesComponent implements OnInit {
     if (termino.length == 0) {
       this.listarDocentes();
     } else {
-      this.docenteService.buscarNombres(termino)
+      this.docenteService.buscar(termino)
         .subscribe((resp: Docente[]) => {
           this.docentes = resp;
           this.totalRegistros = resp.length;

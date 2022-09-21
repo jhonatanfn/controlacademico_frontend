@@ -1,42 +1,19 @@
 <div class="row">
-    <div class="col-12 col-lg-3">
-        <div class="col-12 col-lg-12">
-            <div class="card contenido-principal">
-                <div class="card-header">
-                    <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+    <div class="col-12 col-lg-9 mb-3 mb-lg-0">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <div class="d-flex justify-content-between">
+                    <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
+                        (click)="crearMaterial()">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Crear
+                    </button>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card w-100">
-                                <div class="card-body">
-                                    <h6 class="card-title">Periodo:</h6>
-                                    <p class="card-text"> {{ periodonombre | uppercase }}</p>
-                                    <h6 class="card-title">Aula:</h6>
-                                    <p class="card-text">{{ aulanombre | uppercase }}</p>
-                                    <h6 class="card-title">Subarea:</h6>
-                                    <p class="card-text"> {{ subareanombre | uppercase }}</p>
-                                    <h6 class="card-title">Docente:</h6>
-                                    <p class="card-text"> {{ docentenombre | uppercase }}</p>
-                                    <h6 class="card-title">Total de Materiales:</h6>
-                                    <p class="card-text"> {{ total }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-lg-9">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
             </div>
             <div class="card-body">
                 <div class="d-flex align-items-start mb-2 buscador">
-                    <div class="input-group me-1">
+                    <div class="input-group me-0">
                         <span class="input-group-text" id="buscar-algo">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-search" viewBox="0 0 16 16">
@@ -47,13 +24,7 @@
                         <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
                             aria-describedby="buscar-algo" (keyup)="buscarMaterial(txtTermino.value)" #txtTermino>
                     </div>
-                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
-                        (click)="crearMaterial()">
-                        <i class="bi bi-plus-square me-2"></i>
-                        Crear
-                    </button>
                 </div>
-
                 <div class="mb-1" *ngIf="cargando">
                     <div class="alert alert-info text-center" role="alert">
                         <h6 class="alert-heading">Cargando...</h6>
@@ -115,12 +86,61 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div class="d-flex align-items-start" *ngIf="!cargando">
+                <div class="d-flex justify-content-between align-items-start" *ngIf="!cargando">
                     <button [disabled]="da" (click)="cambiarPagina(-6)" type="button"
-                        class="btn btn-secondary  btn-sm me-2">Anterior</button>
+                        class="btn btn-dark  btn-sm me-2">
+                        <i class="bi bi-arrow-left-square"></i> Anterior
+                    </button>
                     <button [disabled]="ds" (click)="cambiarPagina(6)" type="button"
-                        class="btn btn-secondary  btn-sm">Siguiente</button>
+                        class="btn btn-dark  btn-sm">
+                        <i class="bi bi-arrow-right-square"></i> Siguiente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-3">
+        <div class="col-12 col-lg-12">
+            <div class="card card-color-primary contenido-principal mt-0">
+                <div class="card-header card-color-header">
+                    <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                </div>
+                <div class="card-body">
+
+                    <ol class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Periodo</div>
+                                {{ periodonombre | uppercase}}
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Aula</div>
+                                {{ aulanombre | uppercase}}
+                            </div>
+                           
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Area</div>
+                                {{ areanombre | uppercase}}
+                            </div>
+                           
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Docente</div>
+                                {{ docentenombre | uppercase}}
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Total de Materiales:</div>
+                                {{ total}}
+                            </div>
+                        </li>
+                    </ol>
                 </div>
             </div>
         </div>
@@ -130,16 +150,18 @@
 <div class="modal fade" id="detalle" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card-color-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Detalle Material</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
                 <div class="d-flex flex-column flex-lg-row justify-content-start">
+                    <!--
                     <img [src]="material?.programacion?.subarea?.area?.img! | imgarea" alt="imagen"
                         class="imagen me-3 mb-2">
+                    -->
                     <div>
                         <h6>Titulo:</h6>
                         <p>{{material?.titulo}}</p>
@@ -170,8 +192,8 @@
 <div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card-color-primary">
+            <div class="modal-header card.card-color-header">
                 <h5 class="modal-title" id="staticBackdropLabel">{{titulo}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

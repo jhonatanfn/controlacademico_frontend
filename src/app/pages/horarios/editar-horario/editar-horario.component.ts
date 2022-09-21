@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Area } from 'src/app/models/area.model';
 import { Aula } from 'src/app/models/aula.model';
 import { Hora } from 'src/app/models/hora.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { Subarea } from 'src/app/models/subarea.model';
+import { AreaService } from 'src/app/services/area.service';
 import { AulaService } from 'src/app/services/aula.service';
 import { HoraService } from 'src/app/services/hora.service';
 import { HorarioService } from 'src/app/services/horario.service';
@@ -26,12 +28,12 @@ export class EditarHorarioComponent implements OnInit {
   public icono: string = 'bi bi-pen';
   public titulo2: string = 'Horarios';
   public icono2: string = 'bi bi-calendar-check';
-  public titulo3: string = 'Resumen';
+  public titulo3: string = 'Datos del Horario';
   public icono3: string = 'bi bi-card-checklist';
   public horarioForm!: FormGroup;
   public periodos: Periodo[] = [];
   public aulas: Aula[] = [];
-  public subareas: Subarea[] = [];
+  public areas: Area[] = [];
   public dias: any[] = [];
   public horas: Hora[] = [];
   public formSubmitted: boolean = false;
@@ -50,7 +52,7 @@ export class EditarHorarioComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private periodoService: PeriodoService, private aulaService: AulaService,
-    private subareaService: SubareaService, private usuarioService: UsuarioService,
+    private areaService: AreaService, private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
     private programacionService: ProgramacionService, private router: Router,
     private route: ActivatedRoute) {
@@ -72,10 +74,10 @@ export class EditarHorarioComponent implements OnInit {
           }
         }
       });
-      this.subareaService.todo().subscribe({
-        next: ({ ok, subareas }) => {
+      this.areaService.todo().subscribe({
+        next: ({ ok, areas }) => {
           if (ok) {
-            this.subareas = subareas;
+            this.areas = areas;
           }
         }
       });
@@ -139,7 +141,7 @@ export class EditarHorarioComponent implements OnInit {
                     id: resultado.id,
                     dia: objd,
                     hora: objh,
-                    subareaId: resultado.subareaId,
+                    areaId: resultado.areaId,
                     programacionId: resultado.programacionId
                   }
                   this.datos.push(objeto);
@@ -170,14 +172,14 @@ export class EditarHorarioComponent implements OnInit {
   obtenerObjetoHorario(vector: any[], dia: string, hora: number) {
     let retorno = {
       id: 0,
-      subareaId: 0,
+      areaId: 0,
       programacionId: 0
     };
     vector.forEach(item => {
       if (item.dia === dia && item.horaId === hora) {
         retorno = {
           id: item.id,
-          subareaId: item.programacion.subarea.id,
+          areaId: item.programacion.area.id,
           programacionId: item.programacion.id
         }
       }
@@ -185,10 +187,10 @@ export class EditarHorarioComponent implements OnInit {
     return retorno;
   }
 
-  obtenerProgramacion(vector: any[], periodo: number, aula: number, subarea: number) {
+  obtenerProgramacion(vector: any[], periodo: number, aula: number, area: number) {
     let retorno = 0;
     vector.forEach(objeto => {
-      if (objeto.periodoId === periodo && objeto.aulaId === aula && objeto.subareaId === subarea) {
+      if (objeto.periodoId === periodo && objeto.aulaId === aula && objeto.areaId === area) {
         retorno = objeto.id;
       }
     });
@@ -229,7 +231,7 @@ export class EditarHorarioComponent implements OnInit {
                   programacionId: this.obtenerProgramacion(this.programaciones,
                     Number(arrperiodos[0]),
                     Number(this.horarioForm.get('aulaId')?.value),
-                    Number(dato.subareaId))
+                    Number(dato.areaId))
                 }
                 this.datosSave.push(horario);
               });
@@ -304,7 +306,7 @@ export class EditarHorarioComponent implements OnInit {
             .subscribe({
               next: ({ ok, horario }) => {
                 if (ok) {
-                  dato.subareaId = horario.programacion?.subarea?.id;
+                  dato.subareaId = horario.programacion?.area?.id;
                   if (dato.id != horario.id) {
                     Swal.fire({
                       position: 'top-end',

@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Area } from 'src/app/models/area.model';
 import { Aula } from 'src/app/models/aula.model';
 import { Hora } from 'src/app/models/hora.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
-import { Subarea } from 'src/app/models/subarea.model';
+import { AreaService } from 'src/app/services/area.service';
 import { AulaService } from 'src/app/services/aula.service';
 import { HoraService } from 'src/app/services/hora.service';
 import { HorarioService } from 'src/app/services/horario.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
-import { SubareaService } from 'src/app/services/subarea.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 
@@ -29,7 +29,7 @@ export class CrearHorarioComponent implements OnInit {
   public horarioForm!: FormGroup;
   public periodos: Periodo[] = [];
   public aulas: Aula[] = [];
-  public subareas: Subarea[] = [];
+  public areas: Area[] = [];
   public dias: any[] = [];
   public horas: Hora[] = [];
   public formSubmitted: boolean = false;
@@ -43,7 +43,7 @@ export class CrearHorarioComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private periodoService: PeriodoService, private aulaService: AulaService,
-    private subareaService: SubareaService, private usuarioService: UsuarioService,
+    private areaService: AreaService, private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
     private programacionService: ProgramacionService,private router:Router) {
 
@@ -63,10 +63,10 @@ export class CrearHorarioComponent implements OnInit {
           }
         }
       });
-      this.subareaService.todo().subscribe({
-        next: ({ ok, subareas }) => {
+      this.areaService.todo().subscribe({
+        next: ({ ok, areas }) => {
           if (ok) {
-            this.subareas = subareas;
+            this.areas = areas;
           }
         }
       });
@@ -76,7 +76,7 @@ export class CrearHorarioComponent implements OnInit {
             this.horas = horas;
           }
         }
-      })
+      });
     }
   }
 
@@ -115,7 +115,7 @@ export class CrearHorarioComponent implements OnInit {
                   let objeto = {
                     dia: objd,
                     hora: objh,
-                    subareaId: 0,
+                    areaId: 0,
                     programacionId: 0
                   }
                   this.datos.push(objeto);
@@ -142,10 +142,10 @@ export class CrearHorarioComponent implements OnInit {
     }
   }
 
-  obtenerProgramacion(vector: any[], periodo: number, aula: number, subarea: number) {
+  obtenerProgramacion(vector: any[], periodo: number, aula: number, area: number) {
     let retorno = 0;
     vector.forEach(objeto => {
-      if (objeto.periodoId === periodo && objeto.aulaId === aula && objeto.subareaId === subarea) {
+      if (objeto.periodoId === periodo && objeto.aulaId === aula && objeto.areaId === area) {
         retorno = objeto.id;
       }
     });
@@ -183,7 +183,7 @@ export class CrearHorarioComponent implements OnInit {
                   horaId: dato.hora.id,
                   tipoId: dato.hora.tipo,
                   programacionId: this.obtenerProgramacion(this.programaciones,
-                    Number(arrperiodos[0]), Number(arraulas[0]), Number(dato.subareaId))
+                    Number(arrperiodos[0]), Number(arraulas[0]), Number(dato.areaId))
                 }
                 this.datosSave.push(horario);
               });
@@ -251,17 +251,17 @@ export class CrearHorarioComponent implements OnInit {
     this.horarioService.horarioDuplicado(
       Number(arrperiodos[0]),
       Number(arraulas[0]),
-      Number(dato.subareaId),
+      Number(dato.areaId),
       dato.dia.nombre,
       dato.hora.id
     ).subscribe({
       next: ({ ok }) => {
         if (ok) {
-          dato.subareaId = 0;
+          dato.areaId = 0;
           Swal.fire({
             position: 'top-end',
             icon: 'info',
-            title: "No es posible registrar la subarea.",
+            title: "No es posible registrar el area.",
             showConfirmButton: false,
             timer: 1000
           });
@@ -269,5 +269,4 @@ export class CrearHorarioComponent implements OnInit {
       }
     });
   }
-
 }

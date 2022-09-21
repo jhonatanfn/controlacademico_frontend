@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute} from '@angular/router';
-import * as moment from 'moment';
+import { ActivatedRoute } from '@angular/router';
 import { Ciclo } from 'src/app/models/ciclo.model';
+import { Competencia } from 'src/app/models/competencia.model';
 import { Evaluacion } from 'src/app/models/evaluacion.model';
-import { Matricula } from 'src/app/models/matricula.model';
+import { Matriculadetalle } from 'src/app/models/matriculadetalle';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { CicloService } from 'src/app/services/ciclo.service';
+import { CompetenciaService } from 'src/app/services/competencia.service';
 import { EvaluacionService } from 'src/app/services/evaluacion.service';
-import { MatriculaService } from 'src/app/services/matricula.service';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
 import { NotaService } from 'src/app/services/nota.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import Swal from 'sweetalert2';
@@ -25,28 +26,40 @@ export class CrearComponent implements OnInit {
   public icono: string = 'bi bi-plus-square';
   public titulo2: string = 'Tabla Alumnos';
   public icono2: string = 'bi bi-table';
-  public titulo3: string = 'Resumen';
+  public titulo3: string = 'Datos de la Asignación';
   public icono3: string = 'bi bi-card-checklist';
   public notaForm!: FormGroup;
   public periodos: Periodo[] = [];
   public programaciones: Programacion[] = [];
   public ciclos: Ciclo[] = [];
   public evaluaciones: Evaluacion[] = [];
-  public matriculas: Matricula[] = [];
+  public matriculadetalles: Matriculadetalle[] = [];
+  public competencias: Competencia[] = [];
   public datos: any[] = [];
   public formSubmitted: boolean = false;
+  public periodonombre: string = "";
+  public aulanombre: string = "";
+  public areanombre: string = "";
+  public docentenombre: string = "";
+  public cargando: boolean = false;
 
-  public periodonombre:string="";
-  public aulanombre:string="";
-  public subareanombre:string="";
-  public areanombre:string="";
-  public docentenombre:string="";
-  public cargando:boolean=  false;
+  public literal: boolean = false;
+  public vigesimal: boolean = false;
+  public valordefecto: string = "";
+  public letras: any = [
+    { id: 1, nombre: "AD" },
+    { id: 2, nombre: "A" },
+    { id: 3, nombre: "B" },
+    { id: 4, nombre: "C" },
+    { id: 5, nombre: "-" },
+  ];
 
-  constructor(private fb: FormBuilder,private cicloService: CicloService,
-    private evaluacionService: EvaluacionService, private matriculaService: MatriculaService,
+  constructor(private fb: FormBuilder, private cicloService: CicloService,
+    private evaluacionService: EvaluacionService,
     private notaService: NotaService, private route: ActivatedRoute,
-    private programacionService:ProgramacionService) {
+    private programacionService: ProgramacionService,
+    private matriculadetalleService: MatriculadetalleService,
+    private competenciaService: CompetenciaService) {
 
     this.cicloService.listar().subscribe(({ ok, ciclos }) => {
       if (ok) {
@@ -59,28 +72,34 @@ export class CrearComponent implements OnInit {
       }
     });
 
-    this.programacionService.obtener( Number(this.route.snapshot.paramMap.get('id')) )
-    .subscribe({
-      next: ({ok,programacion})=>{
-        if(ok){
-          this.periodonombre= programacion.periodo?.nombre || "";
-          this.aulanombre= programacion.aula?.nombre || "";
-          this.subareanombre= programacion.subarea?.nombre || "";
-          this.docentenombre= programacion.docente?.persona?.apellidopaterno+" "+
-          programacion.docente?.persona?.apellidomaterno+" "+
-          programacion.docente?.persona?.nombres;
-          this.areanombre= programacion.subarea?.area.nombre || "";
+    this.programacionService.obtener(Number(this.route.snapshot.paramMap.get('id')))
+      .subscribe({
+        next: ({ ok, programacion }) => {
+          if (ok) {
+            this.periodonombre = programacion.periodo?.nombre || "";
+            this.aulanombre = programacion.aula?.nombre || "";
+            this.areanombre = programacion.area?.nombre || "";
+            this.docentenombre = programacion.docente?.persona?.apellidopaterno + " " +
+              programacion.docente?.persona?.apellidomaterno + " " +
+              programacion.docente?.persona?.nombres;
+            this.competenciaService.competenciasArea(Number(programacion.area?.id)).subscribe({
+              next: ({ ok, competencias }) => {
+                if (ok) {
+                  this.competencias = competencias;
+                }
+              }
+            });
+          }
         }
-      }
-    });
-
+      });
   }
 
   ngOnInit(): void {
-    this.buscarMatriculas();
     this.notaForm = this.fb.group({
       cicloId: ['', Validators.required],
-      evaluacionId: ['', Validators.required]
+      evaluacionId: ['', Validators.required],
+      competenciaId: ['', Validators.required],
+      areaId: ['']
     });
   }
   campoRequerido(campo: string) {
@@ -91,26 +110,42 @@ export class CrearComponent implements OnInit {
     }
   }
 
-
   buscarMatriculas() {
-    this.cargando= true;
-    this.matriculaService.matriculasPorProgramacion(Number(this.route.snapshot.paramMap.get('id')))
-      .subscribe(({ ok, matriculas }) => {
-        if (ok) {
-          this.matriculas = matriculas;
-          this.matriculas.forEach(matricula => {
-            this.datos.push({
-              matricula: matricula,
-              matriculaId: matricula.id,
-              valor: 0,
-              cicloId: this.notaForm.controls['cicloId'].value,
-              evaluacionId: this.notaForm.controls['evaluacionId'].value,
+    this.formSubmitted = true;
+    if (this.notaForm.valid) {
+      this.cargando = true;
+      let arrCompetencia = (this.notaForm.get('competenciaId')?.value).split(',');
+      this.datos = [];
+      this.matriculadetalleService.matriculadetallesProgramacion(
+        Number(this.route.snapshot.paramMap.get('id')))
+        .subscribe(({ ok, matriculadetalles }) => {
+          if (ok) {
+            this.matriculadetalles = matriculadetalles;
+            let tipovalor = this.matriculadetalles[0].programacion?.aula?.tipovalor;
+            if (tipovalor == "1") {
+              this.literal = true;
+              this.vigesimal = false;
+              this.valordefecto = "-";
+            } else {
+              this.literal = false;
+              this.vigesimal = true;
+              this.valordefecto = "0";
+            }
+            this.matriculadetalles.forEach(matriculadetalle => {
+              this.datos.push({
+                matriculadetalle: matriculadetalle,
+                matriculadetalleId: matriculadetalle.id,
+                valor: this.valordefecto,
+                cicloId: this.notaForm.controls['cicloId'].value,
+                evaluacionId: this.notaForm.controls['evaluacionId'].value,
+                competenciaId: arrCompetencia[0],
+                competenciadescripcion: arrCompetencia[1]
+              });
             });
-          });
-        }
-        this.cargando= false;
-      });
-
+          }
+          this.cargando = false;
+        });
+    }
   }
 
   validacionDatos() {
@@ -126,13 +161,10 @@ export class CrearComponent implements OnInit {
 
   guardarNotas() {
     this.formSubmitted = true;
- 
     if (this.notaForm.valid) {
-
       if (this.validacionDatos()) {
         Swal.fire('Ingresar las notas correctamente.');
       } else {
-
         Swal.fire({
           title: 'Guardar',
           text: "¿Desea guardar las notas?",
@@ -144,33 +176,35 @@ export class CrearComponent implements OnInit {
           confirmButtonText: 'Guardar'
         }).then((result) => {
           if (result.isConfirmed) {
-
-            const fecha=moment().format("YYYY-MM-DD");
-
             this.datos.forEach(dato => {
-
-              dato.cicloId = this.notaForm.controls['cicloId'].value;
-              dato.evaluacionId = this.notaForm.controls['evaluacionId'].value;
-              dato.fecha= fecha;
-              
               this.notaService.crear(dato)
                 .subscribe(({ ok }) => {
                   if (ok) {
                   }
                 });
-
             });
             Swal.fire({
               position: 'top-end',
               icon: 'success',
               title: 'Registro guardado exitosamente',
               showConfirmButton: false,
-              timer: 1500
-            })
+              timer: 1000
+            });
+            this.resetear();
           }
-        })
+        });
       }
     }
+  }
+
+  resetear() {
+    this.notaForm.controls['cicloId'].setValue('');
+    this.notaForm.controls['evaluacionId'].setValue('');
+    this.notaForm.controls['competenciaId'].setValue('');
+    this.notaForm.controls['areaId'].setValue('');
+    this.datos = [];
+    this.formSubmitted= false;
+    this.cargando= false;
   }
 
   numberOnly(event: any): boolean {
@@ -179,7 +213,6 @@ export class CrearComponent implements OnInit {
       return false;
     }
     return true;
-
   }
 
 }

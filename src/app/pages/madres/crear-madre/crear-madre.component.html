@@ -1,0 +1,167 @@
+<div class="row">
+    <div class="col-12">
+        <form [formGroup]="madreForm" (ngSubmit)="guardarMadre()" autocomplete="off">
+            <div class="row">
+                <div class="col-12 col-lg-12">
+                    <div class="card card-color-primary contenido-principal mt-0">
+                        <div class="card-header card-color-header">
+                            <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="dni" class="form-label">DNI</label>
+                                                <input type="text" class="form-control" formControlName="dni" 
+                                                id="dni" aria-describedby="dni"  (keyup)="validaDNI()">
+                                                <div id="dni" class="form-text text-danger"
+                                                    *ngIf="campoRequerido('dni')">
+                                                    El campo dni es requerido
+                                                </div>
+                                                <div id="dni" class="form-text text-danger"
+                                                    *ngIf="campoMaxLengh('dni',8)">
+                                                    El campo dni debe tener 8 caracteres
+                                                </div>
+                                                <div id="dni" class="form-text text-danger"
+                                                    *ngIf="campoMinLength('dni',8)">
+                                                    El campo dni debe tener 8 caracteres
+                                                </div>
+                                                <div id="dni" class="form-text text-danger" *ngIf="campoNumeros('dni')">
+                                                    Solo se aceptan numeros
+                                                </div>
+                                                <div id="dni" class="form-text text-danger" *ngIf="dnirepetido">
+                                                    El dni ya se encuentra registrado
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="nombre" class="form-label">Nombres</label>
+                                                <input type="text" class="form-control" formControlName="nombres"
+                                                    id="nombres" aria-describedby="nombres">
+                                                <div id="nombres" class="form-text text-danger"
+                                                    *ngIf="campoRequerido('nombres')">
+                                                    El campo nombres es requerido
+                                                </div>
+                                                <div id="nombres" class="form-text text-danger"
+                                                    *ngIf="campoMaxLengh('nombres',50)">
+                                                    El campo nombres debe tener como maximo 50 caracteres
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="apellidopaterno" class="form-label">Apellido Paterno</label>
+                                                <input type="text" class="form-control"
+                                                    formControlName="apellidopaterno" id="apellidopaterno"
+                                                    aria-describedby="apellidopaterno">
+                                                <div id="apellidopaterno" class="form-text text-danger"
+                                                    *ngIf="campoRequerido('apellidopaterno')">
+                                                    El campo apellido paterno es requerido
+                                                </div>
+                                                <div id="apellidopaterno" class="form-text text-danger"
+                                                    *ngIf="campoMaxLengh('apellidopaterno',20)">
+                                                    El campo apellido paterno debe tener como maximo 20 caracteres
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="apellidomaterno" class="form-label">Apellido Materno</label>
+                                                <input type="text" class="form-control"
+                                                    formControlName="apellidomaterno" id="apellidomaterno"
+                                                    aria-describedby="apellidomaterno">
+                                                <div id="apellidomaterno" class="form-text text-danger"
+                                                    *ngIf="campoRequerido('apellidomaterno')">
+                                                    El campo apellido materno es requerido
+                                                </div>
+                                                <div id="apellidomaterno" class="form-text text-danger"
+                                                    *ngIf="campoMaxLengh('apellidomaterno',20)">
+                                                    El campo apellido materno debe tener como maximo 20 caracteres
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="sexo" class="form-label">Sexo</label>
+                                                <select class="form-select" aria-label="Default select example"
+                                                    formControlName="sexo">
+                                                    <option value="">Seleccionar sexo</option>
+                                                    <option *ngFor="let sexo of sexos" [value]="sexo.id">
+                                                        {{sexo.nombre}}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="campoRequerido('sexo')" id="sexo"
+                                                    class="form-text text-danger">
+                                                    El campo sexo es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="fechanacimiento" class="form-label">Fecha Nacimiento</label>
+                                                <input type="date" class="form-control"
+                                                    formControlName="fechanacimiento" id="telefono"
+                                                    aria-describedby="fechanacimiento">
+                                                <div *ngIf="campoRequerido('fechanacimiento')" id="sexo"
+                                                    class="form-text text-danger">
+                                                    El campo fecha nacimiento es requerido
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="telefono" class="form-label">Teléfono</label>
+                                                <input type="text" class="form-control" formControlName="telefono"
+                                                    id="telefono" aria-describedby="telefono">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="nacionalidad" class="form-label">Nacionalidad</label>
+                                                <input type="text" class="form-control" formControlName="nacionalidad"
+                                                    id="nacionalidad" aria-describedby="nacionalidad">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="distrito" class="form-label">Distrito</label>
+                                                <input type="text" class="form-control" formControlName="distrito"
+                                                    id="distrito" aria-describedby="distrito">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <div class="mb-3">
+                                                <label for="correo" class="form-label">Correo Electrónico</label>
+                                                <input type="text" class="form-control" formControlName="correo"
+                                                    id="correo" aria-describedby="correo">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="mb-3">
+                                                <label for="domicilio" class="form-label">Domicilio</label>
+                                                <input type="text" class="form-control" formControlName="domicilio"
+                                                    id="domicilio" aria-describedby="domicilio">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-hdd"></i>
+                                        Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

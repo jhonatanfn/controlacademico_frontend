@@ -1,9 +1,9 @@
 <div class="row">
-    <div class="col-12 col-lg-3">
+    <div class="col-12 col-lg-3 mb-3 mb-lg-0">
         <div class="row">
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-header">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
                         <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
                     </div>
                     <div class="card-body">
@@ -43,37 +43,31 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-12" *ngIf="datos.length>0">
-                <div class="card contenido-principal">
-                    <div class="card-header">
-                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card w-100">
-                                    <div class="card-body">
-                                        <h6 class="card-title">Periodo:</h6>
-                                        <p class="card-text"> {{ periodonombre | uppercase }}</p>                                  
-                                        <h6 class="card-title">Docente:</h6>
-                                        <p class="card-text"> {{ docentenombre | uppercase }}</p>                                       
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
     <div class="col-12 col-lg-9">
         <div class="row">
             <div class="col-12">
-                <div class="card contenido-principal">
-                    <div class="card-header">
-                        <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <div class="d-flex flex-column flex-sm-row justify-content-sm-between gap-3">
+                            <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+                            <div class="d-flex justify-content-start gap-3" *ngIf="datos.length>0">
+                                
+                                <button type="button" class="btn btn-primary btn-sm" (click)="generatePDF('OPEN')"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Imprimir PDF">
+                                    <i class="bi bi-printer"></i>
+                                    Imprimir
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                    (click)="generatePDF('DOWNLOAD')" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="Descargar PDF">
+                                    <i class="bi bi-arrow-down-circle"></i>
+                                    Descargar
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -92,37 +86,11 @@
                                     {{message}}
                                 </div>
                                 <div class="row" *ngIf="datos.length>0">
-
-                                    <div class="col-12">
-                                        <div class="d-lg-flex d-flex-column justify-content-end mb-1"
-                                            *ngIf="datos.length>0">
-                                            <button type="button" class="btn btn-danger btn-sm me-2"
-                                                (click)="generatePDF('OPEN')" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Visualizar PDF">
-                                                <i class="bi bi-file-earmark-pdf"></i>
-                                                Visualizar
-                                            </button>
-                                            <button type="button" class="btn btn-primary btn-sm me-2"
-                                                (click)="generatePDF('PRINT')" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Imprimir PDF">
-                                                <i class="bi bi-printer"></i>
-                                                Imprimir
-                                            </button>
-                                            <button type="button" class="btn btn-secondary btn-sm me-2"
-                                                (click)="generatePDF('DOWNLOAD')" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Descargar PDF">
-                                                <i class="bi bi-arrow-down-circle"></i>
-                                                Descargar
-                                            </button>
-                                        </div>
-                                    </div>
-
                                     <div class="col-12 table-responsive">
                                         <table class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th class="w100">
-
                                                     </th>
                                                     <th *ngFor="let dia of dias" scope="col" class="w300 text-center">
                                                         <p> {{dia.nombre}}</p>

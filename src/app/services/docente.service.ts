@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import {  map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { crudDocente, listarDocentes } from '../interfaces/docente.interface';
 import { Docente } from '../models/docente.model';
@@ -52,7 +51,7 @@ export class DocenteService {
     return this.http.delete<crudDocente>(base,this.headers);
   }
 
-  buscarPorNombre(termino:string){
+  buscar(termino:string){
     const base=`${base_url}/docentes/busqueda/${termino}`;
     return this.http.get<any[]>(base,this.headers)
     .pipe(
@@ -60,6 +59,11 @@ export class DocenteService {
         return this.transformar(resp.busquedas)
       })
     );
+  }
+
+  searchDNI(dni: string){
+    const base = `${base_url}/docentes/searchdni/${dni}`;
+    return this.http.get<crudDocente>(base, this.headers);
   }
 
   buscarPorApellido(termino:string){

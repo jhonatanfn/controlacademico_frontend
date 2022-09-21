@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Ciclo } from 'src/app/models/ciclo.model';
+import { Competencia } from 'src/app/models/competencia.model';
 import { Evaluacion } from 'src/app/models/evaluacion.model';
 import { Matricula } from 'src/app/models/matricula.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { CicloService } from 'src/app/services/ciclo.service';
+import { CompetenciaService } from 'src/app/services/competencia.service';
 import { EvaluacionService } from 'src/app/services/evaluacion.service';
 import { NotaService } from 'src/app/services/nota.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
@@ -23,7 +25,7 @@ export class EliminarComponent implements OnInit {
   public icono: string = 'bi bi-x-circle';
   public titulo2: string = 'Tabla Alumnos';
   public icono2: string = 'bi bi-table';
-  public titulo3: string = 'Resumen';
+  public titulo3: string = 'Datos de la Asignación';
   public icono3: string = 'bi bi-card-checklist';
   public notaForm!: FormGroup;
   public periodos: Periodo[] = [];
@@ -31,19 +33,32 @@ export class EliminarComponent implements OnInit {
   public ciclos: Ciclo[] = [];
   public evaluaciones: Evaluacion[] = [];
   public matriculas: Matricula[] = [];
+  public competencias: Competencia[] = [];
   public datos: any[] = [];
   public formSubmitted: boolean = false;
   public cargando:boolean= false;
 
   public periodonombre:string="";
   public aulanombre:string="";
-  public subareanombre:string="";
   public areanombre:string="";
   public docentenombre:string="";
 
+  public literal: boolean = false;
+  public vigesimal: boolean = false;
+  public valordefecto: string = "";
+  public letras: any = [
+    { id: 1, nombre: "AD" },
+    { id: 2, nombre: "A" },
+    { id: 3, nombre: "B" },
+    { id: 4, nombre: "C" },
+    { id: 5, nombre: "-" },
+  ];
+
+
   constructor(private fb: FormBuilder, private cicloService: CicloService,
     private evaluacionService: EvaluacionService, private notaService: NotaService,
-    private route: ActivatedRoute, private  programacionService:ProgramacionService) {
+    private route: ActivatedRoute, private  programacionService:ProgramacionService,
+    private competenciaService: CompetenciaService) {
 
     this.cicloService.listar().subscribe(({ ok, ciclos }) => {
       if (ok) {
@@ -62,11 +77,17 @@ export class EliminarComponent implements OnInit {
         if(ok){
           this.periodonombre= programacion.periodo?.nombre || "";
           this.aulanombre= programacion.aula?.nombre || "";
-          this.subareanombre= programacion.subarea?.nombre || "";
           this.docentenombre= programacion.docente?.persona?.apellidopaterno+" "+
           programacion.docente?.persona?.apellidomaterno+" "+
           programacion.docente?.persona?.nombres;
-          this.areanombre= programacion.subarea?.area.nombre || "";
+          this.areanombre= programacion.area?.nombre || "";
+          this.competenciaService.competenciasArea(Number(programacion.area?.id)).subscribe({
+            next: ({ ok, competencias }) => {
+              if (ok) {
+                this.competencias = competencias;
+              }
+            }
+          });
         }
       }
     });
@@ -77,6 +98,8 @@ export class EliminarComponent implements OnInit {
     this.notaForm = this.fb.group({
       cicloId: ['', Validators.required],
       evaluacionId: ['', Validators.required],
+      competenciaId: ['', Validators.required],
+      areaId: [''],
       fecha: ['',Validators.required]
     });
   }
@@ -91,21 +114,33 @@ export class EliminarComponent implements OnInit {
   buscarMatriculas() {
     this.formSubmitted = true;
     if (this.notaForm.valid) {
-      this.cargando= true;
-      this.notaService.notasProgramacionFechaEvaluacionCiclo(
+      this.cargando = true;
+      this.datos = [];
+      this.notaService.notasProgramacionFechaEvaluacionCicloCompetencia(
         Number(this.route.snapshot.paramMap.get('id')),
-        this.notaForm.controls['fecha'].value, 
+        this.notaForm.controls['fecha'].value,
         Number(this.notaForm.get('evaluacionId')?.value),
-        Number(this.notaForm.get('cicloId')?.value))
+        Number(this.notaForm.get('cicloId')?.value),
+        Number(this.notaForm.get('competenciaId')?.value))
         .subscribe(({ ok, notas }) => {
           if (ok) {
-            this.datos = notas;
-            this.cargando= false;
+            if (notas.length > 0) {
+              this.datos = notas;
+              let tipovalor = this.datos[0].matriculadetalle?.programacion?.aula?.tipovalor;
+              if (tipovalor == "1") {
+                this.literal = true;
+                this.vigesimal = false;
+                this.valordefecto = "-";
+              } else {
+                this.literal = false;
+                this.vigesimal = true;
+                this.valordefecto = "0";
+              }
+            }
+            this.cargando = false;
           }
         });
-
     }
-
   }
 
   validacionDatos() {

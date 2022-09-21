@@ -21,52 +21,64 @@ export class EditarDocenteComponent implements OnInit {
   public docenteForm!: FormGroup;
   public formSubmitted: boolean = false;
   public docente!: Docente;
+  public sexos: any = [
+    { id: 1, nombre: "MASCULINO" },
+    { id: 2, nombre: "FEMENINO" },
+  ];
+  public dnirepetido: boolean = false;
+  public dniusuarioeditar: string = "";
 
   constructor(
     private tipodocuementoService: TipodocumentoService,
     private fb: FormBuilder, private personaService: PersonaService,
     private docenteService: DocenteService,
     private route: ActivatedRoute) {
-
     this.tipodocuementoService.listar()
       .subscribe(({ tipodocumentos }) => {
         this.tipos = tipodocumentos;
-    });
-
+      });
     this.docenteService.obtener(Number(this.route.snapshot.paramMap.get('id')))
       .subscribe(({ ok, docente }) => {
-
         if (ok) {
+          this.docenteForm.controls['dni'].setValue(docente.persona?.dni);
+          this.docenteForm.controls['nombres'].setValue(docente.persona?.nombres);
+          this.docenteForm.controls['apellidopaterno'].setValue(docente.persona?.apellidopaterno);
+          this.docenteForm.controls['apellidomaterno'].setValue(docente.persona?.apellidomaterno);
+          this.docenteForm.controls['sexo'].setValue(docente.persona?.sexo);
+          this.docenteForm.controls['fechanacimiento'].setValue(docente.persona?.fechanacimiento);
           this.docenteForm.controls['tipodocumentoId'].setValue(docente.persona?.tipodocumento.id);
-          this.docenteForm.controls['numero'].setValue(docente.persona?.numero);
-          this.docenteForm.controls['nombres'].setValue(docente.persona?.nombres.toUpperCase());
-          this.docenteForm.controls['apellidopaterno'].setValue(docente.persona?.apellidopaterno.toUpperCase());
-          this.docenteForm.controls['apellidomaterno'].setValue(docente.persona?.apellidomaterno.toUpperCase());
-          this.docenteForm.controls['direccion'].setValue(docente.persona?.direccion?.toUpperCase());
+          this.docenteForm.controls['domicilio'].setValue(docente.persona?.domicilio);
           this.docenteForm.controls['telefono'].setValue(docente.persona?.telefono);
+          this.docenteForm.controls['nacionalidad'].setValue(docente.persona?.nacionalidad);
+          this.docenteForm.controls['distrito'].setValue(docente.persona?.distrito);
+          this.docenteForm.controls['correo'].setValue(docente.persona?.correo);
           this.docenteForm.controls['id'].setValue(docente.persona?.id);
+          this.dniusuarioeditar = docente.persona?.dni || '';
         }
-
       });
-
   }
-
   ngOnInit(): void {
     this.docenteForm = this.fb.group({
-      tipodocumentoId: ['', Validators.required],
-      numero: ['', [Validators.required, Validators.maxLength(8),
+      dni: ['', [
+        Validators.required,
+        Validators.maxLength(8),
         Validators.minLength(8),
-        Validators.pattern(/^\d+$/)]],
+        Validators.pattern(/^\d+$/)]
+      ],
       nombres: ['', [Validators.required, Validators.maxLength(50)]],
       apellidopaterno: ['', [Validators.required, Validators.maxLength(20)]],
       apellidomaterno: ['', [Validators.required, Validators.maxLength(20)]],
-      direccion: [''],
+      sexo: ['', Validators.required],
+      fechanacimiento: ['', Validators.required],
+      tipodocumentoId: ['', Validators.required],
+      domicilio: [''],
       telefono: [''],
+      nacionalidad: [''],
+      distrito: [''],
+      correo: [''],
       id: ['']
     });
-
   }
-
   campoRequerido(campo: string) {
     if (this.docenteForm.get(campo)?.getError('required') && this.formSubmitted) {
       return true;
@@ -85,15 +97,13 @@ export class EditarDocenteComponent implements OnInit {
       return false;
     }
   }
-
   campoNumeros(campo: string) {
-    if(this.docenteForm.controls[campo].getError('pattern') && this.formSubmitted){
+    if (this.docenteForm.controls[campo].getError('pattern') && this.formSubmitted) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
-
   campoMinLength(campo: string, longitud: number) {
     if (this.docenteForm.get(campo)?.value === "") {
       return;
@@ -106,10 +116,30 @@ export class EditarDocenteComponent implements OnInit {
     }
   }
 
+  validaDNI() {
+    if (this.dniusuarioeditar !== this.docenteForm.get('dni')?.value) {
+      if ((this.docenteForm.get('dni')?.value).length == 8
+        && !this.docenteForm.get('dni')?.getError('required')
+        && !this.docenteForm.get('dni')?.getError('pattern')) {
+        this.docenteService.searchDNI(this.docenteForm.get('dni')?.value).subscribe({
+          next: ({ ok }) => {
+            if (ok) {
+              this.docenteForm.controls['dni'].setErrors({ error: true });
+              this.dnirepetido = true;
+            } else {
+              this.docenteForm.controls['dni'].setErrors(null);
+              this.dnirepetido = false;
+            }
+          }
+        });
+      } else {
+        this.dnirepetido = false;
+      }
+    }
+  }
+
   actualizarDocente() {
-
     this.formSubmitted = true;
-
     if (this.docenteForm.valid) {
       Swal.fire({
         title: 'Actualizar',
@@ -122,27 +152,20 @@ export class EditarDocenteComponent implements OnInit {
         confirmButtonText: 'Actualizar'
       }).then((result) => {
         if (result.isConfirmed) {
-
           this.personaService.actualizar(this.docenteForm.get('id')?.value, this.docenteForm.value)
-            .subscribe(({ ok, msg, persona }) => {
+            .subscribe(({ ok, msg }) => {
               if (ok) {
-                this.docenteForm.controls['nombres'].setValue(persona?.nombres.toUpperCase());
-                this.docenteForm.controls['apellidopaterno'].setValue(persona?.apellidopaterno.toUpperCase());
-                this.docenteForm.controls['apellidomaterno'].setValue(persona?.apellidomaterno.toUpperCase());
-                this.docenteForm.controls['direccion'].setValue(persona?.direccion?.toUpperCase());
                 Swal.fire({
                   position: 'top-end',
                   icon: 'success',
                   title: 'Docente actualizado exitosamente.',
                   showConfirmButton: false,
-                  timer: 1500
+                  timer: 1000
                 })
               }
             });
         }
       })
     }
-
   }
-
 }

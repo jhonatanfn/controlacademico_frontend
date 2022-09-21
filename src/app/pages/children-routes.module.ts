@@ -1,20 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { AreasComponent } from './areas/areas.component';
-import { SubareasComponent } from './subareas/subareas.component';
-import { RolesComponent } from './roles/roles.component';
-
 import { AdminGuard } from '../guards/admin.guard';
 import { DocenteGuard } from '../guards/docente.guard';
 import { TodoGuard } from '../guards/todo.guard';
 import { RouterModule, Routes } from '@angular/router';
 import { DocentesComponent } from './docentes/docentes.component';
 import { AlumnosComponent } from './alumnos/alumnos.component';
-import { ApoderadosComponent } from './apoderados/apoderados.component';
 import { NivelesComponent } from './niveles/niveles.component';
 import { GradosComponent } from './grados/grados.component';
 import { SeccionesComponent } from './secciones/secciones.component';
@@ -22,8 +17,6 @@ import { ProgramacionesComponent } from './programaciones/programaciones.compone
 import { AulasComponent } from './aulas/aulas.component';
 import { CrearDocenteComponent } from './docentes/crear-docente/crear-docente.component';
 import { EditarDocenteComponent } from './docentes/editar-docente/editar-docente.component';
-import { CrearApoderadoComponent } from './apoderados/crear-apoderado/crear-apoderado.component';
-import { EditarApoderadoComponent } from './apoderados/editar-apoderado/editar-apoderado.component';
 import { CrearAlumnoComponent } from './alumnos/crear-alumno/crear-alumno.component';
 import { EditarAlumnoComponent } from './alumnos/editar-alumno/editar-alumno.component';
 import { CrearAulaComponent } from './aulas/crear-aula/crear-aula.component';
@@ -62,21 +55,15 @@ import { IsMatriculaGuard } from '../guards/is-matricula.guard';
 import { ListaMaterialAlumnoComponent } from './materiales/alumno/lista-material-alumno/lista-material-alumno.component';
 import { VerMaterialAlumnoComponent } from './materiales/alumno/ver-material-alumno/ver-material-alumno.component';
 import { IsProgramacionAlumnoGuard } from '../guards/is-programacion-alumno.guard';
-import { ReporteNotaComponent } from './reportes/reporte-nota/reporte-nota.component';
-import { ReporteAsistenciaComponent } from './reportes/reporte-asistencia/reporte-asistencia.component';
 import { ListaMatriculaApoderadoComponent } from './matriculas/apoderado/lista-matricula-apoderado/lista-matricula-apoderado.component';
 import { VerNotaApoderadoComponent } from './matriculas/apoderado/ver-nota-apoderado/ver-nota-apoderado.component';
-import { VerAsistenciaApoderadoComponent } from './matriculas/apoderado/ver-asistencia-apoderado/ver-asistencia-apoderado.component';
 import { ApoderadoGuard } from '../guards/apoderado.guard';
 import { IsMatriculaApoderadoGuard } from '../guards/is-matricula-apoderado.guard';
 import { InstitucionComponent } from './institucion/institucion.component';
-import { VerAsistenciaAlumnoComponent } from './matriculas/alumno/ver-asistencia-alumno/ver-asistencia-alumno.component';
 import { ReporteAnualNotaComponent } from './reportes/reporte-anual-nota/reporte-anual-nota.component';
 import { ReporteAsistenciaRangoComponent } from './reportes/reporte-asistencia-rango/reporte-asistencia-rango.component';
-import { ReporteNotaAlumnoComponent } from './reportes/reporte-nota-alumno/reporte-nota-alumno.component';
 import { ReporteAsistenciaAlumnoComponent } from './reportes/reporte-asistencia-alumno/reporte-asistencia-alumno.component';
 import { AdmindocenteapoderadoGuard } from '../guards/admindocenteapoderado.guard';
-import { ReporteNotaAlumnoAnualComponent } from './reportes/reporte-nota-alumno-anual/reporte-nota-alumno-anual.component';
 import { PeriodosComponent } from './periodos/periodos.component';
 import { HorariosComponent } from './horarios/horarios.component';
 import { CrearHorarioComponent } from './horarios/crear-horario/crear-horario.component';
@@ -87,15 +74,48 @@ import { HorarioAlumnoComponent } from './horarios/alumno/horario-alumno/horario
 import { HorarioApoderadoComponent } from './horarios/apoderado/horario-apoderado/horario-apoderado.component';
 import { HorarioDocenteComponent } from './horarios/docente/horario-docente/horario-docente.component';
 import { RangosComponent } from './rangos/rangos.component';
-import { ReporteNotaAreaComponent } from './reportes/reporte-nota-area/reporte-nota-area.component';
 import { ReporteNotaAreaTotalComponent } from './reportes/reporte-nota-area-total/reporte-nota-area-total.component';
+import { ReporteNotaConsolidadoComponent } from './reportes/reporte-nota-consolidado/reporte-nota-consolidado.component';
+import { AdmindocenteGuard } from '../guards/admindocente.guard';
+import { ReporteAsistenciaConsolidadoComponent } from './reportes/reporte-asistencia-consolidado/reporte-asistencia-consolidado.component';
+import { MensajeriasComponent } from './mensajerias/mensajerias.component';
+import { PadresComponent } from './padres/padres.component';
+import { MadresComponent } from './madres/madres.component';
+import { CrearPadreComponent } from './padres/crear-padre/crear-padre.component';
+import { EditarPadreComponent } from './padres/editar-padre/editar-padre.component';
+import { CrearMadreComponent } from './madres/crear-madre/crear-madre.component';
+import { EditarMadreComponent } from './madres/editar-madre/editar-madre.component';
+import { FichaAlumnoComponent } from './alumnos/ficha-alumno/ficha-alumno.component';
+import { CompetenciasComponent } from './competencias/competencias.component';
+import { IsAulaDocenteGuard } from '../guards/is-aula-docente.guard';
+import { VerAsistenciaComponent } from './asistencias/alumno/ver-asistencia/ver-asistencia.component';
+import { AuxiliaresComponent } from './auxiliares/auxiliares.component';
+import { CrearAuxiliarComponent } from './auxiliares/crear-auxiliar/crear-auxiliar.component';
+import { EditarAuxiliarComponent } from './auxiliares/editar-auxiliar/editar-auxiliar.component';
+import { ListaAsistenciaComponent } from './asistencias/auxiliar/lista-asistencia/lista-asistencia.component';
+import { AuxiliarGuard } from '../guards/auxiliar.guard';
+import { CrearAsistenciaAuxiliarComponent } from './asistencias/auxiliar/crear-asistencia-auxiliar/crear-asistencia-auxiliar.component';
+import { EditarAsistenciaAuxiliarComponent } from './asistencias/auxiliar/editar-asistencia-auxiliar/editar-asistencia-auxiliar.component';
+import { EliminarAsistenciaAuxiliarComponent } from './asistencias/auxiliar/eliminar-asistencia-auxiliar/eliminar-asistencia-auxiliar.component';
+import { ConsultarHorarioAuxiliarComponent } from './horarios/auxiliar/consultar-horario-auxiliar/consultar-horario-auxiliar.component';
+import { ConsultarHorarioDocenteComponent } from './auxiliares/consultar-horario-docente/consultar-horario-docente.component';
+import { VerAsistenciaPadreComponent } from './asistencias/padre/ver-asistencia-padre/ver-asistencia-padre.component';
+import { ListaMatriculaMadreComponent } from './matriculas/apoderado/lista-matricula-madre/lista-matricula-madre.component';
+import { VerNotaMadreComponent } from './matriculas/apoderado/ver-nota-madre/ver-nota-madre.component';
+import { VerAsistenciaMadreComponent } from './asistencias/madre/ver-asistencia-madre/ver-asistencia-madre.component';
+import { DirectoresComponent } from './directores/directores.component';
+import { CrearDirectorComponent } from './directores/crear-director/crear-director.component';
+import { EditarDirectorComponent } from './directores/editar-director/editar-director.component';
+import { ReporteNotaAlumnoAnualComponent } from './reportes/reporte-nota-alumno-anual/reporte-nota-alumno-anual.component';
+import { InformesComponent } from './informes/informes.component';
+import { ApreciacionesComponent } from './apreciaciones/apreciaciones.component';
 
 const childrenRoutes: Routes = [
   {
     path: '', component: DashboardComponent,
     canActivate: [TodoGuard],
     data: {
-      titulo: 'Inicio', icono: 'bi bi-speedometer',
+      titulo: 'Principal', icono: 'bi bi-speedometer',
       accion: 'Bienvenido', enlace: ''
     }
   },
@@ -103,7 +123,7 @@ const childrenRoutes: Routes = [
     path: 'institucion', component: InstitucionComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Institución', icono: 'bi bi-building',
+      titulo: 'Institución', icono: 'bi bi-house',
       accion: 'Actualizar', enlace: 'institucion'
     }
   },
@@ -115,7 +135,6 @@ const childrenRoutes: Routes = [
       accion: 'Lista', enlace: 'usuarios'
     }
   },
-
   {
     path: 'areas', component: AreasComponent,
     canActivate: [AdminGuard],
@@ -124,7 +143,6 @@ const childrenRoutes: Routes = [
       accion: 'Lista', enlace: 'areas'
     }
   },
-
   {
     path: 'periodos', component: PeriodosComponent,
     canActivate: [AdminGuard],
@@ -133,26 +151,6 @@ const childrenRoutes: Routes = [
       accion: 'Lista', enlace: 'periodos'
     }
   },
-
-
-  {
-    path: 'subareas', component: SubareasComponent,
-    canActivate: [AdminGuard],
-    data: {
-      titulo: 'Subareas', icono: 'bi bi-collection',
-      accion: 'Lista', enlace: 'subareas'
-    }
-  },
-
-  {
-    path: 'roles', component: RolesComponent,
-    canActivate: [AdminGuard],
-    data: {
-      titulo: 'Tabla Roles', icono: 'bi bi-table',
-      principal: 'Roles', accion: '', enlace: 'roles'
-    }
-  },
-
   {
     path: 'perfil', component: PerfilComponent,
     canActivate: [TodoGuard],
@@ -161,8 +159,6 @@ const childrenRoutes: Routes = [
       accion: 'Actualizar', enlace: 'perfil'
     }
   },
-
-
   {
     path: 'docentes', component: DocentesComponent,
     canActivate: [AdminGuard],
@@ -171,7 +167,6 @@ const childrenRoutes: Routes = [
       accion: 'Lista', enlace: 'docentes'
     }
   },
-
   {
     path: 'docentes/crear', component: CrearDocenteComponent,
     canActivate: [AdminGuard],
@@ -180,7 +175,6 @@ const childrenRoutes: Routes = [
       accion: 'Crear', enlace: 'docentes'
     }
   },
-
   {
     path: 'docentes/editar/:id', component: EditarDocenteComponent,
     canActivate: [AdminGuard],
@@ -189,7 +183,6 @@ const childrenRoutes: Routes = [
       accion: 'Editar', enlace: 'docentes'
     }
   },
-
   {
     path: 'alumnos', component: AlumnosComponent,
     canActivate: [AdminGuard],
@@ -215,39 +208,13 @@ const childrenRoutes: Routes = [
     }
   },
   {
-    path: 'apoderados', component: ApoderadosComponent,
-    canActivate: [AdminGuard],
-    data: {
-      titulo: 'Apoderados', icono: 'bi bi-file-ppt',
-      accion: 'Lista', enlace: 'apoderados'
-    }
-  },
-  {
-    path: 'apoderados/crear', component: CrearApoderadoComponent,
-    canActivate: [AdminGuard],
-    data: {
-      titulo: 'Apoderados', icono: 'bi bi-file-ppt',
-      accion: 'Crear', enlace: 'apoderados'
-    }
-  },
-  {
-    path: 'apoderados/editar/:id', component: EditarApoderadoComponent,
-    canActivate: [AdminGuard],
-    data: {
-      titulo: 'Apoderados', icono: 'bi bi-file-ppt',
-      accion: 'Editar', enlace: 'apoderados'
-    }
-  },
-
-  {
     path: 'niveles', component: NivelesComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Niveles', icono: 'bi bi-receipt',
+      titulo: 'Niveles', icono: 'bi bi-view-stacked',
       accion: 'Lista', enlace: 'niveles'
     }
   },
-
   {
     path: 'rangos', component: RangosComponent,
     canActivate: [AdminGuard],
@@ -256,68 +223,62 @@ const childrenRoutes: Routes = [
       accion: 'Lista', enlace: 'rangos'
     }
   },
-
   {
     path: 'grados', component: GradosComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Grados', icono: 'bi bi-layout-text-sidebar',
+      titulo: 'Grados', icono: 'bi bi-layout-three-columns',
       accion: 'Lista', enlace: 'grados'
     }
   },
-
   {
     path: 'secciones', component: SeccionesComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Secciones', icono: 'bi bi-layout-text-sidebar-reverse',
+      titulo: 'Secciones', icono: 'bi bi-columns-gap',
       accion: 'Lista', enlace: 'secciones'
     }
   },
-
   {
-    path: 'programaciones', component: ProgramacionesComponent,
+    path: 'asignaciones', component: ProgramacionesComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Programaciones', icono: 'bi bi-pc-display-horizontal',
-      accion: 'Lista', enlace: 'programaciones'
+      titulo: 'Asignaciones', icono: 'bi bi-pc-display-horizontal',
+      accion: 'Lista', enlace: 'asignaciones'
     }
   },
   {
-    path: 'programaciones/crear', component: CrearProgramacionComponent,
+    path: 'asignaciones/crear', component: CrearProgramacionComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Programaciones', icono: 'bi bi-pc-display-horizontal',
-      accion: 'Crear', enlace: 'programaciones'
+      titulo: 'Asignaciones', icono: 'bi bi-pc-display-horizontal',
+      accion: 'Crear', enlace: 'asignaciones'
     }
   },
   {
-    path: 'programaciones/editar/:id', component: EditarProgramacionComponent,
+    path: 'asignaciones/editar/:id', component: EditarProgramacionComponent,
     canActivate: [AdminGuard],
     data: {
-      titulo: 'Programaciones', icono: 'bi bi-pc-display-horizontal',
-      accion: 'Editar', enlace: 'programaciones'
+      titulo: 'Asignaciones', icono: 'bi bi-pc-display-horizontal',
+      accion: 'Editar', enlace: 'asignaciones'
     }
   },
   {
-    path: 'programaciones/docente', component: ListaDocenteComponent,
+    path: 'asignaciones/docente', component: ListaDocenteComponent,
     canActivate: [DocenteGuard],
     data: {
-      titulo: 'Programaciones', icono: 'bi bi-pc-display-horizontal',
-      accion: 'Lista', enlace: 'programaciones/docente'
+      titulo: 'Asignaciones', icono: 'bi bi-pc-display-horizontal',
+      accion: 'Lista', enlace: 'asignaciones/docente'
     }
   },
-
-  /**------------------------------------------------- */
   {
     path: 'matriculas', component: MatriculasComponent,
     canActivate: [AdminGuard],
     data: {
       titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
-     accion: 'Lista', enlace: 'matriculas'
+      accion: 'Lista', enlace: 'matriculas'
     }
   },
-
   {
     path: 'matriculas/crear', component: CrearMatriculaComponent,
     canActivate: [AdminGuard],
@@ -326,13 +287,11 @@ const childrenRoutes: Routes = [
       accion: 'Crear', enlace: 'matriculas'
     }
   },
-
-  /** ALUMNO */
   {
     path: 'matriculas/alumno', component: ListaMatriculaAlumnoComponent,
     canActivate: [AlumnoGuard],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
+      titulo: 'Notas', icono: 'bi bi-stickies',
       accion: 'Lista', enlace: 'matriculas/alumno'
     }
   },
@@ -340,48 +299,63 @@ const childrenRoutes: Routes = [
   {
     path: 'matriculas/alumno/:id', component: VerNotaAlumnoComponent,
     canActivate: [AlumnoGuard, IsMatriculaGuard],
-    canLoad: [IsMatriculaGuard],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
-      accion: 'Consultar notas', enlace: 'matriculas/alumno'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Consultar', enlace: 'matriculas/alumno'
     }
   },
-
   {
-    path: 'matriculas/alumno/asistencia/:id', component: VerAsistenciaAlumnoComponent,
-    canActivate: [AlumnoGuard, IsMatriculaGuard],
-    canLoad: [IsMatriculaGuard],
-    data: {
-      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
-      accion: 'Consultar asistencias', enlace: 'matriculas/alumno'
-    }
-  },
-
-  /** APODERADO */
-  {
-    path: 'matriculas/apoderado', component: ListaMatriculaApoderadoComponent,
+    path: 'matriculas/padre', component: ListaMatriculaApoderadoComponent,
     canActivate: [ApoderadoGuard],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
-      accion: 'Lista', enlace: 'matriculas/apoderado'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Lista', enlace: 'matriculas/padre'
     }
   },
   {
-    path: 'matriculas/apoderado/notas/:id', component: VerNotaApoderadoComponent,
-    canActivate: [ApoderadoGuard, IsMatriculaApoderadoGuard],
+    path: 'matriculas/madre', component: ListaMatriculaMadreComponent,
+    canActivate: [ApoderadoGuard],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
-      accion: 'Consultar notas', enlace: 'matriculas/apoderado'
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Lista', enlace: 'matriculas/madre'
     }
   },
 
   {
-    path: 'matriculas/apoderado/asistencia/:id', component: VerAsistenciaApoderadoComponent,
+    path: 'matriculas/padre/notas/:id', component: VerNotaApoderadoComponent,
     canActivate: [ApoderadoGuard, IsMatriculaApoderadoGuard],
+    data: {
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Consultar', enlace: 'matriculas/padre'
+    }
+  },
+
+  {
+    path: 'matriculas/madre/notas/:id', component: VerNotaMadreComponent,
+    canActivate: [ApoderadoGuard, IsMatriculaApoderadoGuard],
+    data: {
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Consultar', enlace: 'matriculas/madre'
+    }
+  },
+
+  {
+    path: 'asistencias/padre/ver', component: VerAsistenciaPadreComponent,
+    canActivate: [ApoderadoGuard],
     canLoad: [],
     data: {
-      titulo: 'Matriculas', icono: 'bi bi-file-earmark-ruled',
-      accion: 'Consultar asistencias', enlace: 'matriculas/apoderado'
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Consultar', enlace: 'asistencias/padre/ver'
+    }
+  },
+
+  {
+    path: 'asistencias/madre/ver', component: VerAsistenciaMadreComponent,
+    canActivate: [ApoderadoGuard],
+    canLoad: [],
+    data: {
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Consultar', enlace: 'asistencias/padre/ver'
     }
   },
 
@@ -394,7 +368,6 @@ const childrenRoutes: Routes = [
     }
   },
 
-  /* ADMINISTRADOR*/
   {
     path: 'notas/crear/:id', component: CrearComponent,
     canActivate: [AdminGuard],
@@ -481,7 +454,6 @@ const childrenRoutes: Routes = [
     }
   },
 
-  /*  ADMINISTRADOR  */
   {
     path: 'asistencias', component: AsistenciasComponent,
     canActivate: [AdminGuard],
@@ -515,7 +487,6 @@ const childrenRoutes: Routes = [
     }
   },
 
-  /** ASISTENCIAS DOCENTE */
   {
     path: 'asistencias/docente', component: ListaAsistenciaDocenteComponent,
     canActivate: [DocenteGuard],
@@ -526,8 +497,7 @@ const childrenRoutes: Routes = [
   },
   {
     path: 'asistencias/docente/crear/:id', component: CrearAsistenciaDocenteComponent,
-    canActivate: [DocenteGuard, IsProgramacionGuard],
-    canLoad: [IsProgramacionGuard],
+    canActivate: [DocenteGuard, IsAulaDocenteGuard],
     data: {
       titulo: 'Asistencias', icono: 'bi bi-megaphone',
       accion: 'Crear', enlace: 'asistencias/docente'
@@ -535,8 +505,7 @@ const childrenRoutes: Routes = [
   },
   {
     path: 'asistencias/docente/editar/:id', component: EditarAsistenciaDocenteComponent,
-    canActivate: [DocenteGuard, IsProgramacionGuard],
-    canLoad: [IsProgramacionGuard],
+    canActivate: [DocenteGuard, IsAulaDocenteGuard],
     data: {
       titulo: 'Asistencias', icono: 'bi bi-megaphone',
       accion: 'Editar', enlace: 'asistencias/docente'
@@ -544,18 +513,25 @@ const childrenRoutes: Routes = [
   },
   {
     path: 'asistencias/docente/eliminar/:id', component: EliminarAsistenciaDocenteComponent,
-    canActivate: [DocenteGuard, IsProgramacionGuard],
-    canLoad: [IsProgramacionGuard],
+    canActivate: [DocenteGuard, IsAulaDocenteGuard],
     data: {
       titulo: 'Asistencias', icono: 'bi bi-megaphone',
       accion: 'Eliminar', enlace: 'asistencias/docente'
     }
   },
 
-  
+  {
+    path: 'asistencias/alumno/ver', component: VerAsistenciaComponent,
+    canActivate: [AlumnoGuard],
+    data: {
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Consultar', enlace: 'asistencias/alumno/ver'
+    }
+  },
+
   {
     path: 'reportes', component: ReportesComponent,
-    canActivate: [AdminGuard],
+    canActivate: [AdmindocenteapoderadoGuard],
     data: {
       titulo: 'Reportes', icono: 'bi bi-printer-fill',
       principal: 'Reportes', accion: '', enlace: 'reportes'
@@ -570,8 +546,6 @@ const childrenRoutes: Routes = [
       accion: 'Lista', enlace: 'materiales'
     }
   },
-
-  /* MATERIALES DOCENTE */
   {
     path: 'materiales/docente', component: ListaMaterialDocenteComponent,
     canActivate: [DocenteGuard],
@@ -589,8 +563,6 @@ const childrenRoutes: Routes = [
       accion: 'Lista', enlace: 'materiales/docente'
     }
   },
-
-  /**  MATERIALES ALUMNO */
   {
     path: 'materiales/alumno', component: ListaMaterialAlumnoComponent,
     canActivate: [AlumnoGuard],
@@ -602,7 +574,6 @@ const childrenRoutes: Routes = [
   {
     path: 'materiales/alumno/:id', component: VerMaterialAlumnoComponent,
     canActivate: [AlumnoGuard, IsProgramacionAlumnoGuard],
-    canLoad: [IsProgramacionAlumnoGuard],
     data: {
       titulo: 'Materiales', icono: 'bi bi-folder2',
       accion: 'Consultar', enlace: 'materiales/alumno'
@@ -616,41 +587,42 @@ const childrenRoutes: Routes = [
       accion: 'Lista', enlace: 'materiales'
     }
   },
-
-
-  /**--------REPORTES---------- */
+  /*
   {
-    path: 'reportes/notas', component: ReporteNotaComponent,
+    path: 'reportes/notaseva', component: ReporteNotaComponent,
     canActivate: [AdmindocenteapoderadoGuard],
     data: {
-      titulo: 'Buscar Notas', icono: 'bi bi-search',
-      principal: 'Reportes', accion: 'Notas', enlace: 'reportes/notas'
+      titulo: 'Reportes', icono: 'bi bi-printer-fill',
+      accion: 'Notas por evaluación', enlace: 'reportes'
     }
   },
+
   {
     path: 'reportes/asistencias', component: ReporteAsistenciaComponent,
     canActivate: [AdmindocenteapoderadoGuard],
     data: {
-      titulo: 'Buscar Asistencias', icono: 'bi bi-search',
-      principal: 'Reportes', accion: 'Asistencias', enlace: 'reportes/asistencias'
+      titulo: 'Reportes', icono: 'bi bi-printer-fill',
+      accion: 'Asistencias por fecha', enlace: 'reportes'
     }
   },
+  */
   {
     path: 'reportes/anual', component: ReporteAnualNotaComponent,
     canActivate: [AdmindocenteapoderadoGuard],
     data: {
-      titulo: 'Buscar Notas', icono: 'bi bi-search',
-      principal: 'Reportes', accion: 'Notas', enlace: 'reportes/anual'
+      titulo: 'Reportes', icono: 'bi bi-printer-fill',
+      accion: 'Notas Alumno', enlace: 'reportes'
     }
   },
   {
     path: 'reportes/rango', component: ReporteAsistenciaRangoComponent,
     canActivate: [AdmindocenteapoderadoGuard],
     data: {
-      titulo: 'Buscar Asistencias', icono: 'bi bi-search',
-      principal: 'Reportes', accion: 'Asistencias', enlace: 'reportes/rango'
+      titulo: 'Reportes', icono: 'bi bi-printer-fill',
+      accion: 'Asistencias Fechas', enlace: 'reportes'
     }
   },
+  /*
   {
     path: 'reportes/notasalumno', component: ReporteNotaAlumnoComponent,
     canActivate: [TodoGuard],
@@ -659,41 +631,42 @@ const childrenRoutes: Routes = [
       principal: 'Reportes', accion: 'Notas', enlace: 'reportes/notasalumno'
     }
   },
+  */
   {
     path: 'reportes/asistenciasalumno', component: ReporteAsistenciaAlumnoComponent,
     canActivate: [TodoGuard],
     data: {
-      titulo: 'Buscar Asistencias', icono: 'bi bi-search',
-      principal: 'Reportes', accion: 'Asistencias', enlace: 'reportes/asistenciasalumno'
+      titulo: 'Reportes', icono: 'bi bi-printer-fill',
+      accion: 'Asistencias Alumno', enlace: 'reportes'
     }
   },
-
+   /*
   {
     path: 'reportes/notasalumnoanual', component: ReporteNotaAlumnoAnualComponent,
     canActivate: [TodoGuard],
     data: {
-      titulo: 'Buscar Notas', icono: 'bi bi-search',
-      principal: 'Reportes', accion: 'Notas', enlace: 'reportes/notasalumnoanual'
+      titulo: 'Reportes', icono: 'bi bi-printer-fill',
+      accion: 'Informe', enlace: 'reportes'
     }
   },
-
-  {
-    path: 'reportes/notasarea', component: ReporteNotaAreaComponent,
-    canActivate: [TodoGuard],
-    data: {
-      titulo: 'Buscar Notas', icono: 'bi bi-search',
-      principal: 'Reportes', accion: 'Notas', enlace: 'reportes/notasalumnoanual'
-    }
-  },
+ 
+{
+  path: 'reportes/notasarea', component: ReporteNotaAreaComponent,
+  canActivate: [TodoGuard],
+  data: {
+    titulo: 'Buscar Notas', icono: 'bi bi-search',
+    principal: 'Reportes', accion: 'Notas', enlace: 'reportes/notasalumnoanual'
+  }
+},
+*/
   {
     path: 'reportes/notasareatotal', component: ReporteNotaAreaTotalComponent,
     canActivate: [TodoGuard],
     data: {
-      titulo: 'Buscar Notas', icono: 'bi bi-search',
-      principal: 'Reportes', accion: 'Notas', enlace: 'reportes/notasareatotal'
+      titulo: 'Reportes', icono: 'bi bi-printer-fill',
+      accion: 'Notas Areas', enlace: 'reportes'
     }
   },
-
   {
     path: 'horarios', component: HorariosComponent,
     canActivate: [AdminGuard],
@@ -702,7 +675,6 @@ const childrenRoutes: Routes = [
       accion: 'Lista', enlace: 'horarios'
     }
   },
-
   {
     path: 'horarios/crear', component: CrearHorarioComponent,
     canActivate: [AdminGuard],
@@ -711,7 +683,6 @@ const childrenRoutes: Routes = [
       accion: 'Crear', enlace: 'horarios'
     }
   },
-
   {
     path: 'horarios/editar/:id', component: EditarHorarioComponent,
     canActivate: [AdminGuard],
@@ -745,15 +716,6 @@ const childrenRoutes: Routes = [
     }
   },
   {
-    path: 'horarios/apoderado', component: HorarioApoderadoComponent,
-    canActivate: [ApoderadoGuard],
-    data: {
-      titulo: 'Horarios', icono: 'bi bi-calendar3',
-      accion: 'Consultar', enlace: 'horarios'
-    }
-  },
-
-  {
     path: 'horarios/docente', component: HorarioDocenteComponent,
     canActivate: [DocenteGuard],
     data: {
@@ -761,7 +723,224 @@ const childrenRoutes: Routes = [
       accion: 'Consultar', enlace: 'horarios'
     }
   },
+  {
+    path: 'reportes/notas/consolidado', component: ReporteNotaConsolidadoComponent,
+    canActivate: [AdmindocenteGuard],
+    data: {
+      titulo: 'Reportes', icono: 'bi bi-printer-fill',
+      accion: 'Notas consolidado', enlace: 'reportes'
+    }
+  },
+  {
+    path: 'reportes/asistenciasconsolidado', component: ReporteAsistenciaConsolidadoComponent,
+    canActivate: [AdmindocenteGuard],
+    data: {
+      titulo: 'Reportes', icono: 'bi bi-printer-fill',
+      accion: 'Asistencias consolidado', enlace: 'reportes'
+    }
+  },
+  {
+    path: 'mensajerias', component: MensajeriasComponent,
+    canActivate: [TodoGuard],
+    data: {
+      titulo: 'Mensajes', icono: 'bi bi-envelope-fill',
+      accion: 'Bandeja', enlace: 'mensajerias'
+    }
+  },
+  {
+    path: 'padres', component: PadresComponent,
+    canActivate: [TodoGuard],
+    data: {
+      titulo: 'Padres', icono: 'bi bi-gender-male',
+      accion: 'Lista', enlace: 'padres'
+    }
+  },
+  {
+    path: 'padres/crear', component: CrearPadreComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Padres', icono: 'bi bi-gender-male',
+      accion: 'Crear', enlace: 'padres'
+    }
+  },
+  {
+    path: 'padres/editar/:id', component: EditarPadreComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Padres', icono: 'bi bi-gender-male',
+      accion: 'Editar', enlace: 'padres'
+    }
+  },
+  {
+    path: 'madres', component: MadresComponent,
+    canActivate: [TodoGuard],
+    data: {
+      titulo: 'Madres', icono: 'bi bi-gender-female',
+      accion: 'Lista', enlace: 'madres'
+    }
+  },
+  {
+    path: 'madres/crear', component: CrearMadreComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Madres', icono: 'bi bi-gender-female',
+      accion: 'Crear', enlace: 'madres'
+    }
+  },
+  {
+    path: 'madres/editar/:id', component: EditarMadreComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Madres', icono: 'bi bi-gender-female',
+      accion: 'Editar', enlace: 'madres'
+    }
+  },
+  {
+    path: 'alumnos/ficha/:id', component: FichaAlumnoComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Alumnos', icono: 'bi bi-person',
+      accion: 'Ficha', enlace: 'alumnos'
+    }
+  },
+  {
+    path: 'competencias', component: CompetenciasComponent,
+    canActivate: [TodoGuard],
+    data: {
+      titulo: 'Competencias', icono: 'bi bi-lightbulb',
+      accion: 'Lista', enlace: 'competencias'
+    }
+  },
 
+  {
+    path: 'auxiliares', component: AuxiliaresComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Auxiliares', icono: 'bi bi-person-video',
+      accion: 'Lista', enlace: 'auxiliares'
+    }
+  },
+  {
+    path: 'auxiliares/crear', component: CrearAuxiliarComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Auxiliares', icono: 'bi bi-person-video',
+      accion: 'Crear', enlace: 'auxiliares'
+    }
+  },
+
+  {
+    path: 'auxiliares/editar/:id', component: EditarAuxiliarComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Auxiliares', icono: 'bi bi-person-video',
+      accion: 'Editar', enlace: 'auxiliares'
+    }
+  },
+  {
+    path: 'asistencias/auxiliar', component: ListaAsistenciaComponent,
+    canActivate: [AuxiliarGuard],
+    data: {
+      titulo: 'Auxiliares', icono: 'bi bi-megaphone',
+      accion: 'Lista', enlace: 'asistencias/auxiliar'
+    }
+  },
+  {
+    path: 'asistencias/auxiliar/crear/:id', component: CrearAsistenciaAuxiliarComponent,
+    canActivate: [AuxiliarGuard],
+    data: {
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Crear', enlace: 'asistencias/auxiliar'
+    }
+  },
+  {
+    path: 'asistencias/auxiliar/editar/:id', component: EditarAsistenciaAuxiliarComponent,
+    canActivate: [AuxiliarGuard],
+    data: {
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Editar', enlace: 'asistencias/auxiliar'
+    }
+  },
+  {
+    path: 'asistencias/auxiliar/eliminar/:id', component: EliminarAsistenciaAuxiliarComponent,
+    canActivate: [AuxiliarGuard],
+    data: {
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
+      accion: 'Eliminar', enlace: 'asistencias/auxiliar'
+    }
+  },
+  {
+    path: 'horarios/auxiliar', component: ConsultarHorarioAuxiliarComponent,
+    canActivate: [AuxiliarGuard],
+    data: {
+      titulo: 'Horarios', icono: 'bi bi-megaphone',
+      accion: 'Consultar', enlace: 'horarios/auxiliar'
+    }
+  },
+  {
+    path: 'docentes/horarios', component: ConsultarHorarioDocenteComponent,
+    canActivate: [AuxiliarGuard],
+    data: {
+      titulo: 'Docentes', icono: 'bi bi-person-video3',
+      accion: 'Consultar', enlace: 'docentes/horarios'
+    }
+  },
+  {
+    path: 'horarios/padre', component: HorarioApoderadoComponent,
+    canActivate: [ApoderadoGuard],
+    data: {
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Consultar', enlace: 'horarios/padre'
+    }
+  },
+  {
+    path: 'horarios/madre', component: HorarioApoderadoComponent,
+    canActivate: [ApoderadoGuard],
+    data: {
+      titulo: 'Horarios', icono: 'bi bi-calendar3',
+      accion: 'Consultar', enlace: 'horarios/padre'
+    }
+  },
+  {
+    path: 'directores', component: DirectoresComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Directores', icono: 'bi bi-award',
+      accion: 'Lista', enlace: 'directores'
+    }
+  },
+  {
+    path: 'directores/crear', component: CrearDirectorComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Directores', icono: 'bi bi-award',
+      accion: 'Crear', enlace: 'directores'
+    }
+  },
+  {
+    path: 'directores/editar/:id', component: EditarDirectorComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Directores', icono: 'bi bi-award',
+      accion: 'Editar', enlace: 'directores'
+    }
+  },
+  {
+    path: 'informes', component: InformesComponent,
+    canActivate: [AdmindocenteGuard],
+    data: {
+      titulo: 'Informes', icono: 'bi bi-file-earmark-post',
+      accion: 'Buscar', enlace: 'informes'
+    }
+  },
+  {
+    path: 'apreciaciones', component: ApreciacionesComponent,
+    canActivate: [AdmindocenteGuard],
+    data: {
+      titulo: 'Apreciaciones', icono: 'bi bi-chat-text',
+      accion: 'Lista', enlace: 'apreciaciones'
+    }
+  }
 
 ];
 

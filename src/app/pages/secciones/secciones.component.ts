@@ -11,34 +11,34 @@ import Swal from 'sweetalert2';
 })
 export class SeccionesComponent implements OnInit {
 
-  public secciones:Seccion[]=[];
-  public cargando:boolean= true;
-  public titulo:string='Tabla Secciones';
-  public icono:string='bi bi-table';
-  public desde:number=0;
-  public totalRegistros:number=0;
-  public numeropaginas=0;
-  public ds:boolean= true;
-  public da:boolean=true;
+  public secciones: Seccion[] = [];
+  public cargando: boolean = true;
+  public titulo: string = 'Tabla Secciones';
+  public icono: string = 'bi bi-table';
+  public desde: number = 0;
+  public totalRegistros: number = 0;
+  public numeropaginas = 0;
+  public ds: boolean = true;
+  public da: boolean = true;
+  public seccionForm!: FormGroup;
+  public formSubmitted: boolean = false;
+  public boton: string = "";
+  public isSave: boolean = true;
+  public tituloseccion: string = "";
+  public nombrerepetido: boolean = false;
 
-  public seccionForm!:FormGroup;
-  public formSubmitted:boolean= false;
-  public boton:string="";
-  public isSave:boolean=true;
-  public tituloseccion:string="";
-
-  @ViewChild('closebutton') closebutton:any;
+  @ViewChild('closebutton') closebutton: any;
 
   constructor(
-    private seccionService:SeccionService,
-    private fb:FormBuilder) {
+    private seccionService: SeccionService,
+    private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.listarSecciones();
-    this.seccionForm= this.fb.group({
-      seccionId:[''],
-      nombre:['',[Validators.required,Validators.maxLength(30)]]
+    this.seccionForm = this.fb.group({
+      id: [''],
+      nombre: ['', [Validators.required, Validators.maxLength(30)]]
     });
   }
 
@@ -61,172 +61,204 @@ export class SeccionesComponent implements OnInit {
     }
   }
 
-  controlBotonesPaginacion(){
-      if(this.secciones.length !==5){
-        this.ds= true;
-      }else{
-        this.ds= false;
-      }
-      if(this.desde===0){
-        this.da= true;
-      }else{
-        this.da= false;
-      }
-  }
-  
-  listarSecciones(){
-    this.cargando= true;
-    this.seccionService.listar(this.desde)
-    .subscribe(({secciones,total})=>{
-      this.secciones=secciones;
-      this.totalRegistros=total;
-      this.numeropaginas= Math.ceil(this.totalRegistros/5);
-      this.cargando= false;
-      this.controlBotonesPaginacion();
-    });
+  controlBotonesPaginacion() {
+    if (this.secciones.length !== 5) {
+      this.ds = true;
+    } else {
+      this.ds = false;
+    }
+    if (this.desde === 0) {
+      this.da = true;
+    } else {
+      this.da = false;
+    }
   }
 
-  cambiarPagina(valor:number){
+  listarSecciones() {
+    this.cargando = true;
+    this.seccionService.listar(this.desde)
+      .subscribe(({ secciones, total }) => {
+        this.secciones = secciones;
+        this.totalRegistros = total;
+        this.cargando = false;
+        this.controlBotonesPaginacion();
+      });
+  }
+
+  cambiarPagina(valor: number) {
     this.desde += valor;
-    if(this.desde<0){
-      this.desde=0;
-    }else{
-      if(this.desde>this.totalRegistros){
-        this.desde -=valor;
+    if (this.desde < 0) {
+      this.desde = 0;
+    } else {
+      if (this.desde > this.totalRegistros) {
+        this.desde -= valor;
       }
     }
     this.listarSecciones();
   }
 
-  crearSeccion(){
-    this.formSubmitted= false;
+  crearSeccion() {
+    this.formSubmitted = false;
     this.seccionForm.controls['nombre'].setValue('');
-    this.boton="Guardar";
-    this.isSave= true;
-    this.tituloseccion="Crear Seccion";
+    this.boton = "Guardar";
+    this.isSave = true;
+    this.tituloseccion = "Crear Sección";
+    this.nombrerepetido = false;
   }
 
-  guardarSeccion(){
+  guardarSeccion() {
 
-    this.formSubmitted= true;
-
-      if(this.seccionForm.valid){
-
-        if(this.isSave){
-          this.seccionService.crear(this.seccionForm.value)
-          .subscribe(({ok,msg})=>{
-            if(ok){
-              this.closebutton.nativeElement.click();
-              this.listarSecciones();
+    this.formSubmitted = true;
+    this.nombrerepetido = false;
+    if (this.seccionForm.valid) {
+      if (this.isSave) {
+        this.seccionService.existeNombreSeccion((this.seccionForm.get('nombre')?.value).trim()).subscribe({
+          next: ({ ok }) => {
+            if (ok) {
+              this.nombrerepetido = true;
+            } else {
               Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: msg,
-                showConfirmButton: false,
-                timer: 1000
-              })
+                title: 'Guardar',
+                text: "¿Desea crear la seccion?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Guardar'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.seccionService.crear(this.seccionForm.value)
+                    .subscribe({
+                      next: ({ ok, msg }) => {
+                        if (ok) {
+                          this.closebutton.nativeElement.click();
+                          this.listarSecciones();
+                          Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: msg,
+                            showConfirmButton: false,
+                            timer: 1000
+                          });
+                        }
+                      }
+                    });
+                }
+              });
             }
-          },(error)=>{
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: error.error.msg,
-              showConfirmButton: false,
-              timer: 1500
-            })
-          })
-        }else{
+          }
+        });
 
-         this.seccionService.actualizar(this.seccionForm.get('seccionId')?.value,this.seccionForm.value)
-         .subscribe(({ok,msg})=>{
-           if(ok){
-            this.closebutton.nativeElement.click();
-            this.listarSecciones();
+      } else {
+
+        this.seccionService.existeNombreSeccionEditar(this.seccionForm.get('id')?.value,
+          (this.seccionForm.get('nombre')?.value).trim()).subscribe({
+            next: ({ ok }) => {
+              if (ok) {
+                this.nombrerepetido = true;
+              } else {
+                Swal.fire({
+                  title: 'Guardar',
+                  text: "¿Desea actualizar la seccion?",
+                  icon: 'question',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  cancelButtonText: 'Cancelar',
+                  confirmButtonText: 'Actualizar'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.seccionService.actualizar(this.seccionForm.get('id')?.value, this.seccionForm.value)
+                      .subscribe({
+                        next: ({ ok, msg }) => {
+                          if (ok) {
+                            this.closebutton.nativeElement.click();
+                            this.listarSecciones();
+                            Swal.fire({
+                              position: 'top-end',
+                              icon: 'success',
+                              title: msg,
+                              showConfirmButton: false,
+                              timer: 1000
+                            });
+                          }
+                        }
+                      });
+                  }
+                });
+              }
+            }
+          })
+      }
+    }
+  }
+
+  eliminarSeccion(seccion: Seccion) {
+
+    this.seccionService.tieneAulas(seccion.id!)
+      .subscribe({
+        next: ({ ok, msg }) => {
+          if (ok) {
             Swal.fire({
               position: 'top-end',
-              icon: 'success',
+              icon: 'info',
               title: msg,
               showConfirmButton: false,
               timer: 1000
             })
-           }
-         },(error)=>{
-          Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: error.error.msg,
-            showConfirmButton: false,
-            timer: 1000
-          })
-         })
-        }
-      }
-  }
-
-  eliminarSeccion(seccion:Seccion){
-    
-    this.seccionService.tieneAulas(seccion.id!)
-    .subscribe({
-      next: ({ok,msg})=>{
-        if(ok){
-          Swal.fire({
-            position: 'top-end',
-            icon: 'info',
-            title: msg,
-            showConfirmButton: false,
-            timer: 1000
-          })
-        }else{
-          Swal.fire({
-            title: 'Borrar Seccion',
-            text: "Desea borrar a: "+seccion.nombre,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Cancelar',
-            confirmButtonText: 'Borrar'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.seccionService.borrar(seccion.id!)
-              .subscribe(({ok,msg})=>{
-                if(ok){
-                  this.listarSecciones();
-                  Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: msg,
-                    showConfirmButton: false,
-                    timer: 1000
+          } else {
+            Swal.fire({
+              title: 'Borrar Seccion',
+              text: "Desea borrar a: " + seccion.nombre,
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'Cancelar',
+              confirmButtonText: 'Borrar'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.seccionService.borrar(seccion.id!)
+                  .subscribe(({ ok, msg }) => {
+                    if (ok) {
+                      this.listarSecciones();
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 1000
+                      })
+                    }
                   })
-                }
-              })
-            }
-          })
+              }
+            })
+          }
         }
-      }
-    })
+      })
   }
 
-  editarSeccion(seccion:Seccion){
-    this.seccionForm.controls['seccionId'].setValue(seccion.id);
+  editarSeccion(seccion: Seccion) {
+    this.seccionForm.controls['id'].setValue(seccion.id);
     this.seccionForm.controls['nombre'].setValue(seccion.nombre.toUpperCase());
-    this.boton="Actualizar";
-    this.isSave= false;
-    this.tituloseccion= "Editar Seccion";
+    this.boton = "Actualizar";
+    this.isSave = false;
+    this.tituloseccion = "Editar Sección";
+    this.nombrerepetido = false;
   }
 
-  buscarSeccion(termino:string){
-    if(termino.length==0){
+  buscarSeccion(termino: string) {
+    if (termino.length == 0) {
       this.listarSecciones();
-    }else{
+    } else {
       this.seccionService.buscarPorNombre(termino)
-      .subscribe((resp:Seccion[])=>{
-        this.secciones=resp;
-        this.totalRegistros=resp.length;
-        this.cargando= false;
-        this.controlBotonesPaginacion();
-      });
+        .subscribe((resp: Seccion[]) => {
+          this.secciones = resp;
+          this.totalRegistros = resp.length;
+          this.cargando = false;
+          this.controlBotonesPaginacion();
+        });
     }
   }
 

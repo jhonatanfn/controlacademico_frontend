@@ -7,16 +7,16 @@ import { Hora } from 'src/app/models/hora.model';
 import { Institucion } from 'src/app/models/institucion.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
-import { Subarea } from 'src/app/models/subarea.model';
 import { AulaService } from 'src/app/services/aula.service';
 import { HoraService } from 'src/app/services/hora.service';
 import { HorarioService } from 'src/app/services/horario.service';
 import { InstitucionService } from 'src/app/services/institucion.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
-import { SubareaService } from 'src/app/services/subarea.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { AreaService } from 'src/app/services/area.service';
+import { Area } from 'src/app/models/area.model';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -30,12 +30,12 @@ export class ConsultaHorarioComponent implements OnInit {
   public icono: string = 'bi bi-calendar2';
   public titulo2: string = 'Horarios';
   public icono2: string = 'bi bi-calendar-check';
-  public titulo3: string = 'Resumen';
+  public titulo3: string = 'Datos del Horario';
   public icono3: string = 'bi bi-card-checklist';
   public horarioForm!: FormGroup;
   public periodos: Periodo[] = [];
   public aulas: Aula[] = [];
-  public subareas: Subarea[] = [];
+  public areas: Area[] = [];
   public dias: any[] = [];
   public horas: Hora[] = [];
   public formSubmitted: boolean = false;
@@ -54,7 +54,7 @@ export class ConsultaHorarioComponent implements OnInit {
 
   constructor( private fb: FormBuilder,
     private periodoService: PeriodoService, private aulaService: AulaService,
-    private subareaService: SubareaService, private usuarioService: UsuarioService,
+    private areaService: AreaService, private usuarioService: UsuarioService,
     private horarioService: HorarioService, private horaService: HoraService,
     private route: ActivatedRoute, private institucionService: InstitucionService) {
 
@@ -75,10 +75,10 @@ export class ConsultaHorarioComponent implements OnInit {
           }
         }
       });
-      this.subareaService.todo().subscribe({
-        next: ({ ok, subareas }) => {
+      this.areaService.todo().subscribe({
+        next: ({ ok, areas }) => {
           if (ok) {
-            this.subareas = subareas;
+            this.areas = areas;
           }
         }
       });
@@ -128,7 +128,6 @@ export class ConsultaHorarioComponent implements OnInit {
     if (this.horarioForm.valid) {
       this.cargando = true;
       let arrperiodos = (this.horarioForm.get('periodoId')?.value).split(',');
-
       this.horarioService.horariosPeriodoAula(
         Number(arrperiodos[0]),
         Number(this.horarioForm.get('aulaId')?.value))
@@ -142,14 +141,13 @@ export class ConsultaHorarioComponent implements OnInit {
                     id: resultado.id,
                     dia: objd,
                     hora: objh,
-                    subareaId: resultado.subareaId,
+                    areaId: resultado.areaId,
                     programacionId: resultado.programacionId,
                     programacion: resultado.programacion
                   }
                   this.datos.push(objeto);
                 });
               });
-
               let numerofilas = this.datos.length / 5;
               let inicioAux = 0;
               let finalAux = 5;
@@ -176,7 +174,7 @@ export class ConsultaHorarioComponent implements OnInit {
   obtenerObjetoHorario(vector: any[], dia: string, hora: number) {
     let retorno = {
       id: 0,
-      subareaId: 0,
+      areaId: 0,
       programacionId: 0,
       programacion: ""
     };
@@ -184,7 +182,7 @@ export class ConsultaHorarioComponent implements OnInit {
       if (item.dia === dia && item.horaId === hora) {
         retorno = {
           id: item.id,
-          subareaId: item.programacion.subarea.id,
+          areaId: item.programacion.area?.id,
           programacionId: item.programacion.id,
           programacion: item.programacion
         }
@@ -217,7 +215,7 @@ export class ConsultaHorarioComponent implements OnInit {
     this.formSubmitted = true;
     if (this.horarioForm.valid) {
       let url = this.institucionService.getImageUrlInstitucion(this.institucion.img!);
-      let nombreArchivo = 'REPORTE: ' + moment().format('DD/MM/yyyy') + '.pdf';
+      let nombreArchivo = 'HORARIO: ' + moment().format('DD/MM/yyyy') + '.pdf';
       let arrPeriodos = (this.horarioForm.get('periodoId')?.value).split(',');
 
       var docDefinition: any = {
@@ -332,19 +330,19 @@ export class ConsultaHorarioComponent implements OnInit {
                       { text: intervalo.rango.inicio + '-' + intervalo.rango.fin, alignment: 'center' },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 1].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 1].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 2].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 2].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 3].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 3].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                     [
-                      { text: this.datos[intervalo.inicio + 4].programacion?.subarea?.nombre || { text: 'RECREO',bold: true}, alignment: 'center' },
+                      { text: this.datos[intervalo.inicio + 4].programacion?.area?.nombre || { text: 'RECREO',bold: true, fontSize: 10}, alignment: 'center',fontSize: 10 },
                     ],
                   ]
                 )),

@@ -9,7 +9,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { NopagefoundComponent } from './nopagefound/nopagefound/nopagefound.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,

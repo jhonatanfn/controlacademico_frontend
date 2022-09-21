@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Aula } from 'src/app/models/aula.model';
 import { Docente } from 'src/app/models/docente.model';
 import { Periodo } from 'src/app/models/periodo.model';
 import { Programacion } from 'src/app/models/programacion.model';
@@ -24,9 +25,10 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
   public ds: boolean = true;
   public da: boolean = true;
   public docente!: Docente;
-
   public periodoseleccionado: any = "";
   public periodos: Periodo[] = [];
+  public aulas: Aula[] = [];
+  public aulasAux: Aula[] = [];
 
   constructor(
     private programacionService: ProgramacionService,
@@ -68,29 +70,43 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
 
   listarProgramaciones() {
     this.cargando = true;
-
+    this.aulas = [];
     if (this.periodoseleccionado) {
-      this.programacionService.programacionesPorDocentePeriodoPaginado(Number(this.docente.id),
-        Number(this.periodoseleccionado), Number(this.desde))
+      this.programacionService.programacionesPorDocentePeriodoPaginadoTodos(Number(this.docente.id),
+        Number(this.periodoseleccionado))
         .subscribe({
-          next: ({ ok, programaciones, total }) => {
-            if (ok) {
-              this.programaciones = programaciones;
-              this.totalRegistros = total;
-              this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-              this.cargando = false;
-              this.controlBotonesPaginacion();
+          next: ({ programaciones }) => {
+            if (programaciones.length > 0) {
+              var lookupObject: any = {};
+              programaciones.forEach(programacion => {
+                this.aulasAux.push(programacion.aula!);
+              });
+              for (var i in this.aulasAux) {
+                lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
+              }
+              for (i in lookupObject) {
+                this.aulas.push(lookupObject[i]);
+              }
             }
+            this.cargando = false;
           }
         });
     } else {
-      this.programacionService.programacionesPorDocente(Number(this.docente.id), Number(this.desde))
-        .subscribe(({ programaciones, total }) => {
-          this.programaciones = programaciones;
-          this.totalRegistros = total;
-          this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+      this.programacionService.programacionesPorDocenteTodos(Number(this.docente.id))
+        .subscribe(({ programaciones }) => {
+          if (programaciones.length > 0) {
+            var lookupObject: any = {};
+            programaciones.forEach(programacion => {
+              this.aulasAux.push(programacion.aula!);
+            });
+            for (var i in this.aulasAux) {
+              lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
+            }
+            for (i in lookupObject) {
+              this.aulas.push(lookupObject[i]);
+            }
+          }
           this.cargando = false;
-          this.controlBotonesPaginacion();
         });
     }
   }
@@ -108,9 +124,8 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
   }
 
   buscarProgramaciones(nombre: string) {
-
+    this.aulas = [];
     if (this.periodoseleccionado) {
-
       if (nombre.length == 0) {
         this.listarProgramaciones();
       } else {
@@ -118,10 +133,17 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
           Number(this.docente.id), Number(this.periodoseleccionado))
           .subscribe({
             next: (resp: Programacion[]) => {
-              this.programaciones = resp;
-              this.totalRegistros = resp.length;
-              this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-              this.controlBotonesPaginacion();
+              var lookupObject: any = {};
+              resp.forEach(programacion => {
+                this.aulasAux.push(programacion.aula!);
+              });
+              for (var i in this.aulasAux) {
+                lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
+              }
+              for (i in lookupObject) {
+                this.aulas.push(lookupObject[i]);
+              }
+              this.cargando = false;
             },
             error: (error) => {
               Swal.fire({
@@ -130,7 +152,7 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
                 title: 'Se produjo un error. Hable con el administrador.',
                 showConfirmButton: false,
                 timer: 1000
-              })
+              });
             }
           });
       }
@@ -141,10 +163,17 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
         this.programacionService.buscarProgramacionesDocente(nombre, Number(this.docente.id))
           .subscribe({
             next: (resp: Programacion[]) => {
-              this.programaciones = resp;
-              this.totalRegistros = resp.length;
-              this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-              this.controlBotonesPaginacion();
+              var lookupObject: any = {};
+              resp.forEach(programacion => {
+                this.aulasAux.push(programacion.aula!);
+              });
+              for (var i in this.aulasAux) {
+                lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
+              }
+              for (i in lookupObject) {
+                this.aulas.push(lookupObject[i]);
+              }
+              this.cargando = false;
             },
             error: (error) => {
               Swal.fire({
@@ -153,12 +182,10 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
                 title: 'Se produjo un error. Hable con el administrador.',
                 showConfirmButton: false,
                 timer: 1000
-              })
+              });
             }
           });
       }
     }
-
   }
-
 }

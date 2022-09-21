@@ -1,59 +1,41 @@
 <div class="row">
-    <div class="col-12 col-lg-6">
-        <div class="card contenido-principal">
-            <div class="card-header">
-                <!--Encabezado-->
+    <div class="col-12 col-lg-12">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
                 <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
                         <form [formGroup]="docenteForm" (ngSubmit)="actualizarDocente()" autocomplete="off">
-
                             <div class="row">
-                                <div class="col-12 col-md-6">
-                                    <input type="hidden" name="id" formControlName="id">
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="dni" class="form-label">Tipo Documento</label>
-                                        <select class="form-select" aria-label="Default select example"
-                                            formControlName="tipodocumentoId">
-                                            <option value="">Seleccionar tipo documento</option>
-                                            <option *ngFor="let tipo of tipos" [value]="tipo.id">
-                                                {{tipo.nombre}}
-                                            </option>
-                                        </select>
-                                        <div *ngIf="campoRequerido('tipodocumentoId')" id="tipodocumentoId"
-                                            class="form-text text-danger">
-                                            El campo tipo documento es requerido
+                                        <label for="dni" class="form-label">DNI</label>
+                                        <input type="text" class="form-control" formControlName="dni"
+                                            aria-describedby="dni"  (keyup)="validaDNI()">
+                                        <div id="dni" class="form-text text-danger" *ngIf="campoRequerido('dni')">
+                                            El campo dni es requerido
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="mb-3">
-                                        <label for="dni" class="form-label">N° Documento</label>
-                                        <input type="text" class="form-control" formControlName="numero"
-                                            aria-describedby="numero">
-                                        <div id="numero" class="form-text text-danger" *ngIf="campoRequerido('numero')">
-                                            El campo número documento es requerido
+                                        <div id="dni" class="form-text text-danger"
+                                            *ngIf="campoMaxLengh('dni',8)">
+                                            El campo dni debe tener 8 caracteres
                                         </div>
-                                        <div id="numero" class="form-text text-danger"
-                                            *ngIf="campoMaxLengh('numero',8)">
-                                            El campo número documento debe tener 8 caracteres
+                                        <div id="dni" class="form-text text-danger"
+                                            *ngIf="campoMinLength('dni',8)">
+                                            El campo dni debe tener 8 caracteres
                                         </div>
-                                        <div id="numero" class="form-text text-danger"
-                                            *ngIf="campoMinLength('numero',8)">
-                                            El campo número documento debe tener 8 caracteres
-                                        </div>
-                                        <div id="numero" class="form-text text-danger" *ngIf="campoNumeros('numero')">
+                                        <div id="dni" class="form-text text-danger" *ngIf="campoNumeros('dni')">
                                             Solo se aceptan numeros
                                         </div>
+                                        <div id="dni" class="form-text text-danger" *ngIf="dnirepetido">
+                                            El DNI ya se encuentra registrado
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 col-md-6">
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="nombre" class="form-label">Nombres</label>
+                                        <label for="nombres" class="form-label">Nombres</label>
                                         <input type="text" class="form-control" formControlName="nombres" id="nombres"
                                             aria-describedby="nombres">
                                         <div id="nombres" class="form-text text-danger"
@@ -66,7 +48,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
                                         <label for="apellidopaterno" class="form-label">Apellido Paterno</label>
                                         <input type="text" class="form-control" formControlName="apellidopaterno"
@@ -81,9 +63,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 col-md-6">
+
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
                                         <label for="apellidomaterno" class="form-label">Apellido Materno</label>
                                         <input type="text" class="form-control" formControlName="apellidomaterno"
@@ -98,20 +79,72 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="sexo" class="form-label">Sexo</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="sexo">
+                                            <option value="">Seleccionar sexo</option>
+                                            <option *ngFor="let sexo of sexos" [value]="sexo.id">
+                                                {{sexo.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('sexo')" id="sexo"
+                                            class="form-text text-danger">
+                                            El campo sexo es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="fechanacimiento" class="form-label">Fecha Nacimiento</label>
+                                        <input type="date" class="form-control"
+                                            formControlName="fechanacimiento" id="telefono"
+                                            aria-describedby="fechanacimiento">
+                                        <div *ngIf="campoRequerido('fechanacimiento')" id="sexo"
+                                            class="form-text text-danger">
+                                            El campo fecha nacimiento es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
                                         <label for="telefono" class="form-label">Teléfono</label>
                                         <input type="text" class="form-control" formControlName="telefono" id="telefono"
                                             aria-describedby="telefono">
                                     </div>
                                 </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="nacionalidad" class="form-label">Nacionalidad</label>
+                                        <input type="text" class="form-control" formControlName="nacionalidad"
+                                            id="nacionalidad" aria-describedby="nacionalidad">
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" formControlName="direccion"
-                                            id="direccion" aria-describedby="direccion">
+                                        <label for="distrito" class="form-label">Distrito</label>
+                                        <input type="text" class="form-control" formControlName="distrito"
+                                            id="distrito" aria-describedby="distrito">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="mb-3">
+                                        <label for="correo" class="form-label">Correo Electrónico</label>
+                                        <input type="text" class="form-control" formControlName="correo"
+                                            id="correo" aria-describedby="correo">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="mb-3">
+                                        <label for="domicilio" class="form-label">Domicilio</label>
+                                        <input type="text" class="form-control" formControlName="domicilio"
+                                            id="domicilio" aria-describedby="domicilio">
                                     </div>
                                 </div>
                             </div>

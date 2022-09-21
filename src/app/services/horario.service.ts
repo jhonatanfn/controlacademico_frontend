@@ -41,7 +41,6 @@ export class HorarioService {
     const base = `${base_url}/horarios?desde=${desde}`;
     return this.http.get<listarHorarios>(base, this.headers);
   }
-
   obtener(id: number) {
     const url = `${base_url}/horarios/${id}`;
     return this.http.get<crudHorario>(url, this.headers);
@@ -67,6 +66,16 @@ export class HorarioService {
         })
       );
   }
+  
+  buscarHorarioPorDia(diaNombre:string,termino: string) {
+    const base = `${base_url}/horarios/busqueda/pordia/${diaNombre}/${termino}`;
+    return this.http.get<any[]>(base, this.headers)
+      .pipe(
+        map((resp: any) => {
+          return this.transformar(resp.busquedas)
+        })
+      );
+  }
 
   private transformar(busquedas: any[]): Horario[] {
     return busquedas.map(
@@ -74,28 +83,33 @@ export class HorarioService {
     );
   }
 
-  existeHorario(periodoId:number,aulaId:number,diaNombre:string,horaId:number){
+  existeHorario(periodoId: number, aulaId: number, diaNombre: string, horaId: number) {
     const base = `${base_url}/horarios/existehorario/${periodoId}/${aulaId}/${diaNombre}/${horaId}`;
     return this.http.get<crudHorario>(base, this.headers);
   }
 
-  hayHorarioPeriodoAula(periodoId:number,aulaId:number){
+  hayHorarioPeriodoAula(periodoId: number, aulaId: number) {
     const base = `${base_url}/horarios/hayhorario/${periodoId}/${aulaId}`;
     return this.http.get<listarHorarios>(base, this.headers);
   }
 
-  horarioDuplicado(periodoId:number,aulaId:number, subareaId:number,dia:string,horaId:number){
-    const base = `${base_url}/horarios/horarioduplicado/${periodoId}/${aulaId}/${subareaId}/${dia}/${horaId}`;
+  horarioDuplicado(periodoId: number, aulaId: number, areaId: number, dia: string, horaId: number) {
+    const base = `${base_url}/horarios/horarioduplicado/${periodoId}/${aulaId}/${areaId}/${dia}/${horaId}`;
     return this.http.get<crudHorario>(base, this.headers);
   }
 
-  horariosPeriodoAula(periodoId:number,aulaId:number){
+  horariosPeriodoAula(periodoId: number, aulaId: number) {
     const base = `${base_url}/horarios/periodoaula/${periodoId}/${aulaId}`;
     return this.http.get<listarHorarios>(base, this.headers);
   }
 
-  horariosPeriododDocente(periodoId:number,docenteId:number){
+  horariosPeriododDocente(periodoId: number, docenteId: number) {
     const base = `${base_url}/horarios/periododocente/${periodoId}/${docenteId}`;
+    return this.http.get<listarHorarios>(base, this.headers);
+  }
+
+  listarpordia(diaNombre: string, desde: number = 0) {
+    const base = `${base_url}/horarios/pordia/${diaNombre}?desde=${desde}`;
     return this.http.get<listarHorarios>(base, this.headers);
   }
 

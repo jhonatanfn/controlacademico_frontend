@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Apoderado } from 'src/app/models/apoderado.model';
-import { Matricula } from 'src/app/models/matricula.model';
+import { Matriculadetalle } from 'src/app/models/matriculadetalle';
+import { Padre } from 'src/app/models/padre.model';
 import { Periodo } from 'src/app/models/periodo.model';
-import { MatriculaService } from 'src/app/services/matricula.service';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 })
 export class ListaMatriculaApoderadoComponent implements OnInit {
 
-  public matriculas: Matricula[] = [];
+  public matriculadetalles: Matriculadetalle[] = [];
   public cargando: boolean = true;
   public titulo: string = 'Tabla Matriculas';
   public icono: string = 'bi bi-table';
@@ -23,12 +23,12 @@ export class ListaMatriculaApoderadoComponent implements OnInit {
   public numeropaginas = 0;
   public ds: boolean = true;
   public da: boolean = true;
-  public apoderado!: Apoderado;
+  public padre!: Padre;
   public periodoseleccionado: any = "";
   public periodos: Periodo[] = [];
 
   constructor(
-    private matriculaService: MatriculaService,
+    private matriculadetalleService: MatriculadetalleService,
     private usuarioService: UsuarioService,
     private periodoService: PeriodoService) {
 
@@ -43,16 +43,16 @@ export class ListaMatriculaApoderadoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usuarioService.apoderadoPorPersona().subscribe(({ ok, apoderado }) => {
+    this.usuarioService.padrePorPersona().subscribe(({ ok, padre }) => {
       if (ok) {
-        this.apoderado = apoderado;
+        this.padre = padre;
         this.listarMatriculas();
       }
     });
   }
 
   controlBotonesPaginacion() {
-    if (this.matriculas.length !== 5) {
+    if (this.matriculadetalles.length !== 5) {
       this.ds = true;
     } else {
       this.ds = false;
@@ -66,26 +66,25 @@ export class ListaMatriculaApoderadoComponent implements OnInit {
 
   listarMatriculas() {
     this.cargando = true;
-
-    if(this.periodoseleccionado){
-      this.matriculaService.matriculasAlumnoPorApoderadoPeriodo(Number(this.apoderado.id),
-      Number(this.periodoseleccionado), this.desde)
-      .subscribe(({ matriculas, total }) => {
-        this.matriculas = matriculas;
-        this.totalRegistros = total;
-        this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-        this.cargando = false;
-        this.controlBotonesPaginacion();
-      });
-    }else{
-      this.matriculaService.matriculasAlumnoPorApoderado(Number(this.apoderado.id), this.desde)
-      .subscribe(({ matriculas, total }) => {
-        this.matriculas = matriculas;
-        this.totalRegistros = total;
-        this.numeropaginas = Math.ceil(this.totalRegistros / 5);
-        this.cargando = false;
-        this.controlBotonesPaginacion();
-      });
+    if (this.periodoseleccionado) {
+      this.matriculadetalleService.matriculadetallesAlumnoPorPadrePeriodo(Number(this.padre.id),
+        Number(this.periodoseleccionado), this.desde)
+        .subscribe(({ matriculadetalles, total }) => {
+          this.matriculadetalles = matriculadetalles;
+          this.totalRegistros = total;
+          this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+          this.cargando = false;
+          this.controlBotonesPaginacion();
+        });
+    } else {
+      this.matriculadetalleService.matriculadetallesAlumnoPorPadre(Number(this.padre.id), this.desde)
+        .subscribe(({ matriculadetalles, total }) => {
+          this.matriculadetalles = matriculadetalles;
+          this.totalRegistros = total;
+          this.numeropaginas = Math.ceil(this.totalRegistros / 5);
+          this.cargando = false;
+          this.controlBotonesPaginacion();
+        });
     }
 
   }
@@ -104,17 +103,15 @@ export class ListaMatriculaApoderadoComponent implements OnInit {
 
   buscarMatriculas(termino: string) {
 
-
-    if(this.periodoseleccionado){
-
+    if (this.periodoseleccionado) {
       if (termino.length == 0) {
         this.listarMatriculas();
       } else {
-        this.matriculaService.buscarMatriculasApoderadoPorAlumnoPeriodo(termino, 
-        Number(this.apoderado.id), Number(this.periodoseleccionado))
+        this.matriculadetalleService.buscarMatriculadetallesPadrePorAlumnoPeriodo(termino,
+          Number(this.padre.id), Number(this.periodoseleccionado))
           .subscribe({
-            next: (resp: Matricula[]) => {
-              this.matriculas = resp;
+            next: (resp: Matriculadetalle[]) => {
+              this.matriculadetalles = resp;
               this.totalRegistros = resp.length;
               this.cargando = false;
               this.controlBotonesPaginacion();
@@ -130,16 +127,14 @@ export class ListaMatriculaApoderadoComponent implements OnInit {
             }
           });
       }
-
-    }else{
-
+    } else {
       if (termino.length == 0) {
         this.listarMatriculas();
       } else {
-        this.matriculaService.buscarMatriculasApoderadoPorAlumno(termino, Number(this.apoderado.id))
+        this.matriculadetalleService.buscarMatriculadetallesPadrePorAlumno(termino, Number(this.padre.id))
           .subscribe({
-            next: (resp: Matricula[]) => {
-              this.matriculas = resp;
+            next: (resp: Matriculadetalle[]) => {
+              this.matriculadetalles = resp;
               this.totalRegistros = resp.length;
               this.cargando = false;
               this.controlBotonesPaginacion();
@@ -155,13 +150,6 @@ export class ListaMatriculaApoderadoComponent implements OnInit {
             }
           });
       }
-
     }
-
-
-   
-
-
   }
-
 }
