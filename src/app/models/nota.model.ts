@@ -19,6 +19,7 @@ export class Nota{
         public ciclo?:Ciclo,
         public competencia?:Competencia,
         public matriculadetalle?:Matriculadetalle,
+        public estado?:boolean,
         public id?:number,
         
         public matricula?:Matricula,

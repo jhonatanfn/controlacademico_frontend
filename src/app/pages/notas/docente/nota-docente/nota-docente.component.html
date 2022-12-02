@@ -71,6 +71,13 @@
                                 <td>{{programacion.numeromat}} de {{programacion.numeromaxmat}}</td>
                                 <td>
                                     <div class="btn-group text-center">
+                                        <button type="button" class="btn btn-secondary me-1" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" title="Alumno"
+                                            [routerLink]="['alumno',programacion.id]">
+                                            <span>
+                                                <i class="bi bi-mortarboard"></i>
+                                            </span>
+                                        </button>
                                         <button type="button" class="btn btn-primary me-1" data-bs-toggle="tooltip"
                                             data-bs-placement="top" title="Crear"
                                             [routerLink]="['crear',programacion.id]">

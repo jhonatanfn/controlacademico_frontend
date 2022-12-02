@@ -43,7 +43,7 @@ export class CrearMatriculaComponent implements OnInit {
     tienediscapacidad: 0,
     personaId: 0,
     padreId: 0,
-    madreId: 0
+    madreId: 0,
   };
   public existeAlumno: boolean = false;
   public messageError: string = "No hay alumno";

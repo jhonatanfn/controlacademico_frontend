@@ -201,27 +201,32 @@
                                     <tr>
                                         <th scope="col">Asistencias</th>
                                         <td class="text-center">{{asistiototal}}</td>
-                                        <td class="text-center">{{ (asistiototal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total>0">{{ (asistiototal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total==0">0 %</td>
                                     </tr>
                                     <tr>
                                         <th scope="col">Faltas</th>
                                         <td class="text-center">{{faltototal}}</td>
-                                        <td class="text-center">{{ (faltototal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total>0">{{ (faltototal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total==0">0 %</td>
                                     </tr>
                                     <tr>
                                         <th scope="col">Justificaciones</th>
                                         <td class="text-center">{{justificototal}}</td>
-                                        <td class="text-center">{{ (justificototal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total>0">{{ (justificototal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total==0">0 %</td>
                                     </tr>
                                     <tr>
                                         <th scope="col">Tardanzas</th>
                                         <td class="text-center">{{tardanzatotal}}</td>
-                                        <td class="text-center">{{ (tardanzatotal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total>0">{{ (tardanzatotal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total==0">0 %</td>
                                     </tr>
                                     <tr>
                                         <th scope="col">No registrado</th>
                                         <td class="text-center">{{noregistrototal}}</td>
-                                        <td class="text-center">{{ (noregistrototal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total>0">{{ (noregistrototal/total)*100 }} %</td>
+                                        <td class="text-center" *ngIf="total==0">0 %</td>
                                     </tr>
                                 </tbody>
                             </table>

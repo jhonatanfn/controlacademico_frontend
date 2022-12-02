@@ -112,6 +112,13 @@ import { CrearDirectorComponent } from './directores/crear-director/crear-direct
 import { EditarDirectorComponent } from './directores/editar-director/editar-director.component';
 import { InformesComponent } from './informes/informes.component';
 import { ApreciacionesComponent } from './apreciaciones/apreciaciones.component';
+import { PadresfamiliaComponent } from './padresfamilia/padresfamilia.component';
+import { CrearPadrefamiliaComponent } from './padresfamilia/crear-padrefamilia/crear-padrefamilia.component';
+import { EditarPadrefamiliaComponent } from './padresfamilia/editar-padrefamilia/editar-padrefamilia.component';
+import { CrearApreciacionComponent } from './apreciaciones/crear-apreciacion/crear-apreciacion.component';
+import { EditarApreciacionComponent } from './apreciaciones/editar-apreciacion/editar-apreciacion.component';
+import { GestionAlumnoComponent } from './notas/administrador/gestion-alumno/gestion-alumno.component';
+import { GestionAlumnoDocenteComponent } from './notas/docente/gestion-alumno-docente/gestion-alumno-docente.component';
 
 
 @NgModule({
@@ -220,7 +227,14 @@ import { ApreciacionesComponent } from './apreciaciones/apreciaciones.component'
     CrearDirectorComponent,
     EditarDirectorComponent,
     InformesComponent,
-    ApreciacionesComponent
+    ApreciacionesComponent,
+    PadresfamiliaComponent,
+    CrearPadrefamiliaComponent,
+    EditarPadrefamiliaComponent,
+    CrearApreciacionComponent,
+    EditarApreciacionComponent,
+    GestionAlumnoComponent,
+    GestionAlumnoDocenteComponent
   ],
   imports: [
     RouterModule,

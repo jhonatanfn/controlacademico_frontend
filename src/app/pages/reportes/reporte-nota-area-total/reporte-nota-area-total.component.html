@@ -147,6 +147,7 @@
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
+                                                                <th>Fecha</th>
                                                                 <th>Competencia</th>
                                                                 <th>Evaluacion</th>
                                                                 <th>Nota</th>
@@ -154,6 +155,7 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr *ngFor="let item of dato.notas">
+                                                                <td>{{item.fecha | date:'dd/MM/yyyy'}}</td>
                                                                 <td>{{item.competencia?.descripcion}}</td>
                                                                 <td>{{item.evaluacion?.nombre}}</td>
                                                                 <td>{{item.valor}}</td>

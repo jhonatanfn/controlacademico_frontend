@@ -225,22 +225,42 @@ export class ReporteAsistenciaRangoComponent implements OnInit {
     this.graficos.forEach(grafico=>{
       if(grafico.situacion?.abreviatura=="F"){
         grafico.total= this.faltototal;
-        grafico.porcentaje= Math.round((this.faltototal / this.total) * 100);
+        if(this.total>0){
+          grafico.porcentaje= Math.round((this.faltototal / this.total) * 100);
+        }else{
+          grafico.porcentaje= 0;
+        }
       }else{
         if(grafico.situacion?.abreviatura=="A"){
           grafico.total= this.asistiototal;
-          grafico.porcentaje= Math.round((this.asistiototal / this.total) * 100);
+          if(this.total>0){
+            grafico.porcentaje= Math.round((this.asistiototal / this.total) * 100);
+          }else{
+            grafico.porcentaje=0;
+          }
         }else{
           if(grafico.situacion?.abreviatura=="J"){
             grafico.total= this.justificototal;
-            grafico.porcentaje= Math.round((this.justificototal / this.total) * 100);
+            if(this.total>0){
+              grafico.porcentaje= Math.round((this.justificototal / this.total) * 100);
+            }else{
+              grafico.porcentaje=0;
+            }
           }else{
             if(grafico.situacion?.abreviatura=="T"){
               grafico.total= this.tardanzatotal;
-              grafico.porcentaje= Math.round((this.tardanzatotal / this.total) * 100);
+              if(this.total>0){
+                grafico.porcentaje= Math.round((this.tardanzatotal / this.total) * 100);
+              }else{
+                grafico.porcentaje=0;
+              }
             }else{
               grafico.total= this.noregistrototal;
-              grafico.porcentaje= Math.round((this.noregistrototal / this.total) * 100);
+              if(this.total>0){
+                grafico.porcentaje= Math.round((this.noregistrototal / this.total) * 100);
+              }else{
+                grafico.porcentaje=0;
+              }
             }
           }
         }

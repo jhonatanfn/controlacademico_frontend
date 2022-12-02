@@ -66,7 +66,7 @@ export class ApreciacionService {
   }
   private transformar(busquedas: any[]): Apreciacion[] {
     return busquedas.map(
-      apreciacion => new Apreciacion(apreciacion.nombre, apreciacion.descripcion, apreciacion.periodoId, apreciacion.alumnoId, apreciacion.periodo, apreciacion.alumno, apreciacion.responsabilidad, apreciacion.estado, apreciacion.id)
+      apreciacion => new Apreciacion(apreciacion.periodoId, apreciacion.alumnoId, apreciacion.periodo, apreciacion.alumno, apreciacion.estado, apreciacion.id)
     );
   }
 }

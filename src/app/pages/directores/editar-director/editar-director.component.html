@@ -7,11 +7,22 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
+                        <div class="mb-3">
+                            <p class="text-secondary fw-bold">
+                                Los campos marcados con <span class="text-danger fw-bold">*</span> 
+                                son obligatorios. 
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-12">
                         <form [formGroup]="directorForm" (ngSubmit)="actualizarDirector()" autocomplete="off">
                             <div class="row">
                                 <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="dni" class="form-label">DNI</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="dni" class="form-label m-0">DNI</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <input type="text" class="form-control" formControlName="dni"
                                             aria-describedby="dni" (keyup)="validaDNI()">
                                         <div id="dni" class="form-text text-danger" *ngIf="campoRequerido('dni')">
@@ -33,7 +44,10 @@
                                 </div>
                                 <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="nombres" class="form-label">Nombres</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="nombres" class="form-label m-0">Nombres</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <input type="text" class="form-control" formControlName="nombres" id="nombres"
                                             aria-describedby="nombres">
                                         <div id="nombres" class="form-text text-danger"
@@ -48,7 +62,10 @@
                                 </div>
                                 <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="apellidopaterno" class="form-label">Apellido Paterno</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="apellidopaterno" class="form-label m-0">Apellido Paterno</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <input type="text" class="form-control" formControlName="apellidopaterno"
                                             id="apellidopaterno" aria-describedby="apellidopaterno">
                                         <div id="apellidopaterno" class="form-text text-danger"
@@ -64,7 +81,10 @@
 
                                 <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="apellidomaterno" class="form-label">Apellido Materno</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="apellidomaterno" class="form-label m-0">Apellido Materno</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <input type="text" class="form-control" formControlName="apellidomaterno"
                                             id="apellidomaterno" aria-describedby="apellidomaterno">
                                         <div id="apellidomaterno" class="form-text text-danger"
@@ -82,7 +102,10 @@
                             <div class="row">
                                 <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="sexo" class="form-label">Sexo</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="sexo" class="form-label m-0">Sexo</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="sexo">
                                             <option value="">Seleccionar sexo</option>
@@ -97,7 +120,10 @@
                                 </div>
                                 <div class="col-12 col-md-3">
                                     <div class="mb-3">
-                                        <label for="fechanacimiento" class="form-label">Fecha Nacimiento</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="fechanacimiento" class="form-label m-0">Fecha Nacimiento</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <input type="date" class="form-control" formControlName="fechanacimiento"
                                             id="telefono" aria-describedby="fechanacimiento">
                                         <div *ngIf="campoRequerido('fechanacimiento')" id="sexo"

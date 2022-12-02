@@ -109,6 +109,13 @@ import { EditarDirectorComponent } from './directores/editar-director/editar-dir
 import { ReporteNotaAlumnoAnualComponent } from './reportes/reporte-nota-alumno-anual/reporte-nota-alumno-anual.component';
 import { InformesComponent } from './informes/informes.component';
 import { ApreciacionesComponent } from './apreciaciones/apreciaciones.component';
+import { PadresfamiliaComponent } from './padresfamilia/padresfamilia.component';
+import { CrearPadrefamiliaComponent } from './padresfamilia/crear-padrefamilia/crear-padrefamilia.component';
+import { EditarPadrefamiliaComponent } from './padresfamilia/editar-padrefamilia/editar-padrefamilia.component';
+import { CrearApreciacionComponent } from './apreciaciones/crear-apreciacion/crear-apreciacion.component';
+import { EditarApreciacionComponent } from './apreciaciones/editar-apreciacion/editar-apreciacion.component';
+import { GestionAlumnoComponent } from './notas/administrador/gestion-alumno/gestion-alumno.component';
+import { GestionAlumnoDocenteComponent } from './notas/docente/gestion-alumno-docente/gestion-alumno-docente.component';
 
 const childrenRoutes: Routes = [
   {
@@ -392,6 +399,14 @@ const childrenRoutes: Routes = [
       accion: 'Eliminar', enlace: 'notas'
     }
   },
+  {
+    path: 'notas/alumno/:id', component: GestionAlumnoComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Alumno', enlace: 'notas'
+    }
+  },
 
   {
     path: 'notas/docente', component: NotaDocenteComponent,
@@ -426,6 +441,15 @@ const childrenRoutes: Routes = [
     data: {
       titulo: 'Notas', icono: 'bi bi-stickies',
       accion: 'Eliminar', enlace: 'notas/docente'
+    }
+  },
+  {
+    path: 'notas/docente/alumno/:id', component: GestionAlumnoDocenteComponent,
+    canActivate: [DocenteGuard,IsProgramacionGuard],
+    canLoad: [IsProgramacionGuard],
+    data: {
+      titulo: 'Notas', icono: 'bi bi-stickies',
+      accion: 'Alumno', enlace: 'notas/docente'
     }
   },
 
@@ -640,23 +664,23 @@ const childrenRoutes: Routes = [
       accion: 'Asistencias Alumno', enlace: 'reportes'
     }
   },
-   /*
-  {
-    path: 'reportes/notasalumnoanual', component: ReporteNotaAlumnoAnualComponent,
-    canActivate: [TodoGuard],
-    data: {
-      titulo: 'Reportes', icono: 'bi bi-printer-fill',
-      accion: 'Informe', enlace: 'reportes'
-    }
-  },
+  /*
+ {
+   path: 'reportes/notasalumnoanual', component: ReporteNotaAlumnoAnualComponent,
+   canActivate: [TodoGuard],
+   data: {
+     titulo: 'Reportes', icono: 'bi bi-printer-fill',
+     accion: 'Informe', enlace: 'reportes'
+   }
+ },
  
 {
-  path: 'reportes/notasarea', component: ReporteNotaAreaComponent,
-  canActivate: [TodoGuard],
-  data: {
-    titulo: 'Buscar Notas', icono: 'bi bi-search',
-    principal: 'Reportes', accion: 'Notas', enlace: 'reportes/notasalumnoanual'
-  }
+ path: 'reportes/notasarea', component: ReporteNotaAreaComponent,
+ canActivate: [TodoGuard],
+ data: {
+   titulo: 'Buscar Notas', icono: 'bi bi-search',
+   principal: 'Reportes', accion: 'Notas', enlace: 'reportes/notasalumnoanual'
+ }
 },
 */
   {
@@ -940,7 +964,47 @@ const childrenRoutes: Routes = [
       titulo: 'Apreciaciones', icono: 'bi bi-chat-text',
       accion: 'Lista', enlace: 'apreciaciones'
     }
-  }
+  },
+  {
+    path: 'apreciaciones/crear', component: CrearApreciacionComponent,
+    canActivate: [AdmindocenteGuard],
+    data: {
+      titulo: 'Apreciaciones', icono: 'bi bi-chat-text',
+      accion: 'Crear', enlace: 'apreciaciones'
+    }
+  },
+  {
+    path: 'apreciaciones/editar/:id', component: EditarApreciacionComponent,
+    canActivate: [AdmindocenteGuard],
+    data: {
+      titulo: 'Apreciaciones', icono: 'bi bi-chat-text',
+      accion: 'Editar', enlace: 'apreciaciones'
+    }
+  },
+  {
+    path: 'familiares', component: PadresfamiliaComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Familiares', icono: 'bi bi-incognito',
+      accion: 'Lista', enlace: 'familiares'
+    }
+  },
+  {
+    path: 'familiares/crear', component: CrearPadrefamiliaComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Familiares', icono: 'bi bi-incognito',
+      accion: 'Crear', enlace: 'familiares'
+    }
+  },
+  {
+    path: 'familiares/editar/:id/:name', component: EditarPadrefamiliaComponent,
+    canActivate: [AdminGuard],
+    data: {
+      titulo: 'Familiares', icono: 'bi bi-incognito',
+      accion: 'Editar', enlace: 'familiares'
+    }
+  },
 
 ];
 

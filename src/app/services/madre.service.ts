@@ -66,4 +66,9 @@ export class MadreService {
       madre => new Madre(madre.personaId, madre.persona, madre.id)
     );
   }
+
+  consultadniMadre(dni:string){
+    const url=`${base_url}/madres/consultadni/${dni}`;
+    return this.http.get<crudMadre>(url,this.headers);
+  }
 }

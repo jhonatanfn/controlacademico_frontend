@@ -241,22 +241,26 @@ export class ReporteAnualNotaComponent implements OnInit {
       ).subscribe({
         next: ({ ok, notas }) => {
           if (ok) {
-            this.alumnonombre= notas[0].matriculadetalle?.matricula?.alumno?.persona?.apellidopaterno+' '+
-            notas[0].matriculadetalle?.matricula?.alumno?.persona?.apellidomaterno+' '+
-            notas[0].matriculadetalle?.matricula?.alumno?.persona?.nombres;
-            this.areas.forEach(area => {
-              let notitas: any[] = [];
-              notas.forEach(nota => {
-                if (area.id == nota.matriculadetalle?.programacion?.area?.id) {
-                  notitas.push(nota);
-                }
+            this.alumnonombre= arrAlumnos[1]+' '+arrAlumnos[2]+' '+arrAlumnos[3];
+            /*
+              this.alumnonombre= notas[0].matriculadetalle?.matricula?.alumno?.persona?.apellidopaterno+' '+
+              notas[0].matriculadetalle?.matricula?.alumno?.persona?.apellidomaterno+' '+
+              notas[0].matriculadetalle?.matricula?.alumno?.persona?.nombres;
+            */
+              this.areas.forEach(area => {
+                let notitas: any[] = [];
+                notas.forEach(nota => {
+                  if (area.id == nota.matriculadetalle?.programacion?.area?.id) {
+                    notitas.push(nota);
+                  }
+                });
+                let objeto = {
+                  area: area,
+                  notas: notitas
+                };
+                this.datos.push(objeto);
               });
-              let objeto = {
-                area: area,
-                notas: notitas
-              };
-              this.datos.push(objeto);
-            });
+            
           }
           this.cargando = false;
         }
@@ -403,12 +407,14 @@ export class ReporteAnualNotaComponent implements OnInit {
                         table: {
                           body: [
                             [
+                              { text: 'Fecha', bold: true },
                               { text: 'Competencia', bold: true },
                               { text: 'Evaluación', bold: true },
                               { text: 'Valor', bold: true }
                             ],
                             ...p.notas.map((nt: any) => (
                               [
+                                moment(nt.fecha).format('DD/MM/yyyy'),
                                 nt.competencia?.descripcion,
                                 nt.evaluacion?.nombre,
                                 nt.valor

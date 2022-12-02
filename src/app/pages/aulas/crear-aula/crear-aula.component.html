@@ -7,12 +7,22 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
+                        <div class="mb-3">
+                            <p class="text-secondary fw-bold">
+                                Los campos marcados con <span class="text-danger fw-bold">*</span> 
+                                son obligatorios. 
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-12">
                         <form [formGroup]="aulaForm" (submit)="crearAula()" autocomplete="off">
                             <div class="row">
                                 <div class="col-12 col-md-12">
-
                                     <div class="mb-3">
-                                        <label for="nivelId" class="form-label">Nivel</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="nivelId" class="form-label m-0">Nivel</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="nivelId">
                                             <option value="">Seleccionar nivel</option>
@@ -25,9 +35,11 @@
                                             El nivel es requerido
                                         </div>
                                     </div>
-
                                     <div class="mb-3">
-                                        <label for="gradoId" class="form-label">Grado</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="gradoId" class="form-label m-0">Grado</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="gradoId">
                                             <option value="">Seleccionar grado</option>
@@ -42,7 +54,10 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="seccionId" class="form-label">Seccion</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="seccionId" class="form-label m-0">Seccion</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="seccionId">
                                             <option value="">Seleccionar seccion</option>
@@ -57,7 +72,10 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="nombre" class="form-label">Nombre</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="nombre" class="form-label m-0">Nombre</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <input type="text" class="form-control" formControlName="nombre" id="nombre"
                                             aria-describedby="nombre">
                                         <div id="nombre" class="form-text text-danger" *ngIf="campoRequerido('nombre')">
@@ -69,7 +87,10 @@
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="tipovalor" class="form-label">Tipo Evaluación</label>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <label for="tipovalor" class="form-label m-0">Tipo Evaluacion</label>
+                                            <span class="text-danger fw-bold">*</span>                                               
+                                        </div>
                                         <select class="form-select" name="tipovalor" id="tipovalor" 
                                         formControlName="tipovalor">
                                             <option value="">Seleccionar tipo evaluacion</option>

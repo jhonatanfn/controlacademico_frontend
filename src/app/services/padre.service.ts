@@ -70,4 +70,9 @@ export class PadreService {
     );
   }
 
+  consultadniPadre(dni:string){
+    const url=`${base_url}/padres/consultadni/${dni}`;
+    return this.http.get<crudPadre>(url,this.headers);
+  }
+
 }

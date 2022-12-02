@@ -17,8 +17,9 @@ import { MatriculadetalleService } from 'src/app/services/matriculadetalle.servi
 import { NotaService } from 'src/app/services/nota.service';
 import { AreaService } from 'src/app/services/area.service';
 import { Area } from 'src/app/models/area.model';
-import { Apreciacion } from 'src/app/models/apreciacion.model';
 import { ApreciacionService } from 'src/app/services/apreciacion.service';
+import { ApreciaciondetalleService } from 'src/app/services/apreciaciondetalle.service';
+import { Apreciaciondetalle } from 'src/app/models/apreciaciondetalle';
 
 @Component({
   selector: 'app-informes',
@@ -46,7 +47,7 @@ export class InformesComponent implements OnInit {
   public institucion!: Institucion;
   public resumenes: any[] = [];
   public tipovalor: number = 0;
-  public apreciaciones: Apreciacion[] = [];
+  public apreciaciondetalles: Apreciaciondetalle[] = [];
 
   constructor(private fb: FormBuilder,
     private periodoService: PeriodoService,
@@ -54,7 +55,8 @@ export class InformesComponent implements OnInit {
     private areaService: AreaService,
     private institucionService: InstitucionService,
     private aulaService: AulaService, private notaService: NotaService,
-    private rangoService: RangoService, private apreciacionService: ApreciacionService) {
+    private rangoService: RangoService, private apreciacionService: ApreciacionService,
+    private apreciaciondetalleService: ApreciaciondetalleService) {
 
     this.periodoService.todo().subscribe(({ ok, periodos }) => {
       if (ok) {
@@ -117,7 +119,7 @@ export class InformesComponent implements OnInit {
   buscarNotas() {
     this.formSubmitted = true;
     this.datos = [];
-    this.apreciaciones = [];
+    this.apreciaciondetalles = [];
     this.resumenes = [];
     this.cargando = true;
     if (this.repForm.valid) {
@@ -133,31 +135,31 @@ export class InformesComponent implements OnInit {
         this.datos.push(objeto);
       });
 
-      this.apreciacionService.getApreciacionesPeriodoAlumno(arrPeriodos[0], arrAlumnos[0]).subscribe({
-        next: ({ ok, apreciaciones }) => {
+      this.apreciaciondetalleService.apreciaciondetallesPeriodoAlumno(arrPeriodos[0], arrAlumnos[0]).subscribe({
+        next: ({ ok, apreciaciondetalles }) => {
           if (ok) {
-            this.apreciaciones = apreciaciones;
+            this.apreciaciondetalles = apreciaciondetalles;
           }
         }
       });
       this.notaService.notasPeriodoAulaAlumno(arrPeriodos[0], arrAulas[0], arrAlumnos[0])
-      .subscribe({
-        next: ({ ok, notas }) => {
-          if (ok) {
-            if (notas.length > 0) {
-              this.tipovalor = Number(notas[0].matriculadetalle?.programacion?.aula?.tipovalor);
-              if (this.tipovalor == 1) {
-                this.retornaLogroLiteral(notas);
-                this.generarResumenLiteral();
-              }
-              if (this.tipovalor == 2) {
-                this.retornaLogroVigesimal(notas);
-                this.generarResumenVigesimal();
+        .subscribe({
+          next: ({ ok, notas }) => {
+            if (ok) {
+              if (notas.length > 0) {
+                this.tipovalor = Number(notas[0].matriculadetalle?.programacion?.aula?.tipovalor);
+                if (this.tipovalor == 1) {
+                  this.retornaLogroLiteral(notas);
+                  this.generarResumenLiteral();
+                }
+                if (this.tipovalor == 2) {
+                  this.retornaLogroVigesimal(notas);
+                  this.generarResumenVigesimal();
+                }
               }
             }
           }
-        }
-      });
+        });
 
       this.cargando = false;
     }
@@ -180,7 +182,6 @@ export class InformesComponent implements OnInit {
     this.datos.forEach(dato => {
       let competencias: any[] = dato.competencias;
       competencias.forEach(competencia => {
-
         this.resumenes.forEach(resumen => {
           if (resumen.rango.letra == competencia.logro1) {
             resumen.total1 = resumen.total1 + 1;
@@ -195,7 +196,6 @@ export class InformesComponent implements OnInit {
             resumen.total4 = resumen.total4 + 1;
           }
         });
-
       });
     });
   }
@@ -232,10 +232,8 @@ export class InformesComponent implements OnInit {
             resumen.total4 = resumen.total4 + 1;
           }
         });
-
       });
     });
-
   }
 
   retornaLogroLiteral(notas: any[]) {
@@ -305,7 +303,6 @@ export class InformesComponent implements OnInit {
     });
     return maximo;
   }
-
   calcularPromedio(notas: any[], cicloId: number, competenciaId: number) {
     let suma = 0;
     let promedio = 0;
@@ -325,7 +322,6 @@ export class InformesComponent implements OnInit {
     }
     return retorno;
   }
-
   calcularNivel(notas: any[], cicloId: number, competenciaId: number) {
     let vector: any[] = [];
     let nivelFinal = "-";
@@ -366,10 +362,8 @@ export class InformesComponent implements OnInit {
       // retornamos la califacion
       nivelFinal = this.retornaCalificacion(sumaNivel);
     }
-
     return nivelFinal;
   }
-
   retornaCalificacion(nivel: number) {
     let calificacion = "";
     this.rangos.forEach(rango => {
@@ -379,7 +373,6 @@ export class InformesComponent implements OnInit {
     });
     return calificacion;
   }
-
   retornaCompetencias(area: any) {
     let lista: any[] = [];
     let competencias: any[] = area.competencia;
@@ -396,7 +389,6 @@ export class InformesComponent implements OnInit {
     });
     return lista;
   }
-
   getBase64ImageFromURL(url: any) {
     return new Promise((resolve, reject) => {
       var img = new Image();
@@ -416,10 +408,8 @@ export class InformesComponent implements OnInit {
       img.src = url;
     });
   }
-
   async generatePDF(accion: string) {
     this.formSubmitted = true;
-
     if (this.repForm.valid) {
       let url = this.institucionService.getImageUrlInstitucion(this.institucion.img!);
       let nombreArchivo = 'INFORME: ' + moment().format('DD/MM/yyyy') + '.pdf';
@@ -427,7 +417,6 @@ export class InformesComponent implements OnInit {
       let arrAulas = (this.repForm.get('aulaId')?.value).split(',');
       let arrAlumnos = (this.repForm.get('alumnoId')?.value).split(',');
       this.alumnonombre = arrAlumnos[1] + ' ' + arrAlumnos[2] + ' ' + arrAlumnos[3];
-
       if (this.tipovalor == 1) {
         var docDefinition: any = {
           content: [
@@ -587,20 +576,21 @@ export class InformesComponent implements OnInit {
               margin: [0, 10, 0, 15],
               table: {
                 headerRows: 1,
-                widths: [120, 'auto', 80, 150],
+                widths: [120, 150, 80, 150],
+                //heights: [30, 30, 30, 30],
                 body: [
                   [
-                    { text: 'APRECIACIÓN', bold: true, alignment: 'center', fontSize: 10 },
+                    { text: 'APRECIACIÓN DEL TUTOR', bold: true, alignment: 'center', fontSize: 10 },
                     { text: 'DESCRIPCION', bold: true, alignment: 'center', fontSize: 10 },
                     { text: 'RESPOSABILIDAD DEL PADRE', bold: true, alignment: 'center', fontSize: 10 },
                     { text: 'FIRMA DEL TUTOR', bold: true, alignment: 'center', fontSize: 10 },
                   ],
-                  ...this.apreciaciones.map(p => (
+                  ...this.apreciaciondetalles.map(p => (
                     [
-                      { text: p.nombre, fontSize: 10 },
+                      { text: 'APRECIACIÓN DEL TUTOR PARA EL '+(p.nombre).toUpperCase(), fontSize: 10},
                       { text: p.descripcion, fontSize: 10 },
                       { text: p.responsabilidad, fontSize: 10, alignment: "center" },
-                      "",
+                      { text: '' },
                     ])),
                 ]
               }
@@ -778,20 +768,20 @@ export class InformesComponent implements OnInit {
               margin: [0, 10, 0, 15],
               table: {
                 headerRows: 1,
-                widths: [120, 'auto', 80, 150],
+                widths: [120, 150, 80, 150],
                 body: [
                   [
-                    { text: 'APRECIACIÓN', bold: true, alignment: 'center', fontSize: 10 },
+                    { text: 'APRECIACIÓN DEL TUTOR', bold: true, alignment: 'center', fontSize: 10 },
                     { text: 'DESCRIPCION', bold: true, alignment: 'center', fontSize: 10 },
                     { text: 'RESPOSABILIDAD DEL PADRE', bold: true, alignment: 'center', fontSize: 10 },
                     { text: 'FIRMA DEL TUTOR', bold: true, alignment: 'center', fontSize: 10 },
                   ],
-                  ...this.apreciaciones.map(p => (
+                  ...this.apreciaciondetalles.map(p => (
                     [
-                      { text: p.nombre, fontSize: 10 },
+                      { text: 'APRECIACIÓN DEL TUTOR PARA EL '+(p.nombre).toUpperCase(), fontSize: 10},
                       { text: p.descripcion, fontSize: 10 },
                       { text: p.responsabilidad, fontSize: 10, alignment: "center" },
-                      "",
+                      { text: '' },
                     ])),
                 ]
               }

@@ -1,0 +1,116 @@
+<div class="row">
+    <div class="col-12 col-sm-3">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="apreciacionForm" autocomplete="off" (submit)="generarTabla()">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="periodoId" class="form-label">Periodo</label>
+                                <select class="form-select" aria-label="Seleccionar periodo" formControlName="periodoId"
+                                    (change)="cargarAlumnos()">
+                                    <option value="">Seleccionar Periodo</option>
+                                    <option *ngFor="let periodo of periodos" [value]="[periodo.id,periodo.nombre]">
+                                        {{periodo.nombre}}
+                                    </option>
+                                </select>
+                                <div *ngIf="campoRequerido('periodoId')" id="periodoId" class="form-text text-danger">
+                                    La periodo es requerido
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="aulaId" class="form-label">Aula</label>
+                                <select class="form-select" aria-label="Seleccionar aula" formControlName="aulaId"
+                                    (change)="cargarAlumnos()">
+                                    <option value="">Seleccionar Aula</option>
+                                    <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre]">
+                                        {{aula.nombre}}
+                                    </option>
+                                </select>
+                                <div *ngIf="campoRequerido('aulaId')" id="aulaId" class="form-text text-danger">
+                                    La aula es requerida
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="alumnoId" class="form-label">Alumnos</label>
+                                <select class="form-select" aria-label="Seleccionar alumno" formControlName="alumnoId"
+                                    (change)="limpiarVector()">
+                                    <option value="">Seleccionar alumno</option>
+                                    <option *ngFor="let matriculadetalle of matriculadetalles" [value]="[matriculadetalle.matricula?.alumno?.id,
+                                        matriculadetalle.matricula?.alumno?.persona?.apellidopaterno,
+                                        matriculadetalle.matricula?.alumno?.persona?.apellidomaterno,
+                                        matriculadetalle.matricula?.alumno?.persona?.nombres]">
+                                        {{matriculadetalle.matricula?.alumno?.persona?.apellidopaterno}}
+                                        {{matriculadetalle.matricula?.alumno?.persona?.apellidomaterno}}
+                                        {{matriculadetalle.matricula?.alumno?.persona?.nombres}}
+                                    </option>
+                                </select>
+                                <div *ngIf="campoRequerido('alumnoId')" id="alumnoId" class="form-text text-danger">
+                                    El alumno es requerido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-9">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="alert alert-primary" role="alert" *ngIf="existeAp">
+                        Ya existen apreciaciones para esta busqueda.
+                    </div>
+                    <div class="alert alert-primary" role="alert" *ngIf="apreciaciondetalles.length==0 && !existeAp">
+                        No hay datos.
+                    </div>
+                    <table class="table table-bordered" *ngIf="apreciaciondetalles.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col" class="w100">Apreciación del tutor</th>
+                                <th scope="col">Descripcion</th>
+                                <th scope="col" class="w100">Responsabilidad del padre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let apreciaciondetalle of apreciaciondetalles; let i=index">
+                                <th>{{i+1}}</th>
+                                <td>{{apreciaciondetalle.nombre}}</td>
+                                <td>
+                                    <textarea name="descripcion" id="descripcion" cols="30" rows="5"
+                                        class="form-control" [(ngModel)]="apreciaciondetalle.descripcion" autofocus>
+                                    </textarea>
+                                </td>
+                                <td>
+                                    <select name="responsabilidad" id="responsabilidad" class="form-select"
+                                        [(ngModel)]="apreciaciondetalle.responsabilidad">
+                                        <option value="{{escala.nombre}}" *ngFor="let escala of escalas">
+                                            {{escala.nombre}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-primary" *ngIf="apreciaciondetalles.length>0" (click)="guardarApreciacion()">
+                    <i class="bi bi-hdd"></i>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -208,10 +208,18 @@ export class ReporteNotaConsolidadoComponent implements OnInit {
         label = rango.letra;
       }
       if(this.vigesimalactivo && this.literalactivo== false){
-        label = rango.inicio + ' - ' + rango.fin;
+        if(rango.inicio<=20){
+          label = rango.inicio + ' - ' + rango.fin;
+        }else{
+          label = "-"
+        }
       }
       if(this.vigesimalactivo && this.literalactivo){
-        label = rango.inicio + ' - ' + rango.fin+' / '+rango.letra;
+        if(rango.inicio<=20){
+          label = rango.inicio + ' - ' + rango.fin+' / '+rango.letra;
+        }else{
+          label ="-"
+        }
       }
       etiquetas.push(label);
     });

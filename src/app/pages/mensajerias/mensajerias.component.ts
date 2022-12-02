@@ -64,13 +64,33 @@ export class MensajeriasComponent implements OnInit {
     this.icono = "bi bi-envelope-check";
     this.estaleido = "Marcar leido";
     this.resaltado = "";
-    this.usuarioService.todo().subscribe({
-      next: ({ ok, usuarios }) => {
-        if (ok) {
-          this.usuarios = usuarios;
+    if(this.usuarioService.usuario.role.nombre=="ADMINISTRADOR" || 
+    this.usuarioService.usuario.role.nombre=="DOCENTE" ||
+    this.usuarioService.usuario.role.nombre=="AUXILIAR"){
+
+      this.usuarioService.todo().subscribe({
+        next: ({ ok, usuarios }) => {
+          if (ok) {
+            this.usuarios = usuarios;
+          }
         }
-      }
-    });
+      });
+
+    }
+    if(this.usuarioService.usuario.role.nombre=="PADRE" || 
+    this.usuarioService.usuario.role.nombre=="MADRE" ||
+    this.usuarioService.usuario.role.nombre=="APODERADO"){
+
+      this.usuarioService.limitado().subscribe({
+        next: ({ok, usuarios})=>{
+          if(ok){
+            this.usuarios=usuarios;
+          }
+        }
+      });
+      
+    }
+
   }
 
   ngOnInit(): void {
@@ -79,6 +99,14 @@ export class MensajeriasComponent implements OnInit {
     this.mensajeriaForm = this.fb.group({
       asunto: ['', [Validators.required, Validators.maxLength(20)]],
       contenido: ['', [Validators.required, Validators.maxLength(255)]]
+    });
+    
+    this.mensajeriaService.actualizarMensajesNuevos(this.usuarioService.usuario.email).subscribe({
+      next: ({ok,msg})=>{
+        if(ok){
+          this.mensajeriaService.nuevos=0;
+        }
+      }
     });
   }
 
@@ -106,7 +134,9 @@ export class MensajeriasComponent implements OnInit {
     if (this.selectedUsuario) {
       let objeto = {
         id: this.selectedUsuario[0],
-        email: this.selectedUsuario[1]
+        email: this.selectedUsuario[1],
+        nombres: (this.selectedUsuario[2]+' '+this.selectedUsuario[3]+' '+this.selectedUsuario[4]).toUpperCase(),
+        imagen: this.selectedUsuario[5]
       }
       if (!this.isRepetido(Number(this.selectedUsuario[0]))) {
         this.emails.push(objeto);
@@ -498,6 +528,13 @@ export class MensajeriasComponent implements OnInit {
             });
             this.listarMensajes();
             this.closebutton.nativeElement.click();
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: "Mensaje enviado con exito.",
+              showConfirmButton: false,
+              timer: 1000
+            });
           }
         });
       }

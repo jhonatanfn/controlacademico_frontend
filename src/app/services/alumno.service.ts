@@ -113,7 +113,9 @@ export class AlumnoService {
 
   private transformar(busquedas:any[]):Alumno[]{
     return busquedas.map(
-      alumno=>new Alumno(alumno.personaId,alumno.padreId,alumno.madreId,alumno.vivecon,alumno.tienediscapacidad,alumno.cualdiscapacidad,alumno.certificadiscapacidad,alumno.observacion,alumno.persona,alumno.padre,alumno.madre,alumno.id)
+      alumno=>new Alumno(alumno.personaId,alumno.padreId,alumno.madreId,alumno.responsableId,alumno.vivecon,alumno.tienediscapacidad,
+        alumno.certificadiscapacidad,alumno.cualdiscapacidad,alumno.inicialprocede,alumno.colegioprocede,alumno.observacion,
+        alumno.persona,alumno.padre,alumno.madre,alumno.responsable,alumno.id)
     );
   }
   tieneMatricula(alumnoId:number){

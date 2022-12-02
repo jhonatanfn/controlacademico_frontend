@@ -38,9 +38,15 @@
                                         <span class="input-group-text" id="basic-addon1">
                                             <i class="bi bi-key-fill"></i>
                                         </span>
-                                        <input type="password" class="form-control" formControlName="password"
+                                        <input type="password" class="form-control" formControlName="password" 
+                                        id="mypassword"
                                             placeholder="Password" aria-label="Password" aria-describedby="basic-addon1"
                                             autocomplete="on">
+                                        <button  class="btn btn-primary boton-style" type="button" id="btngroup"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="{{titulo}}" 
+                                        (click)="mostrarPassword()">
+                                            <i class="{{etiqueta}}"></i>
+                                        </button>
                                     </div>
                                     <span *ngIf="campoRequerido('password')" class="text-danger">
                                         <p class="text-sm-start fs-6 m-0">El password es requerido</p>
@@ -55,8 +61,7 @@
                                     </label>
                                 </div>
                                 <div class="d-grid mb-2">
-                                    <button type="submit" class="btn btn-success" 
-                                    [disabled]="control">
+                                    <button type="submit" class="btn btn-success" [disabled]="control">
                                         <span class="fs-5">
                                             <i class="bi bi-door-open-fill"></i>
                                         </span>

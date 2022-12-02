@@ -28,6 +28,14 @@
     width: 50rem;
 }
 
+.boton-style{
+    outline:none !important;
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
 /* --- MEDIAQUERIES ---  */
 
 /* Dispositivo xs */

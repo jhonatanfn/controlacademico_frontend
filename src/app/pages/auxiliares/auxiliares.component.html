@@ -51,6 +51,7 @@
                                 <th scope="col">Apellido Paterno</th>
                                 <th scope="col">Apellido Materno</th>
                                 <th scope="col">Teléfono</th>
+                                <th scope="col">Correo Electrónico</th>
                                 <th scope="col" class="w100"></th>
                             </tr>
                         </thead>
@@ -65,6 +66,7 @@
                                 <td>{{auxiliar.persona?.apellidopaterno | uppercase}}</td>
                                 <td>{{auxiliar.persona?.apellidomaterno | uppercase}}</td>
                                 <td>{{auxiliar.persona?.telefono}}</td>
+                                <td>{{auxiliar.persona?.correo}}</td>
                                 <td>
                                     <div class="btn-group text-center">
                                         <button [ngClass]="{ isDisabled: !auxiliar.estado }" type="button"

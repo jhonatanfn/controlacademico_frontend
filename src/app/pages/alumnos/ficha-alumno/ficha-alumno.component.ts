@@ -77,6 +77,8 @@ export class FichaAlumnoComponent implements OnInit {
     let vivecon = "";
     let tienediscapacidad = "";
     let certificadodiscapacidad = "";
+    let vivep="";
+    let vivem="";
 
     if (this.alumno.persona?.sexo == 1) {
       sexo_alumno = "MASCULINO"
@@ -98,6 +100,18 @@ export class FichaAlumnoComponent implements OnInit {
     if (this.alumno.vivecon == 4) {
       vivecon = "ABUELOS";
     }
+
+    if(this.alumno.padre.vive){
+      vivep= "SI";
+    }else{
+      vivep="NO";
+    }
+    if(this.alumno.madre.vive){
+      vivem= "SI";
+    }else{
+      vivem="NO";
+    }
+
     if (this.alumno.tienediscapacidad == 1) {
       tienediscapacidad = "NO";
     } else {
@@ -107,6 +121,111 @@ export class FichaAlumnoComponent implements OnInit {
       certificadodiscapacidad = "NO";
     } else {
       certificadodiscapacidad = "SI";
+    }
+    if(this.alumno.cualdiscapacidad){
+      this.alumno.cualdiscapacidad= (this.alumno.cualdiscapacidad).toUpperCase()
+    }else{
+      this.alumno.cualdiscapacidad= "";
+    }
+    if(this.alumno.inicialprocede){
+      this.alumno.inicialprocede= (this.alumno.inicialprocede).toUpperCase()
+    }else{
+      this.alumno.inicialprocede= ""
+    }
+    if(this.alumno.colegioprocede){
+      this.alumno.colegioprocede= (this.alumno.colegioprocede).toUpperCase()
+    }else{
+      this.alumno.colegioprocede= ""
+    }
+    if(this.alumno.observacion){
+      this.alumno.observacion= (this.alumno.observacion).toUpperCase()
+    }else{
+      this.alumno.observacion= ""
+    }
+
+    /**Alumno */
+    if(this.alumno.persona.nacionalidad){
+      this.alumno.persona.nacionalidad = (this.alumno.persona.nacionalidad).toUpperCase()
+    }else{
+      this.alumno.persona.nacionalidad="";
+    }
+    if(this.alumno.persona.distrito){
+      this.alumno.persona.distrito = (this.alumno.persona.distrito).toUpperCase()
+    }else{
+      this.alumno.persona.distrito="";
+    }
+    if(this.alumno.persona.correo){
+      this.alumno.persona.correo = (this.alumno.persona.correo).toUpperCase()
+    }else{
+      this.alumno.persona.correo="";
+    }
+    if(this.alumno.persona.domicilio){
+      this.alumno.persona.domicilio = (this.alumno.persona.domicilio).toUpperCase()
+    }else{
+      this.alumno.persona.domicilio="";
+    }
+    /**padre */
+    if(this.alumno.padre.nacionalidad){
+      this.alumno.padre.nacionalidad = (this.alumno.padre.nacionalidad).toUpperCase()
+    }else{
+      this.alumno.padre.nacionalidad="";
+    }
+    if(this.alumno.padre.distrito){
+      this.alumno.padre.distrito = (this.alumno.padre.distrito).toUpperCase()
+    }else{
+      this.alumno.padre.distrito="";
+    }
+    if(this.alumno.padre.correo){
+      this.alumno.padre.correo = (this.alumno.padre.correo).toUpperCase()
+    }else{
+      this.alumno.padre.correo="";
+    }
+    if(this.alumno.padre.domicilio){
+      this.alumno.padre.domicilio = (this.alumno.padre.domicilio).toUpperCase()
+    }else{
+      this.alumno.padre.domicilio="";
+    }
+    /*madre*/
+    if(this.alumno.madre.nacionalidad){
+      this.alumno.madre.nacionalidad = (this.alumno.madre.nacionalidad).toUpperCase()
+    }else{
+      this.alumno.madre.nacionalidad="";
+    }
+    if(this.alumno.madre.distrito){
+      this.alumno.madre.distrito = (this.alumno.madre.distrito).toUpperCase()
+    }else{
+      this.alumno.madre.distrito="";
+    }
+    if(this.alumno.madre.correo){
+      this.alumno.madre.correo = (this.alumno.madre.correo).toUpperCase()
+    }else{
+      this.alumno.madre.correo="";
+    }
+    if(this.alumno.madre.domicilio){
+      this.alumno.madre.domicilio = (this.alumno.madre.domicilio).toUpperCase()
+    }else{
+      this.alumno.madre.domicilio="";
+    }
+    /**responsable */
+    if(this.alumno.responsable.nacionalidad){
+      this.alumno.responsable.nacionalidad = (this.alumno.responsable.nacionalidad).toUpperCase()
+    }else{
+      this.alumno.responsable.nacionalidad="";
+    }
+    if(this.alumno.responsable.distrito){
+      this.alumno.responsable.distrito = (this.alumno.responsable.distrito).toUpperCase()
+    }else{
+      this.alumno.responsable.distrito="";
+    }
+    if(this.alumno.responsable.correo){
+      this.alumno.responsable.correo = (this.alumno.responsable.correo).toUpperCase()
+    }else{
+      this.alumno.responsable.correo="";
+    }
+    if(this.alumno.responsable.domicilio){
+      this.alumno.responsable.domicilio = (this.alumno.responsable.domicilio).toUpperCase()
+    }else{
+      this.alumno.responsable.domicilio="";
     }
 
     var docDefinition: any = {
@@ -147,7 +266,7 @@ export class FichaAlumnoComponent implements OnInit {
         },
 
         {
-          text: 'FICHA DEL ALUMNO',
+          text: 'FICHA FAMILIAR DEL ALUMNO',
           style: ['header'],
           margin: [0, 10, 0, 10],
           decoration: 'underline',
@@ -163,53 +282,7 @@ export class FichaAlumnoComponent implements OnInit {
           fontSize: 12,
           bold: true,
         },
-        /*
-        {
-          margin: [0, 10, 0, 0],
-          table: {
-            headerRows: 1,
-            widths: ['auto', 'auto', 'auto', 'auto'],
-            body: [
-              [
-                { text: 'DNI', bold: true, alignment: 'center' },
-                { text: 'NOMBRES', bold: true, alignment: 'center' },
-                { text: 'APELLIDO PATERNO', bold: true, alignment: 'center' },
-                { text: 'APELLIDO MATERNO', bold: true, alignment: 'center' }
-              ],
-              [
-                { text: this.alumno.persona?.dni },
-                { text: this.alumno.persona?.nombres },
-                { text: this.alumno.persona?.apellidopaterno },
-                { text: this.alumno.persona?.apellidomaterno },
-              ],
-              [
-                { text: 'SEXO', bold: true, alignment: 'center' },
-                { text: 'FECHA NACIMIENTO', bold: true, alignment: 'center' },
-                { text: 'TELEFONO', bold: true, alignment: 'center' },
-                { text: 'NACIONALIDAD', bold: true, alignment: 'center' }
-              ],
-              [
-                { text: sexo_alumno },
-                { text: moment(this.alumno.persona?.fechanacimiento).format('DD/MM/yyyy') },
-                { text: this.alumno.persona?.telefono },
-                { text: this.alumno.persona?.nacionalidad },
-              ],
-              [
-                { text: 'DISTRITO', bold: true, alignment: 'center' },
-                { text: 'CORREO ELECTRÓNICO', bold: true, alignment: 'center' },
-                { text: 'DOMICILIO', bold: true, alignment: 'center' },
-                { text: '', bold: true, alignment: 'center' }
-              ],
-              [
-                { text: this.alumno.persona?.distrito },
-                { text: this.alumno.persona?.correo },
-                { text: this.alumno.persona?.domicilio },
-                { text: '' },
-              ],
-            ]
-          }
-        },
-        */
+
         {
 
           margin: [0, 1, 0, 5],
@@ -220,7 +293,7 @@ export class FichaAlumnoComponent implements OnInit {
                 { text: 'DNI', bold: true }, this.alumno.persona?.dni
               ],
               [
-                { text: 'NOMBRES Y APELLIDOS', bold: true }, this.alumno.persona?.nombres + ' ' + this.alumno.persona?.apellidopaterno + ' ' + this.alumno.persona?.apellidomaterno
+                { text: 'NOMBRES Y APELLIDOS', bold: true }, (this.alumno.persona?.nombres + ' ' + this.alumno.persona?.apellidopaterno + ' ' + this.alumno.persona?.apellidomaterno).toUpperCase()
               ],
               [
                 { text: 'SEXO', bold: true }, sexo_alumno
@@ -274,6 +347,12 @@ export class FichaAlumnoComponent implements OnInit {
                 { text: 'CUAL DISCAPACIDAD', bold: true }, this.alumno.cualdiscapacidad
               ],
               [
+                { text: 'I.E. INICIAL DE DONDE PROCEDE', bold: true }, this.alumno.inicialprocede
+              ],
+              [
+                { text: 'COLEGIO DE PROCEDENCIA', bold: true }, this.alumno.colegioprocede
+              ],
+              [
                 { text: 'OBSERVACIONES', bold: true }, this.alumno.observacion
               ],
             ],
@@ -295,10 +374,13 @@ export class FichaAlumnoComponent implements OnInit {
             widths: [180, 300],
             body: [
               [
+                { text: 'VIVE', bold: true }, vivep
+              ],
+              [
                 { text: 'DNI', bold: true }, this.alumno.padre?.persona?.dni
               ],
               [
-                { text: 'NOMBRES Y APELLIDOS', bold: true }, this.alumno.padre?.persona?.nombres + ' ' + this.alumno.padre?.persona?.apellidopaterno + ' ' + this.alumno.padre?.persona?.apellidomaterno
+                { text: 'NOMBRES Y APELLIDOS', bold: true }, (this.alumno.padre?.persona?.nombres + ' ' + this.alumno.padre?.persona?.apellidopaterno + ' ' + this.alumno.padre?.persona?.apellidomaterno).toUpperCase()
               ],
               [
                 { text: 'TELEFONO', bold: true }, this.alumno.padre?.persona?.telefono
@@ -334,10 +416,13 @@ export class FichaAlumnoComponent implements OnInit {
             widths: [180, 300],
             body: [
               [
+                { text: 'VIVE', bold: true }, vivem
+              ],
+              [
                 { text: 'DNI', bold: true }, this.alumno.madre?.persona?.dni
               ],
               [
-                { text: 'NOMBRES Y APELLIDOS', bold: true }, this.alumno.madre?.persona?.nombres + ' ' + this.alumno.madre?.persona?.apellidopaterno + ' ' + this.alumno.madre?.persona?.apellidomaterno
+                { text: 'NOMBRES Y APELLIDOS', bold: true }, (this.alumno.madre?.persona?.nombres + ' ' + this.alumno.madre?.persona?.apellidopaterno + ' ' + this.alumno.madre?.persona?.apellidomaterno).toUpperCase()
               ],
               [
                 { text: 'TELEFONO', bold: true }, this.alumno.madre?.persona?.telefono
@@ -353,6 +438,45 @@ export class FichaAlumnoComponent implements OnInit {
               ],
               [
                 { text: 'DOMICILIO', bold: true }, this.alumno.madre?.persona?.domicilio
+              ],
+            ],
+          }
+        },
+        {
+          text: 'DATOS DEl APODERADO/RESPONSABLE DE LA INSCRIPCIÓN',
+          margin: [0, 10, 0, 0],
+          decoration: 'underline',
+          decorationStyle: 'solid',
+          decorationColor: 'black',
+          fontSize: 12,
+          bold: true,
+        },
+        {
+
+          margin: [0, 1, 0, 5],
+          table: {
+            widths: [180, 300],
+            body: [
+              [
+                { text: 'DNI', bold: true }, this.alumno.responsable?.persona?.dni
+              ],
+              [
+                { text: 'NOMBRES Y APELLIDOS', bold: true }, (this.alumno.responsable?.persona?.nombres + ' ' + this.alumno.madre?.persona?.apellidopaterno + ' ' + this.alumno.madre?.persona?.apellidomaterno).toUpperCase()
+              ],
+              [
+                { text: 'TELEFONO', bold: true }, this.alumno.responsable?.persona?.telefono
+              ],
+              [
+                { text: 'NACIONALIDAD', bold: true }, this.alumno.responsable?.persona?.nacionalidad
+              ],
+              [
+                { text: 'DISTRITO', bold: true }, this.alumno.responsable?.persona?.distrito
+              ],
+              [
+                { text: 'CORREO ELECTRÓNICO', bold: true }, this.alumno.responsable?.persona?.correo
+              ],
+              [
+                { text: 'DOMICILIO', bold: true }, this.alumno.responsable?.persona?.domicilio
               ],
             ],
           }

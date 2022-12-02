@@ -144,7 +144,8 @@ export class CrearDocenteComponent implements OnInit {
                 if (ok) {
                   let docenteObj: any = {
                     personaId: persona.id,
-                    nombreusuario: (this.docenteForm.get('nombres')?.value).toLowerCase(),
+                    nombreusuario: (this.docenteForm.get('nombres')?.value).trim().toLowerCase(),
+                    dniusuario: (this.docenteForm.get('dni')?.value).trim(),
                   }
                   this.docenteService.crear(docenteObj).subscribe({
                     next: ({ ok, msg }) => {

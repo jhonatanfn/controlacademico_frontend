@@ -1,16 +1,14 @@
 <div class="row contenedor mb-0">
     <div class="col-12 mb-2">
         <div class="row">
-            
             <div class="col-12 col-md-6" *ngIf="mimagen">
                 <img src="../../../assets/img/fondo.jpg"  class="img-fluid imagen-fondo" alt="imagen fondo">
             </div>
-        
             <div class="col-12 col-md-6 mb-2" *ngIf="mgrafica">
                 <div class="card card-color-primary">
                     <div class="card-header card-color-header">
                         Notas de hoy <span class="fw-bold">{{formatofecha}}</span> <br>
-                        1° Primaria a 4° Secundaria
+                        1º y 2º secundaria
                     </div>
                     <div class="card-body">
                         <canvas baseChart [data]="salesData" [type]="'bar'" [options]="chartOptions">
@@ -18,11 +16,11 @@
                     </div>
                 </div>
             </div>
+            <!--
             <div class="col-12 col-md-6 mb-2" *ngIf="mgrafica">
                 <div class="card card-color-primary">
                     <div class="card-header card-color-header">
                         Notas de hoy <span class="fw-bold">{{formatofecha}}</span> <br>
-                        5° Secundaria
                     </div>
                     <div class="card-body">
                         <canvas baseChart [data]="salesData2" [type]="'bar'" [options]="chartOptions">
@@ -30,10 +28,12 @@
                     </div>
                 </div>
             </div>
+            -->
             <div class="col-12 col-md-6" *ngIf="mgrafica">
                 <div class="card card-color-primary">
                     <div class="card-header card-color-header">
-                        Asistencias de hoy <span class="fw-bold">{{formatofecha}}</span>
+                        Asistencias de hoy <span class="fw-bold">{{formatofecha}}</span> <br>
+                        1º y 2º secundaria
                     </div>
                     <div class="card-body">
                         <canvas baseChart [data]="salesData3" [type]="'line'" [options]="chartOptions">
@@ -41,12 +41,11 @@
                     </div>
                 </div>
             </div>
-  
         </div>
     </div>
     <div class="col-12">
         <footer class="footer  py-2 copyright">
-            <p class="text-center m-0 fw-bold fs-5">&copy;<span> Sistema de Seguimiento Escolar</span></p>
+            <p class="text-center m-0 fw-bold fs-5">&copy;<span> Todos los derechos reservados</span></p>
         </footer>
     </div>
 </div>

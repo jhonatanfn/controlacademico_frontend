@@ -109,11 +109,20 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <div class="mb-1">
+                        <p class="text-secondary fw-bold mb-0">
+                            Los campos marcados con <span class="text-danger fw-bold">*</span> 
+                            son obligatorios. 
+                        </p>
+                    </div>
                     <div class="col-12">
                         <form [formGroup]="datosForm" (ngSubmit)="actualizarDatos()" autocomplete="off">
 
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Nombres</label>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label for="nombres" class="form-label m-0">Nombres</label>
+                                    <span class="text-danger fw-bold">*</span>                                               
+                                </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-person-fill"></i>
@@ -124,11 +133,12 @@
                                 <div id="nombres" class="form-text text-danger" *ngIf="campoRequerido2('nombres')">
                                     El nombre es requerido
                                 </div>
-
                             </div>
-
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Apellido Paterno</label>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label for="apellidopaterno" class="form-label m-0">Apellido Paterno</label>
+                                    <span class="text-danger fw-bold">*</span>                                               
+                                </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-person-fill"></i>
@@ -141,11 +151,12 @@
                                     *ngIf="campoRequerido2('apellidopaterno')">
                                     El apellido paterno es requerido
                                 </div>
-
                             </div>
-
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label">Apellido Materno</label>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label for="apellidomaterno" class="form-label m-0">Apellido Materno</label>
+                                    <span class="text-danger fw-bold">*</span>                                               
+                                </div>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-person-fill"></i>
@@ -158,9 +169,24 @@
                                     *ngIf="campoRequerido2('apellidomaterno')">
                                     El apellido materno es requerido
                                 </div>
-
                             </div>
-
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <label for="fechanacimiento" class="form-label m-0">Fecha nacimiento</label>
+                                    <span class="text-danger fw-bold">*</span>                                               
+                                </div>
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-calendar"></i>
+                                    </span>
+                                    <input type="date" class="form-control" id="fechanacimiento" formControlName="fechanacimiento"
+                                    aria-label="fechanacimiento" aria-describedby="basic-addon1">
+                                </div>
+                                <div id="fechanacimiento" class="form-text text-danger"
+                                    *ngIf="campoRequerido2('fechanacimiento')">
+                                    El fechanacimiento es requerida
+                                </div>
+                            </div>
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Domicilio</label>
                                 <div class="input-group mb-2">
@@ -170,9 +196,7 @@
                                     <input type="text" class="form-control" id="domicilio" formControlName="domicilio"
                                         placeholder="Domicilio" aria-label="Domicilio" aria-describedby="basic-addon1">
                                 </div>
-
                             </div>
-
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">Telefono</label>
                                 <div class="input-group mb-2">
@@ -182,9 +206,7 @@
                                     <input type="text" class="form-control" id="telefono" formControlName="telefono"
                                         placeholder="Telefono" aria-label="Telefono" aria-describedby="basic-addon1">
                                 </div>
-
                             </div>
-
                             <div class="d-grid gap-2 col-12 mx-auto">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="bi bi-hdd"></i>

@@ -1,0 +1,68 @@
+<div class="row">
+    <div class="col-12 col-sm-3">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <h6 class="card-title">Periodo:</h6>
+                                <p class="card-text"> {{ datoAlumno.periodo | uppercase }}</p>
+                                <h6 class="card-title">Alumno:</h6>
+                                <p class="card-text">{{ datoAlumno.alumno | uppercase }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-9">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo2" [icono]="icono2"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <table class="table table-bordered" *ngIf="apreciaciondetalles.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w70">N°</th>
+                                <th scope="col" class="w100">Apreciación del tutor</th>
+                                <th scope="col">Descripcion</th>
+                                <th scope="col" class="w100">Responsabilidad del padre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let apreciaciondetalle of apreciaciondetalles; let i=index">
+                                <th>{{i+1}}</th>
+                                <td>{{apreciaciondetalle.nombre}}</td>
+                                <td>
+                                    <textarea name="descripcion" id="descripcion" cols="30" rows="5"
+                                        class="form-control" [(ngModel)]="apreciaciondetalle.descripcion" autofocus>
+                                    </textarea>
+                                </td>
+                                <td>
+                                    <select name="responsabilidad" id="responsabilidad" class="form-select"
+                                        [(ngModel)]="apreciaciondetalle.responsabilidad">
+                                        <option value="{{escala.nombre}}" *ngFor="let escala of escalas">
+                                            {{escala.nombre}}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-primary" *ngIf="apreciaciondetalles.length>0" (click)="actualizarApreciacion()">
+                    <i class="bi bi-hdd"></i>
+                    Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

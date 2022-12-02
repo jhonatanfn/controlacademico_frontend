@@ -83,10 +83,13 @@ export class NotaService {
     const base = `${base_url}/notas/porperiodoaulaareaciclo/${periodoId}/${aulaId}/${areaId}/${cicloId}`;
     return this.http.get<listarNotas>(base, this.headers);
   }
+  
   notasPeriodoAulaAreaCicloAlumno(periodoId:number, aulaId:number,areaId:number,cicloId:number,alumnoId:number){
     const base = `${base_url}/notas/porperiodoaulaareacicloalumno/${periodoId}/${aulaId}/${areaId}/${cicloId}/${alumnoId}`;
     return this.http.get<listarNotas>(base, this.headers);
   }
+
+
   notasHoyLiteral(periodoId:number, fecha:string){
     const base = `${base_url}/notas/parahoynotasliteral/${periodoId}/${fecha}`;
     return this.http.get<listarNotas>(base, this.headers);
@@ -117,6 +120,16 @@ export class NotaService {
   notasPeriodoAulaAlumno(periodoId:number, aulaId:number, alumnoId:number){
     const base = `${base_url}/notas/notasperiodoaulaalumno/${periodoId}/${aulaId}/${alumnoId}`;
     return this.http.get<listarNotas>(base, this.headers);
+  }
+
+  notasCicloMatriculadetalle(cicloId:number, matriculadetalleId:number){
+    const base = `${base_url}/notas/ciclo/matriculadetalle/${cicloId}/${matriculadetalleId}`;
+    return this.http.get<listarNotas>(base, this.headers);
+  }
+
+  cambiarEstado(id: number, nota:Nota){
+    const url = `${base_url}/notas/cambiarestado/${id}`;
+    return this.http.put<crudNota>(url, nota, this.headers);
   }
 
 }

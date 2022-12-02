@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Institucion } from 'src/app/models/institucion.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { InstitucionService } from 'src/app/services/institucion.service';
+import { MensajeriaService } from 'src/app/services/mensajeria.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
@@ -22,9 +23,10 @@ export class HeaderComponent implements OnInit {
     email:"",
     img:""
   };
-
+  
   constructor(private institucionService:InstitucionService, 
-  private menuServices:MenuService,private usuarioService:UsuarioService) {
+  private menuServices:MenuService,private usuarioService:UsuarioService,
+  public mensajeriaService:MensajeriaService) {
     
     this.menuItemsAux= this.menuServices.menu;
     this.menuItemsAux.forEach(menuItem=>{

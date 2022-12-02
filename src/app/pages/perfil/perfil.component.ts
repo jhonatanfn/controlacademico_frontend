@@ -65,7 +65,8 @@ export class PerfilComponent implements OnInit {
       domicilio: [this.usuario.persona.domicilio],
       telefono: [this.usuario.persona.telefono],
       tipodocumentoId: [this.usuario.persona.tipodocumento.id],
-      sexo: [this.usuario.persona.sexo]
+      sexo: [this.usuario.persona.sexo],
+      fechanacimiento:[this.usuario.persona.fechanacimiento, Validators.required]
     });
 
     this.passForm= this.fb.group({
@@ -213,7 +214,6 @@ export class PerfilComponent implements OnInit {
     const extencionesValidas=['png','jpg','jpeg','gif','JPG','JPEG','PNG'];
     if(extencionesValidas.includes(this.getFileExtension(event.target.files[0].name))){   
       this.imagenSubir = event.target.files[0];
-      this.imagenSubir = event.target.files[0];
       if (!event.target.files[0]) {
         return this.imgTemp = null;
       }
@@ -313,9 +313,7 @@ export class PerfilComponent implements OnInit {
     if(this.contrasenasNoValidas()){
       this.passForm.controls['password2'].setErrors({NoEsIgual:true});
     }
-
     if(this.passForm.valid){
-
       Swal.fire({
         title: 'Actualizar',
         text: "Desea actualizar su password",
@@ -336,7 +334,9 @@ export class PerfilComponent implements OnInit {
                   title: msg,
                   showConfirmButton: false,
                   timer: 1000
-                })
+                });
+                this.passForm.controls['password'].setValue("");
+                this.passForm.controls['password2'].setValue("");
               } else {
                 Swal.fire({
                   position: 'top-end',

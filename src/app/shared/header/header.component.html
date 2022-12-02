@@ -12,8 +12,15 @@
                 <a routerLink="institucion" class="me-1" *ngIf="usuario.role.nombre=='ADMINISTRADOR'">
                     <i class="bi bi-house"></i>
                 </a>
-                <a routerLink="mensajerias" class="me-1">
+                <a routerLink="mensajerias" class="me-1 position-relative">
                     <i class="bi bi-envelope"></i>
+                    <span class="position-absolute start-100 translate-middle 
+                    badge rounded-pill bg-danger badge-longitud" 
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Tiene Mensajes Nuevos"
+                    *ngIf="mensajeriaService.nuevos>0">
+                        {{mensajeriaService.nuevos}}
+                        <span class="visually-hidden">mensajes no leídos</span>
+                    </span>
                 </a>
                 <a href="#" class="dropdown-toggle perfil my-dropdown-toggle" type="button" id="dropdown-1"
                     data-bs-toggle="dropdown" aria-expanded="false">

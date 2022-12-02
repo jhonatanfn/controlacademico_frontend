@@ -43,6 +43,10 @@ export class UsuarioService {
     const url = `${base_url}/usuarios/filtrado/todo`;
     return this.http.get<listarUsuarios>(url, this.headers);
   }
+  limitado(){
+    const url = `${base_url}/usuarios/limitado`;
+    return this.http.get<listarUsuarios>(url, this.headers);
+  }
   crearUsuario(usuario: Usuario) {
     const url = `${base_url}/usuarios`;
     return this.http.post<crudUsuario>(url, usuario, this.headers);

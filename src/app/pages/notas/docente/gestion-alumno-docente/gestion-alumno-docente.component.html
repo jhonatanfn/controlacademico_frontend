@@ -1,0 +1,168 @@
+<div class="row">
+    <div class="col-12 col-lg-8 mb-3 mb-lg-0">
+        <div class="card card-color-primary contenido-principal mt-0">
+            <div class="card-header card-color-header">
+                <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <form [formGroup]="notaForm" (submit)="buscarNotas()">
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="mb-3">
+                                        <label for="cicloId" class="form-label">Ciclo</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="cicloId">
+                                            <option value="">Seleccionar ciclo</option>
+                                            <option *ngFor="let ciclo of ciclos" [value]="ciclo.id">
+                                                {{ciclo.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('cicloId')" id="periodoId"
+                                            class="form-text text-danger">
+                                            La ciclo es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8">
+                                    <div class="mb-3">
+                                        <label for="matriculadetalleId" class="form-label">Alumno</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            formControlName="matriculadetalleId">
+                                            <option value="">Seleccionar alumno</option>
+                                            <option *ngFor="let matriculadetalle of matriculadetalles"
+                                                [value]="matriculadetalle.id">
+                                                {{matriculadetalle.matricula?.alumno?.persona?.apellidopaterno}}
+                                                {{matriculadetalle.matricula?.alumno?.persona?.apellidomaterno}}
+                                                {{matriculadetalle.matricula?.alumno?.persona?.nombres}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="campoRequerido('matriculadetalleId')" id="matriculadetalleId"
+                                            class="form-text text-danger">
+                                            El alumno es requerido
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-search"></i>
+                                Buscar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-1" *ngIf="cargando">
+                            <div class="alert alert-info text-center" role="alert">
+                                <h6 class="alert-heading">Cargando...</h6>
+                                <div class="spinner-border" role="status">
+                                </div>
+                                <p>Por favor espera</p>
+                            </div>
+                        </div>
+                        <div class="table-responsive" *ngIf="!cargando">
+                            <div class="alert alert-primary" role="alert" *ngIf="notas.length==0">
+                                No hay registros.
+                            </div>
+                            <table class="table table-hover" *ngIf="notas.length>0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="w70">N°</th>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Competencia</th>
+                                        <th scope="col" class="w100">Nota</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let nota of notas; let i= index">
+                                        <th>{{i+1}}</th>
+                                        <td>{{nota.fecha | date:'dd/MM/yyyy'}}</td>
+                                        <td>{{nota.competencia?.descripcion}}</td>
+                                        <td>
+                                            <span class="badge rounded-pill bg-success" *ngIf="nota.estado">
+                                                ACTIVO
+                                            </span>
+                                            <span class="badge rounded-pill bg-danger" *ngIf="!nota.estado">
+                                                ELIMINADO
+                                            </span>
+                                        </td>
+                                        <td *ngIf="vigesimal">
+                                            {{nota.valor}}
+                                            <!--
+                                            <input (keypress)="numberOnly($event)"
+                                                oninput="if(this.value > 20 || this.value.length>2) this.value = 0;"
+                                                type="text" [(ngModel)]="nota.valor" class="form-control">
+                                            -->
+                                        </td>
+                                        <td *ngIf="literal">
+                                            {{nota.valor}}
+                                            <!--
+                                            <select class="form-select" aria-label="Default select example"
+                                                name="letraId" id="letraId" [(ngModel)]="nota.valor">
+                                                <option *ngFor="let letra of letras" value="{{letra.nombre}}">
+                                                    {{letra.nombre}}</option>
+                                            </select>
+                                            -->
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger me-1" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Eliminar/Recuperar" 
+                                                (click)="eliminarNota(nota)">
+                                                <span>
+                                                    <i class="bi bi-arrow-clockwise"></i>
+                                                </span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-color-primary contenido-principal mt-0">
+                    <div class="card-header card-color-header">
+                        <app-headertable [titulo]="titulo3" [icono]="icono3"></app-headertable>
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Periodo</div>
+                                    {{ periodonombre | uppercase}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Aula</div>
+                                    {{ aulanombre | uppercase}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Area</div>
+                                    {{ areanombre | uppercase}}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Docente</div>
+                                    {{ docentenombre | uppercase}}
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -245,7 +245,10 @@
                                         <tbody>
                                             <tr *ngFor="let dato of datos; let i= index">
                                                 <td>{{i+1}}</td>
-                                                <td *ngIf="vigesimalactivo">{{dato.rango.inicio}} - {{dato.rango.fin}}</td>
+                                                <td *ngIf="vigesimalactivo">
+                                                    <p *ngIf="dato.rango.inicio<=20">{{dato.rango.inicio}} - {{dato.rango.fin}}</p>
+                                                    <p *ngIf="dato.rango.inicio>20"> - </p>
+                                                </td>
                                                 <td *ngIf="literalactivo">{{dato.rango.letra}}</td>
                                                 <td>{{dato.total}}</td>
                                                 <td>

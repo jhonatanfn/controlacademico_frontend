@@ -145,6 +145,7 @@ export class CrearAuxiliarComponent implements OnInit {
                   let docenteObj: any = {
                     personaId: persona.id,
                     nombreusuario: (this.auxiliarForm.get('nombres')?.value).toLowerCase(),
+                    dniusuario: (this.auxiliarForm.get('dni')?.value).trim(),
                   }
                   this.auxiliarService.crear(docenteObj).subscribe({
                     next: ({ ok, msg }) => {

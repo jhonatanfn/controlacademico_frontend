@@ -13,6 +13,8 @@ const base_url = environment.base_url;
 })
 export class MensajeriaService {
 
+  public nuevos:number=0;
+  
   constructor(private http: HttpClient) { }
 
   get token(): string {
@@ -93,9 +95,6 @@ export class MensajeriaService {
     return this.http.post<crudMensajeria>(base,data, this.headers);
   }
 
-
-
-
   busquedaRecibidos(termino: string, email: string) {
     const base = `${base_url}/mensajerias/busqueda/busquedarecibidos/${termino}/${email}`;
     return this.http.get<any[]>(base, this.headers)
@@ -134,4 +133,15 @@ export class MensajeriaService {
       mensajeria.archivo, mensajeria.estado, mensajeria.id)
     );
   }
+
+  existenMensajesNuevos(email:string) {
+    const base = `${base_url}/mensajerias/receptor/nuevos/${email}`;
+    return this.http.get<listarMensajerias>(base, this.headers);
+  }
+
+  actualizarMensajesNuevos(email:string){
+    const base = `${base_url}/mensajerias/receptor/actualizar/nuevos/${email}`;
+    return this.http.get<crudMensajeria>(base, this.headers);
+  }
+
 }

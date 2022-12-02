@@ -397,12 +397,14 @@ export class ReporteNotaAreaTotalComponent implements OnInit {
                         table: {
                           body: [
                             [
+                              { text: 'Fecha', bold: true },
                               { text: 'Competencia', bold: true },
                               { text: 'Evaluación', bold: true },
                               { text: 'Valor', bold: true }
                             ],
                             ...p.notas.map((nt: any) => (
                               [
+                                moment(nt.fecha).format('DD/MM/yyyy'),
                                 nt.competencia?.descripcion,
                                 nt.evaluacion?.nombre,
                                 nt.valor

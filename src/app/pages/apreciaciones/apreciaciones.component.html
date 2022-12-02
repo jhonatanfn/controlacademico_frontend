@@ -4,11 +4,10 @@
             <div class="card-header card-color-header">
                 <div class="d-flex justify-content-between align-items-center">
                     <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-                    <button type="button" class="d-flex btn btn-primary" data-bs-toggle="modal" data-bs-target="#crear"
-                        (click)="crearApreciacion()">
+                    <a routerLink="crear" type="button" class="d-flex btn btn-primary">
                         <i class="bi bi-plus-square me-2"></i>
                         Nuevo
-                    </button>
+                    </a>
                 </div>
             </div>
             <div class="card-body">
@@ -41,27 +40,24 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="w70">N°</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Descripcion</th>
-                                <th scope="col">Alumno</th>
+                                <th scope="col">Periodo</th>
+                                <th scope="col">Apellidos y nombres</th>
                                 <th scope="col" class="w100"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let apreciacion of apreciaciones; let i=index">
                                 <th>{{desde+i+1}}</th>
-                                <td>{{apreciacion.nombre | uppercase}}</td>
-                                <td>{{apreciacion.descripcion | uppercase}}</td>
-                                <td>{{apreciacion.alumno?.persona?.nombres}}
+                                <td>{{apreciacion.periodo?.nombre | uppercase}}</td>
+                                <td>
                                     {{apreciacion.alumno?.persona?.apellidopaterno}}
                                     {{apreciacion.alumno?.persona?.apellidomaterno}}
+                                    {{apreciacion.alumno?.persona?.nombres}}
                                 </td>
                                 <td>
                                     <div class="btn-group text-center">
-
-                                        <button type="button" class="btn btn-success me-1" data-bs-toggle="modal"
-                                            data-bs-target="#editar" data-bs-placement="top" title="Editar"
-                                            (click)="editarApreciacion(apreciacion)">
+                                        <button type="button" class="btn btn-success me-1" data-bs-placement="top"
+                                            title="Editar" [routerLink]="['editar', apreciacion.id]">
                                             <span>
                                                 <i class="bi bi-pen"></i>
                                             </span>
@@ -87,154 +83,6 @@
                     </button>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="crear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content card-color-primary">
-            <div class="modal-header card-color-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Crear Apreciacion</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form [formGroup]="apreciacionForm" autocomplete="off" (submit)="guardarApreciacion()">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="periodoId" class="form-label">Periodo</label>
-                        <select class="form-select" aria-label="Seleccionar periodo" formControlName="periodoId"
-                            (change)="cargarAlumnos()">
-                            <option value="">Seleccionar Periodo</option>
-                            <option *ngFor="let periodo of periodos" [value]="[periodo.id,periodo.nombre]">
-                                {{periodo.nombre}}
-                            </option>
-                        </select>
-                        <div *ngIf="campoRequerido('periodoId')" id="periodoId" class="form-text text-danger">
-                            La periodo es requerido
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-12">
-                        <div class="mb-3">
-                            <label for="aulaId" class="form-label">Aula</label>
-                            <select class="form-select" aria-label="Seleccionar aula" formControlName="aulaId"
-                                (change)="cargarAlumnos()">
-                                <option value="">Seleccionar Aula</option>
-                                <option *ngFor="let aula of aulas" [value]="[aula.id,aula.nombre]">
-                                    {{aula.nombre}}
-                                </option>
-                            </select>
-                            <div *ngIf="campoRequerido('aulaId')" id="aulaId" class="form-text text-danger">
-                                La aula es requerida
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-12">
-                        <div class="mb-3">
-                            <label for="alumnoId" class="form-label">Alumnos</label>
-                            <select class="form-select" aria-label="Seleccionar alumno" formControlName="alumnoId">
-                                <option value="">Seleccionar alumno</option>
-                                <option *ngFor="let matriculadetalle of matriculadetalles" [value]="[matriculadetalle.matricula?.alumno?.id,
-                                    matriculadetalle.matricula?.alumno?.persona?.apellidopaterno,
-                                    matriculadetalle.matricula?.alumno?.persona?.apellidomaterno,
-                                    matriculadetalle.matricula?.alumno?.persona?.nombres]">
-                                    {{matriculadetalle.matricula?.alumno?.persona?.apellidopaterno}}
-                                    {{matriculadetalle.matricula?.alumno?.persona?.apellidomaterno}}
-                                    {{matriculadetalle.matricula?.alumno?.persona?.nombres}}
-                                </option>
-                            </select>
-                            <div *ngIf="campoRequerido('alumnoId')" id="alumnoId" class="form-text text-danger">
-                                El alumno es requerido
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" formControlName="nombre"
-                            placeholder="Nombre apreciacion">
-                        <div class="form-text text-danger" *ngIf="campoRequerido('nombre')">
-                            El campo nombre es requerido
-                        </div>
-                        <div class="form-text text-danger" *ngIf="campoMaxLengh('nombre',100)">
-                            El campo nombre debe tener como maximo 100 caracteres
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="descripcion" class="form-label">Descripcion</label>
-                        <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="10"
-                            formControlName="descripcion">
-                        </textarea>
-                        <div class="form-text text-danger" *ngIf="campoRequerido('descripcion')">
-                            El campo descripcion es requerido
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="responsabilidad" class="form-label">Responsabilidad del Padre</label>
-                        <input type="text" class="form-control" id="esponsabilidad" formControlName="responsabilidad"
-                            placeholder="Responsabilidad del padre">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton>
-                        <i class="bi bi-x-lg"></i>
-                        Cancelar</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-hdd"></i>
-                        Guardar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="editar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content card-color-primary">
-            <div class="modal-header card-color-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Editar Apreciacion</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form [formGroup]="apreciacionForm" autocomplete="off" (submit)="actualizarApreciacion()">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" formControlName="nombre"
-                            placeholder="Nombre apreciacion">
-                        <div class="form-text text-danger" *ngIf="campoRequerido('nombre')">
-                            El campo nombre es requerido
-                        </div>
-                        <div class="form-text text-danger" *ngIf="campoMaxLengh('nombre',100)">
-                            El campo nombre debe tener como maximo 100 caracteres
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="descripcion" class="form-label">Descripcion</label>
-                        <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="10"
-                            formControlName="descripcion">
-                        </textarea>
-                        <div class="form-text text-danger" *ngIf="campoRequerido('descripcion')">
-                            El campo descripcion es requerido
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="responsabilidad" class="form-label">Responsabilidad del Padre</label>
-                        <input type="text" class="form-control" id="responsabilidad" formControlName="responsabilidad"
-                            placeholder="Responsabilidad del padre">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #closebutton2>
-                        <i class="bi bi-x-lg"></i>
-                        Cancelar</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-hdd"></i>
-                        Actualizar
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 </div>

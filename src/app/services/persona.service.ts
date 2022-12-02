@@ -43,4 +43,9 @@ export class PersonaService {
     return this.http.delete<crudPersona>(base,this.headers);
   }
 
+  existePersona(dni:string){
+    const base= `${base_url}/personas/consultadni/${dni}`;
+    return this.http.get<crudPersona>(base,this.headers);
+  }
+
 }

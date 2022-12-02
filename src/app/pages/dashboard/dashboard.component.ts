@@ -5,6 +5,7 @@ import { Periodo } from 'src/app/models/periodo.model';
 import { Rango } from 'src/app/models/rango.model';
 import { Situacion } from 'src/app/models/situacion.model';
 import { AsistenciaService } from 'src/app/services/asistencia.service';
+import { MensajeriaService } from 'src/app/services/mensajeria.service';
 import { NotaService } from 'src/app/services/nota.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { RangoService } from 'src/app/services/rango.service';
@@ -75,10 +76,10 @@ export class DashboardComponent implements OnInit {
   public mimagen: boolean = true;
   public formatofecha: string = "";
 
-
   constructor(private rangoService: RangoService, private notaService: NotaService,
     private periodoService: PeriodoService, private asistenciaService: AsistenciaService,
-    private situacionService: SituacionService, private usuarioService: UsuarioService) {
+    private situacionService: SituacionService, private usuarioService: UsuarioService,
+    private mensajeriaService:MensajeriaService) {
 
     if (this.usuarioService.usuario.role.nombre == "ADMINISTRADOR") {
       this.mgrafica = true;
@@ -106,7 +107,14 @@ export class DashboardComponent implements OnInit {
         }
       });
     }
-
+    this.mensajeriaService.existenMensajesNuevos(this.usuarioService.usuario.email).subscribe({
+      next: ({ok, total})=>{
+        if(ok){
+          this.mensajeriaService.nuevos=total;
+        }
+      }
+    });
+    
   }
 
   listar() {
@@ -120,7 +128,7 @@ export class DashboardComponent implements OnInit {
       }
     });
     this.listarNotasPeriodoLiteral(idperiodo, fechaactual);
-    this.listarNotasPeriodoVigesimal(idperiodo, fechaactual);
+   // this.listarNotasPeriodoVigesimal(idperiodo, fechaactual);
     this.listarAsistenciasPeriodo(idperiodo, fechaactual);
   }
 
@@ -257,7 +265,7 @@ export class DashboardComponent implements OnInit {
           data: datas,
           borderColor: 'rgb(75, 192, 192)',
 
-          tension: 0.1,
+          tension: 0.5,
         },
 
       ],
