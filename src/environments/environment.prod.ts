@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  base_url:'https://victorraulsullana.herokuapp.com/api'
+  base_url:'https://victorraul2-production.up.railway.app/api'
 };
