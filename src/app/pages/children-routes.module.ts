@@ -865,7 +865,7 @@ const childrenRoutes: Routes = [
     path: 'asistencias/auxiliar', component: ListaAsistenciaComponent,
     canActivate: [AuxiliarGuard],
     data: {
-      titulo: 'Auxiliares', icono: 'bi bi-megaphone',
+      titulo: 'Asistencias', icono: 'bi bi-megaphone',
       accion: 'Lista', enlace: 'asistencias/auxiliar'
     }
   },

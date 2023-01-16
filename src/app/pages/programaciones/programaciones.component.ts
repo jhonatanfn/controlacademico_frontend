@@ -14,7 +14,7 @@ export class ProgramacionesComponent implements OnInit {
 
   public programaciones: Programacion[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Asignaciones';
+  public titulo: string = 'Lista Asignaciones';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

@@ -13,7 +13,7 @@ export class HorariosComponent implements OnInit {
 
   public horarios: Horario[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Horarios';
+  public titulo: string = 'Lista Horarios';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

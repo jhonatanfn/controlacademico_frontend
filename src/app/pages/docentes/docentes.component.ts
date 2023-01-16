@@ -12,7 +12,7 @@ export class DocentesComponent implements OnInit {
 
   public docentes: Docente[] = [];
   public cargando: boolean = true;
-  public titulo:string="Tabla Docentes";
+  public titulo:string="Lista Docentes";
   public icono:string="bi bi-table";
   public desde: number = 0;
   public totalRegistros: number = 0;

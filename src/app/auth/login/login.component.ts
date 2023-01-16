@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.formSubmitted = true;
+    let message="Se produjo un error. Intentelo mas tarde.";
     if (this.loginForm.valid) {
       this.control = true;
       this.cargando = true;
@@ -59,7 +60,10 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('dashboard');
         },
         error: (error) => {
-          Swal.fire('Error', "Se produjo un error. Intentale mas tarde.", 'error');
+          if(error.error.msg){
+            message= error.error.msg
+          }
+          Swal.fire('Error', message, 'error');
           this.cargando = false;
           this.control = false;
         }

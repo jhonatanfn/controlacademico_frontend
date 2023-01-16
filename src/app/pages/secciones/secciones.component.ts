@@ -13,7 +13,7 @@ export class SeccionesComponent implements OnInit {
 
   public secciones: Seccion[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Secciones';
+  public titulo: string = 'Lista Secciones';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

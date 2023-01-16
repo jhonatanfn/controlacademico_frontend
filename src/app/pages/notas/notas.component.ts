@@ -13,7 +13,7 @@ export class NotasComponent implements OnInit {
 
   public programaciones: Programacion[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Notas';
+  public titulo: string = 'Lista Notas';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

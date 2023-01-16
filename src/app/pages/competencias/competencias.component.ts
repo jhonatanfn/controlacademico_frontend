@@ -15,7 +15,7 @@ export class CompetenciasComponent implements OnInit {
 
   public competencias: Competencia[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Competencias';
+  public titulo: string = 'Lista Competencias';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

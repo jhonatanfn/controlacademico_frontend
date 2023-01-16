@@ -18,7 +18,7 @@ export class UsuariosComponent implements OnInit {
   public usuarios: Usuario[] = [];
   public usuariosTemp: Usuario[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Usuarios';
+  public titulo: string = 'Lista Usuarios';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

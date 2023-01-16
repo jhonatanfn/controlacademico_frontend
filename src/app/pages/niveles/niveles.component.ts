@@ -13,7 +13,7 @@ export class NivelesComponent implements OnInit {
 
   public niveles: Nivel[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Niveles';
+  public titulo: string = 'Lista Niveles';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

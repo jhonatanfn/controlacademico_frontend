@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+import * as pdfMake from "pdfmake/build/pdfmake";
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 import { Aula } from 'src/app/models/aula.model';
 import { Hora } from 'src/app/models/hora.model';
 import { Institucion } from 'src/app/models/institucion.model';
@@ -13,11 +16,8 @@ import { HorarioService } from 'src/app/services/horario.service';
 import { InstitucionService } from 'src/app/services/institucion.service';
 import { PeriodoService } from 'src/app/services/periodo.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import * as pdfMake from "pdfmake/build/pdfmake";
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { AreaService } from 'src/app/services/area.service';
 import { Area } from 'src/app/models/area.model';
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-consulta-horario',

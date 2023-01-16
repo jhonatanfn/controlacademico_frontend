@@ -1,10 +1,10 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+import Swal from 'sweetalert2';
 import { Institucion } from 'src/app/models/institucion.model';
 import { InstitucionService } from 'src/app/services/institucion.service';
 import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';

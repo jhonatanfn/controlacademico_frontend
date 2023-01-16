@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class ListaDocenteComponent implements OnInit {
 
-  public titulo: string = 'Tabla Asignaciones';
+  public titulo: string = 'Lista Asignaciones';
   public icono: string = 'bi bi-table';
   public cargando: boolean = true;
   public programaciones: Programacion[] = [];

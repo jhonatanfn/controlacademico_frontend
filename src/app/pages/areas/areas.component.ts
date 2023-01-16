@@ -13,7 +13,7 @@ export class AreasComponent implements OnInit {
 
   public areas: Area[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Areas';
+  public titulo: string = 'Lista Areas';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

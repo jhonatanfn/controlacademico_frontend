@@ -12,8 +12,8 @@ export class DirectoresComponent implements OnInit {
 
   public directores: Director[] = [];
   public cargando: boolean = true;
-  public titulo:string="Tabla Directores";
-  public icono:string="bi bi-table";
+  public titulo: string = "Lista Directores";
+  public icono: string = "bi bi-table";
   public desde: number = 0;
   public totalRegistros: number = 0;
   public ds: boolean = true;

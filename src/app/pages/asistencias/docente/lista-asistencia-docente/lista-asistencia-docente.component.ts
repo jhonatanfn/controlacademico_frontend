@@ -17,7 +17,7 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
 
   public programaciones: Programacion[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Asistencias';
+  public titulo: string = 'Lista Asistencias';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
@@ -87,6 +87,7 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
               for (i in lookupObject) {
                 this.aulas.push(lookupObject[i]);
               }
+              this.totalRegistros= this.aulas.length;
             }
             this.cargando = false;
           }
@@ -105,6 +106,7 @@ export class ListaAsistenciaDocenteComponent implements OnInit {
             for (i in lookupObject) {
               this.aulas.push(lookupObject[i]);
             }
+            this.totalRegistros= this.aulas.length;
           }
           this.cargando = false;
         });

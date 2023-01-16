@@ -4,7 +4,8 @@
             <div class="card-header card-color-header">
                 <div class="d-flex justify-content-between">
                     <app-headertable [titulo]="titulo" [icono]="icono"></app-headertable>
-                    <a routerLink="crear" type="button" class="d-flex btn btn-primary">
+                    <a routerLink="crear" type="button" class="d-flex btn btn-primary" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Crear">
                         <i class="bi bi-plus-square me-2"></i>
                         Nuevo
                     </a>
@@ -23,16 +24,9 @@
                                     </svg>
                                 </span>
                                 <input type="search" class="form-control" placeholder="Buscar" aria-label="Buscar"
-                                    aria-describedby="buscar-algo"
-                                    (keyup)="buscarDocente(txtTermino.value)" #txtTermino>
+                                    aria-describedby="buscar-algo" (keyup)="buscarDocente(txtTermino.value)"
+                                    #txtTermino>
                             </div>
-                            <!--
-                            onkeyup="javascript:this.value=this.value.toUpperCase();"
-                            <a routerLink="crear" type="button" class="d-flex btn btn-primary">
-                                <i class="bi bi-plus-square me-2"></i>
-                                Nuevo
-                            </a>
-                            -->
                         </div>
                     </div>
                 </div>
@@ -51,6 +45,9 @@
                 <div class="table-responsive mb-1" *ngIf="!cargando">
                     <div class="alert alert-primary" role="alert" *ngIf="docentes.length==0">
                         No hay registros.
+                    </div>
+                    <div class="d-flex justify-content-end" *ngIf="docentes.length>0">
+                        <app-totaltable [total]="totalRegistros"></app-totaltable>
                     </div>
                     <table class="table table-bordered table-hover" *ngIf="docentes.length>0">
                         <thead>
@@ -100,13 +97,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex justify-content-between align-items-start" *ngIf="!cargando">
+                <div class="d-flex justify-content-start align-items-start" *ngIf="!cargando">
                     <button [disabled]="da" (click)="cambiarPagina(-5)" type="button"
-                        class="btn btn-dark  btn-sm me-2">
+                        class="btn btn-secondary btn-sm me-2 fw-bold">
                         <i class="bi bi-arrow-left-square"></i> Anterior
                     </button>
                     <button [disabled]="ds" (click)="cambiarPagina(5)" type="button"
-                        class="btn btn-dark  btn-sm">
+                        class="btn btn-secondary btn-sm fw-bold">
                         <i class="bi bi-arrow-right-square"></i> Siguiente
                     </button>
                 </div>

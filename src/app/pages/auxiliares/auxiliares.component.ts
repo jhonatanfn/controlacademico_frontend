@@ -12,7 +12,7 @@ export class AuxiliaresComponent implements OnInit {
 
   public auxiliares: Auxiliar[] = [];
   public cargando: boolean = true;
-  public titulo: string = "Tabla Auxiliares";
+  public titulo: string = "Lista Auxiliares";
   public icono: string = "bi bi-table";
   public desde: number = 0;
   public totalRegistros: number = 0;

@@ -12,7 +12,7 @@ export class AlumnosComponent implements OnInit {
 
   public alumnos: Alumno[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Alumnos';
+  public titulo: string = 'Lista Alumnos';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

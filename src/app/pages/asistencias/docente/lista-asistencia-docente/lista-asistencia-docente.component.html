@@ -49,6 +49,9 @@
                     <div class="alert alert-primary" role="alert" *ngIf="aulas.length==0">
                         No hay registros.
                     </div>
+                    <div class="d-flex justify-content-end" *ngIf="aulas.length>0">
+                        <app-totaltable [total]="totalRegistros"></app-totaltable>
+                    </div>
                     <table class="table table-bordered table-hover" *ngIf="aulas.length>0">
                         <thead>
                             <tr>

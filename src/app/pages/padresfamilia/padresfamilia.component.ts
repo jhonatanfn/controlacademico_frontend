@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class PadresfamiliaComponent implements OnInit {
 
-  public titulo: string = "Tabla Familiares";
+  public titulo: string = "Lista Familiares";
   public icono: string = "bi bi-table";
   public desde: number = 0;
   public totalRegistros: number = 0;

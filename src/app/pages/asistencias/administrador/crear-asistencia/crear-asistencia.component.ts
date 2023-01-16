@@ -24,7 +24,7 @@ export class CrearAsistenciaComponent implements OnInit {
   public asisForm!: FormGroup;
   public datos: any[] = [];
   public formSubmitted: boolean = false;
-  public messageInfo: string = "";
+  public messageInfo: string = "No hay registros.";
   public periodoId: number = 0;
   public periodonombre: string = "";
   public aulanombre: string = "";
@@ -48,7 +48,8 @@ export class CrearAsistenciaComponent implements OnInit {
 
   ngOnInit(): void {
     this.asisForm = this.fb.group({
-      fecha: [moment().format("YYYY-MM-DD"), Validators.required],
+      fecha: [moment().format("YYYY-MM-DD")],
+      hora: [moment().format('LTS')],
       matriculadetalleId: [''],
       situacionId: [''],
       aulaId: [Number(this.route.snapshot.paramMap.get('id'))]
@@ -69,6 +70,7 @@ export class CrearAsistenciaComponent implements OnInit {
     this.periodoService.porNombre(moment().format('YYYY')).subscribe({
       next: ({ ok, periodo }) => {
         if (ok) {
+          
           this.periodonombre = periodo.nombre;
           this.asistenciaService.existeAsistencia(Number(periodo.id),
             Number(this.asisForm.get('aulaId')?.value), moment().format("YYYY-MM-DD")).subscribe({
@@ -87,7 +89,9 @@ export class CrearAsistenciaComponent implements OnInit {
                               matriculadetalle: matriculadetalle,
                               situacionId: 14,
                               color: "success",
-                              texto: "ASISTIÓ"
+                              texto: "ASISTIÓ",
+                              fecha: this.asisForm.controls['fecha'].value,
+                              hora: this.asisForm.controls['hora'].value
                             });
                           });
                           this.cargando = false;

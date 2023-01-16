@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 import { Ciclo } from 'src/app/models/ciclo.model';
 import { Competencia } from 'src/app/models/competencia.model';
 import { Evaluacion } from 'src/app/models/evaluacion.model';
@@ -99,7 +100,9 @@ export class CrearNotaDocenteComponent implements OnInit {
       cicloId: ['', Validators.required],
       evaluacionId: ['', Validators.required],
       competenciaId: ['', Validators.required],
-      areaId: ['']
+      areaId: [''],
+      fecha: [moment().format('YYYY-MM-DD')],
+      hora: [moment().format('LTS')]
     });
   }
   campoRequerido(campo: string) {
@@ -138,7 +141,9 @@ export class CrearNotaDocenteComponent implements OnInit {
                 cicloId: this.notaForm.controls['cicloId'].value,
                 evaluacionId: this.notaForm.controls['evaluacionId'].value,
                 competenciaId: arrCompetencia[0],
-                competenciadescripcion: arrCompetencia[1]
+                competenciadescripcion: arrCompetencia[1],
+                fecha: this.notaForm.controls['fecha'].value,
+                hora: this.notaForm.controls['hora'].value
               });
             });
           }

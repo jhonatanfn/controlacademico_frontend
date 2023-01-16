@@ -161,7 +161,7 @@ export class CrearApoderadoComponent implements OnInit {
               if (ok) {
                 let apoderadoObj: any = {
                   personaId: persona.id,
-                  nombreusuario: (this.apoderadoForm.get('nombres')?.value).toLowerCase(),
+                  nombreusuario: (this.apoderadoForm.get('nombres')?.value).trim().toLowerCase(),
                   //emailusuario: this.apoderadoForm.get('emailusuario')?.value
                 }
                 this.apoderadoService.crear(apoderadoObj)

@@ -8,6 +8,7 @@ import { ProgramacionService } from 'src/app/services/programacion.service';
 import * as  moment from 'moment';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 import { AsistenciaService } from 'src/app/services/asistencia.service';
 import { Institucion } from 'src/app/models/institucion.model';
 import { InstitucionService } from 'src/app/services/institucion.service';
@@ -19,7 +20,6 @@ import { Docente } from 'src/app/models/docente.model';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { Apoderado } from 'src/app/models/apoderado.model';
 import { MatriculaService } from 'src/app/services/matricula.service';
-(<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-reporte-asistencia',

@@ -145,7 +145,7 @@ export class CrearMadreComponent implements OnInit {
                 if (ok) {
                   let padreObj: any = {
                     personaId: persona.id,
-                    nombreusuario: (this.madreForm.get('nombres')?.value).toLowerCase(),
+                    nombreusuario: (this.madreForm.get('nombres')?.value).trim().toLowerCase(),
                   }
                   this.madreService.crear(padreObj).subscribe({
                     next: ({ ok, msg }) => {
@@ -165,8 +165,7 @@ export class CrearMadreComponent implements OnInit {
               }
             });
         }
-      })
+      });
     }
   }
-
 }

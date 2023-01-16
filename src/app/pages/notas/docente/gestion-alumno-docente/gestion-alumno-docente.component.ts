@@ -21,8 +21,8 @@ import Swal from 'sweetalert2';
 })
 export class GestionAlumnoDocenteComponent implements OnInit {
 
-  public titulo: string = 'Crear Notas';
-  public icono: string = 'bi bi-plus-square';
+  public titulo: string = 'Consultar Notas';
+  public icono: string = 'bi bi-mortarboard';
   public titulo2: string = 'Tabla Alumnos';
   public icono2: string = 'bi bi-table';
   public titulo3: string = 'Datos de la Asignación';

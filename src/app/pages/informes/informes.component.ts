@@ -518,7 +518,7 @@ export class InformesComponent implements OnInit {
                         {
                           margin: [0, 1, 0, 1],
                           table: {
-                            widths: [150, 20, 20, 20, 20, 70],
+                            widths: [150, 20, 20, 20, 20, 40, 40],
                             body: [
                               [
                                 { text: 'Competencia', bold: true, fontSize: 10 },
@@ -526,7 +526,8 @@ export class InformesComponent implements OnInit {
                                 { text: 'II', bold: true, fontSize: 10 },
                                 { text: 'III', bold: true, fontSize: 10 },
                                 { text: 'IV', bold: true, fontSize: 10 },
-                                { text: 'LOGRO ANUAL', bold: true, fontSize: 10 }
+                                { text: 'LOGRO ANUAL', bold: true, fontSize: 10 },
+                                { text: 'EX. SUSTITUTORIO', bold: true, fontSize: 10 }
                               ],
                               ...p.competencias.map((nt: any) => (
                                 [
@@ -536,6 +537,7 @@ export class InformesComponent implements OnInit {
                                   nt.logro3,
                                   nt.logro4,
                                   { text: nt.logroanual, bold: true, alignment: 'center' },
+                                  { text: "-",alignment: 'center' }
                                 ]
                               ))
                             ]
@@ -711,7 +713,7 @@ export class InformesComponent implements OnInit {
                         {
                           margin: [0, 1, 0, 1],
                           table: {
-                            widths: [150, 20, 20, 20, 20, 70],
+                            widths: [150, 20, 20, 20, 20, 40, 40],
                             body: [
                               [
                                 { text: 'Competencia', bold: true, fontSize: 10 },
@@ -719,7 +721,8 @@ export class InformesComponent implements OnInit {
                                 { text: 'II', bold: true, fontSize: 10 },
                                 { text: 'III', bold: true, fontSize: 10 },
                                 { text: 'IV', bold: true, fontSize: 10 },
-                                { text: 'LOGRO ANUAL', bold: true, fontSize: 10 }
+                                { text: 'LOGRO ANUAL', bold: true, fontSize: 10 },
+                                { text: 'EX. SUSTITUTORIO', bold: true, fontSize: 10 }
                               ],
                               ...p.competencias.map((nt: any) => (
                                 [
@@ -729,6 +732,7 @@ export class InformesComponent implements OnInit {
                                   nt.logro3,
                                   nt.logro4,
                                   { text: nt.logroanual, bold: true, alignment: 'center' },
+                                  { text:"-", alignment: 'center' }
                                 ]
                               ))
                             ]

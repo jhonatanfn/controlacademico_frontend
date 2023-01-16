@@ -13,7 +13,7 @@
                                     <div class="mb-3">
                                         <label for="periodoId" class="form-label">Periodo</label>
                                         <select class="form-select" aria-label="Seleccionar periodo"
-                                            formControlName="periodoId">
+                                            formControlName="periodoId" (change)="listarAulas()">
                                             <option value="">Seleccionar Periodo</option>
                                             <option *ngFor="let periodo of periodos"
                                                 [value]="[periodo.id,periodo.nombre]">

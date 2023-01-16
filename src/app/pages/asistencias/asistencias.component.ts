@@ -11,7 +11,7 @@ export class AsistenciasComponent implements OnInit {
 
   public aulas: Aula[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Asistencias';
+  public titulo: string = 'Lista Asistencias';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
@@ -28,7 +28,7 @@ export class AsistenciasComponent implements OnInit {
 
   listarAulas() {
     this.cargando = true;
-    this.aulaService.listar().subscribe({
+    this.aulaService.listar(this.desde).subscribe({
       next: ({ ok, aulas, total }) => {
         if (ok) {
           this.aulas = aulas;

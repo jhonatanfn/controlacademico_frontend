@@ -12,7 +12,7 @@ export class ApreciacionesComponent implements OnInit {
 
   public apreciaciones: Apreciacion[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Apreciaciones';
+  public titulo: string = 'Lista Apreciaciones';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

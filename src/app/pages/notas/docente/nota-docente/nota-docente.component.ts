@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 })
 export class NotaDocenteComponent implements OnInit {
 
-  public titulo: string = 'Tabla Notas';
+  public titulo: string = 'Lista Notas';
   public icono: string = 'bi bi-table';
   public cargando: boolean = true;
   public programaciones: Programacion[] = [];
@@ -153,7 +153,7 @@ export class NotaDocenteComponent implements OnInit {
                 title: 'Se produjo un error. Hable con el administrador.',
                 showConfirmButton: false,
                 timer: 1000
-              })
+              });
             }
           });
       }

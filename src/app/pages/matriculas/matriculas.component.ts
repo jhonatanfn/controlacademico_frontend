@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import * as moment from 'moment';
-import Swal from 'sweetalert2';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+import Swal from 'sweetalert2';
 import { Matricula } from 'src/app/models/matricula.model';
 import { Matriculadetalle } from 'src/app/models/matriculadetalle';
 import { MatriculaService } from 'src/app/services/matricula.service';
 import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
 import { Institucion } from 'src/app/models/institucion.model';
 import { InstitucionService } from 'src/app/services/institucion.service';
+import { NotaService } from 'src/app/services/nota.service';
 
 @Component({
   selector: 'app-matriculas',
@@ -22,7 +23,7 @@ export class MatriculasComponent implements OnInit {
   public matriculas: Matricula[] = [];
   public matriculadetalles: Matriculadetalle[] = [];
   public cargando: boolean = false;
-  public titulo: string = 'Tabla Matriculas';
+  public titulo: string = 'Lista Matriculas';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
@@ -33,7 +34,8 @@ export class MatriculasComponent implements OnInit {
   public institucion!: Institucion;
 
   constructor(private matriculaService: MatriculaService, private fb: FormBuilder,
-    private matriculadetalleService: MatriculadetalleService, private institucionService: InstitucionService) {
+    private matriculadetalleService: MatriculadetalleService,
+    private institucionService: InstitucionService, private notaService: NotaService) {
     this.institucion = this.institucionService.institucion;
   }
 
@@ -109,31 +111,46 @@ export class MatriculasComponent implements OnInit {
   }
 
   eliminarMatricula(matricula: Matricula) {
-    Swal.fire({
-      title: 'Eliminar',
-      text: "¿Desea eliminar la matricula de: " + matricula.alumno?.persona?.nombres,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: 'Eliminar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.matriculaService.borrar(Number(matricula.id))
-          .subscribe({
-            next: ({ ok, msg }) => {
-              if (ok) {
-                Swal.fire({
-                  position: 'top-end',
-                  icon: 'success',
-                  title: msg,
-                  showConfirmButton: false,
-                  timer: 2500
+
+    this.notaService.existeNotasMatricula(Number(matricula.id)).subscribe({
+      next: ({ ok, msg }) => {
+        if (!ok) {
+          Swal.fire({
+            title: 'Eliminar',
+            text: "¿Desea eliminar la matricula de: " + matricula.alumno?.persona?.nombres,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Eliminar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.matriculaService.borrar(Number(matricula.id))
+                .subscribe({
+                  next: ({ ok, msg }) => {
+                    if (ok) {
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: msg,
+                        showConfirmButton: false,
+                        timer: 2500
+                      });
+                    }
+                  }
                 });
-              }
             }
           });
+        } else {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: msg,
+            showConfirmButton: false,
+            timer: 1000
+          });
+        }
       }
     });
   }

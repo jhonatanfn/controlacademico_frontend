@@ -9,7 +9,7 @@ import { HorarioService } from 'src/app/services/horario.service';
 })
 export class ConsultarHorarioDocenteComponent implements OnInit {
 
-  public titulo: string = "Tabla Docentes";
+  public titulo: string = "Lista Docentes";
   public icono: string = "bi bi-table";
   public desde: number = 0;
   public totalRegistros: number = 0;

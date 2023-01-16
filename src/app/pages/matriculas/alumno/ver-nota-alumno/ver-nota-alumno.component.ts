@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import Swal from 'sweetalert2';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as moment from 'moment';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
+import Swal from 'sweetalert2';
 import { Rango } from 'src/app/models/rango.model';
 import { RangoService } from 'src/app/services/rango.service';
 import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';

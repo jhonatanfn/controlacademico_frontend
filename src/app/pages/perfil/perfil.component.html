@@ -85,9 +85,9 @@
                                         <i class="bi bi-envelope-fill"></i>
                                     </span>
                                     <input type="email" class="form-control" id="email" formControlName="email"
-                                        placeholder="Email" aria-label="Email" aria-describedby="basic-addon2">
+                                        placeholder="Email" aria-label="Email" aria-describedby="basic-addon2" 
+                                        [readonly]="emailuser">
                                 </div>
-
                                 <div id="email" class="form-text text-danger" *ngIf="campoEmail('email')">
                                     El email no es valido
                                 </div>

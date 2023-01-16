@@ -294,6 +294,7 @@ export class CrearAlumnoComponent implements OnInit {
               this.alumnoForm.controls['responsableapellidomaterno'].setValue(responsable.persona?.apellidomaterno);
               this.alumnoForm.controls['responsablefechanacimiento'].setValue(responsable.persona?.fechanacimiento);
               this.alumnoForm.controls['responsableId'].setValue(responsable.id);
+              this.alumnoForm.controls['responsablesexo'].setValue(responsable.persona?.sexo);
               this.activoresponsable = true;
             } else {
               this.alumnoForm.controls['responsablenombres'].setValue("");
@@ -344,7 +345,7 @@ export class CrearAlumnoComponent implements OnInit {
                           let responsableObj: any = {
                             personaId: persona.id,
                             dniusuario: this.alumnoForm.get('responsabledni')?.value,
-                            nombreusuario: (this.alumnoForm.get('responsablenombres')?.value).toLowerCase(),
+                            nombreusuario: (this.alumnoForm.get('responsablenombres')?.value).trim().toLowerCase(),
                             padrevive: pv,
                             medrevive: pm
                           };
@@ -355,7 +356,7 @@ export class CrearAlumnoComponent implements OnInit {
 
                                 let alumnoObj: any = {
                                   personaId: this.alumnoForm.get('id')?.value,
-                                  nombreusuario: (this.alumnoForm.get('nombres')?.value).toLowerCase(),
+                                  nombreusuario: (this.alumnoForm.get('nombres')?.value).trim().toLowerCase(),
                                   dniusuario: (this.alumnoForm.get('dni')?.value),
                                   padreId: this.alumnoForm.get('padreId')?.value,
                                   madreId: this.alumnoForm.get('madreId')?.value,
@@ -370,7 +371,7 @@ export class CrearAlumnoComponent implements OnInit {
 
                                   padredni: this.alumnoForm.get('padredni')?.value,
                                   padredniusuario: (this.alumnoForm.get('padredni')?.value).trim(),
-                                  padrenombreusuario: (this.alumnoForm.get('padrenombres')?.value).trim(),
+                                  padrenombreusuario: (this.alumnoForm.get('padrenombres')?.value).trim().toLowerCase(),
                                   padrenombres: this.alumnoForm.get('padrenombres')?.value,
                                   padreapellidopaterno: this.alumnoForm.get('padreapellidopaterno')?.value,
                                   padreapellidomaterno: this.alumnoForm.get('padreapellidomaterno')?.value,
@@ -381,7 +382,7 @@ export class CrearAlumnoComponent implements OnInit {
 
                                   madredni: this.alumnoForm.get('madredni')?.value,
                                   madredniusuario: (this.alumnoForm.get('madredni')?.value).trim(),
-                                  madrenombreusuario: (this.alumnoForm.get('madrenombres')?.value).trim(),
+                                  madrenombreusuario: (this.alumnoForm.get('madrenombres')?.value).trim().toLowerCase(),
                                   madrenombres: this.alumnoForm.get('madrenombres')?.value,
                                   madreapellidopaterno: this.alumnoForm.get('madreapellidopaterno')?.value,
                                   madreapellidomaterno: this.alumnoForm.get('madreapellidomaterno')?.value,
@@ -444,7 +445,7 @@ export class CrearAlumnoComponent implements OnInit {
                                 let responsableObj: any = {
                                   personaId: persona.id,
                                   dniusuario: this.alumnoForm.get('responsabledni')?.value,
-                                  nombreusuario: (this.alumnoForm.get('responsablenombres')?.value).toLowerCase(),
+                                  nombreusuario: (this.alumnoForm.get('responsablenombres')?.value).trim().toLowerCase(),
                                   padrevive: pv,
                                   medrevive: pm
                                 };
@@ -455,7 +456,7 @@ export class CrearAlumnoComponent implements OnInit {
 
                                       let alumnoObj: any = {
                                         personaId: this.alumnoForm.get('id')?.value,
-                                        nombreusuario: (this.alumnoForm.get('nombres')?.value).toLowerCase(),
+                                        nombreusuario: (this.alumnoForm.get('nombres')?.value).trim().toLowerCase(),
                                         dniusuario: (this.alumnoForm.get('dni')?.value),
                                         padreId: this.alumnoForm.get('padreId')?.value,
                                         madreId: this.alumnoForm.get('madreId')?.value,
@@ -470,7 +471,7 @@ export class CrearAlumnoComponent implements OnInit {
 
                                         padredni: this.alumnoForm.get('padredni')?.value,
                                         padredniusuario: (this.alumnoForm.get('padredni')?.value).trim(),
-                                        padrenombreusuario: (this.alumnoForm.get('padrenombres')?.value).trim(),
+                                        padrenombreusuario: (this.alumnoForm.get('padrenombres')?.value).trim().toLowerCase(),
                                         padrenombres: this.alumnoForm.get('padrenombres')?.value,
                                         padreapellidopaterno: this.alumnoForm.get('padreapellidopaterno')?.value,
                                         padreapellidomaterno: this.alumnoForm.get('padreapellidomaterno')?.value,
@@ -481,7 +482,7 @@ export class CrearAlumnoComponent implements OnInit {
 
                                         madredni: this.alumnoForm.get('madredni')?.value,
                                         madredniusuario: (this.alumnoForm.get('madredni')?.value).trim(),
-                                        madrenombreusuario: (this.alumnoForm.get('madrenombres')?.value).trim(),
+                                        madrenombreusuario: (this.alumnoForm.get('madrenombres')?.value).trim().toLowerCase(),
                                         madrenombres: this.alumnoForm.get('madrenombres')?.value,
                                         madreapellidopaterno: this.alumnoForm.get('madreapellidopaterno')?.value,
                                         madreapellidomaterno: this.alumnoForm.get('madreapellidomaterno')?.value,

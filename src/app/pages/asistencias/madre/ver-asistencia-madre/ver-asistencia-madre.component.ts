@@ -16,6 +16,7 @@ import { SituacionService } from 'src/app/services/situacion.service';
 import { Situacion } from 'src/app/models/situacion.model';
 import { AlumnoService } from 'src/app/services/alumno.service';
 import { Madre } from 'src/app/models/madre.model';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -35,6 +36,7 @@ export class VerAsistenciaMadreComponent implements OnInit {
   public formSubmitted: boolean = false;
   public periodos: Periodo[] = [];
   public aulas: Aula[] = [];
+  public aulasAux: Aula[] = [];
   public alumno!: Alumno;
   public datos: any[] = [];
   public cargando: boolean = false;
@@ -52,19 +54,13 @@ export class VerAsistenciaMadreComponent implements OnInit {
   constructor(private fb: FormBuilder, private periodoService: PeriodoService,
     private aulaService: AulaService, private usuarioService: UsuarioService,
     private asistenciaService: AsistenciaService, private institucionService: InstitucionService,
-    private situacionService: SituacionService, private alumnoService:AlumnoService) {
+    private situacionService: SituacionService, private alumnoService:AlumnoService,
+    private matriculadetalleService:MatriculadetalleService) {
 
     this.periodoService.todo().subscribe({
       next: ({ ok, periodos }) => {
         if (ok) {
           this.periodos = periodos;
-        }
-      }
-    });
-    this.aulaService.todo().subscribe({
-      next: ({ ok, aulas }) => {
-        if (ok) {
-          this.aulas = aulas;
         }
       }
     });
@@ -103,6 +99,29 @@ export class VerAsistenciaMadreComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  listarAulas() {
+    let arrPeriodos = (this.asisForm.get('periodoId')?.value).split(',');
+    this.aulas = [];
+    this.aulasAux = [];
+    this.matriculadetalleService.matriculadetallesAlumnoMadre(Number(this.madre.id), Number(arrPeriodos[0]))
+      .subscribe(({ ok, matriculadetalles }) => {
+        if (ok) {
+          if (matriculadetalles.length > 0) {
+            var lookupObject: any = {};
+            matriculadetalles.forEach(matriculadetalle => {
+              this.aulasAux.push(matriculadetalle.programacion?.aula!);
+            });
+            for (var i in this.aulasAux) {
+              lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
+            }
+            for (i in lookupObject) {
+              this.aulas.push(lookupObject[i]);
+            }
+          }
+        }
+      });
   }
 
   buscarAsistencias() {

@@ -44,7 +44,7 @@ export class PerfilComponent implements OnInit {
   public activopersonal:string= "";
   public activocambiar:string= "";
 
-
+  public emailuser:boolean = true;
   constructor(private fb: FormBuilder,
     private usuarioService: UsuarioService, private personaService: PersonaService) {
   }

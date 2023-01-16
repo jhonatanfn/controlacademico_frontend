@@ -146,7 +146,7 @@ export class CrearPadreComponent implements OnInit {
                 if (ok) {
                   let padreObj: any = {
                     personaId: persona.id,
-                    nombreusuario: (this.padreForm.get('nombres')?.value).toLowerCase(),
+                    nombreusuario: (this.padreForm.get('nombres')?.value).trim().toLowerCase(),
                   }
                   this.padreService.crear(padreObj).subscribe({
                     next: ({ ok, msg }) => {

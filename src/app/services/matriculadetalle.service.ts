@@ -122,6 +122,19 @@ export class MatriculadetalleService {
     const base= `${base_url}/matriculadetalles/alumno/padreperiodo/${padreId}/${periodoId}/?desde=${desde}`;
     return this.http.get<listarMatriculadetalles>(base,this.headers);
   }
+  
+  
+  matriculadetallesAlumnoPadre(padreId:number,periodoId:number){
+    const base= `${base_url}/matriculadetalles/alumno/porpadre/${padreId}/${periodoId}`;
+    return this.http.get<listarMatriculadetalles>(base,this.headers);
+  }
+  matriculadetallesAlumnoMadre(madreId:number,periodoId:number){
+    const base= `${base_url}/matriculadetalles/alumno/pormadre/${madreId}/${periodoId}`;
+    return this.http.get<listarMatriculadetalles>(base,this.headers);
+  }
+
+
+
   matriculadetallesAlumnoPorPadre(padreId:number,desde:number=0){
     const base= `${base_url}/matriculadetalles/alumno/padre/${padreId}?desde=${desde}`;
     return this.http.get<listarMatriculadetalles>(base,this.headers);

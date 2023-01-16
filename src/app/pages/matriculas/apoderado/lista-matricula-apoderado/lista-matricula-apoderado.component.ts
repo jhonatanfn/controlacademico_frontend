@@ -16,7 +16,7 @@ export class ListaMatriculaApoderadoComponent implements OnInit {
 
   public matriculadetalles: Matriculadetalle[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Matriculas';
+  public titulo: string = 'Lista Notas';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;

@@ -16,6 +16,7 @@ import { SituacionService } from 'src/app/services/situacion.service';
 import { Situacion } from 'src/app/models/situacion.model';
 import { Padre } from 'src/app/models/padre.model';
 import { AlumnoService } from 'src/app/services/alumno.service';
+import { MatriculadetalleService } from 'src/app/services/matriculadetalle.service';
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -35,6 +36,7 @@ export class VerAsistenciaPadreComponent implements OnInit {
   public formSubmitted: boolean = false;
   public periodos: Periodo[] = [];
   public aulas: Aula[] = [];
+  public aulasAux: Aula[] = [];
   public alumno!: Alumno;
   public datos: any[] = [];
   public cargando: boolean = false;
@@ -47,24 +49,17 @@ export class VerAsistenciaPadreComponent implements OnInit {
   public resumenes: any[] = [];
   public situaciones: Situacion[] = [];
   public alumnos: Alumno[] = [];
-  public padre!:Padre;
+  public padre!: Padre;
 
   constructor(private fb: FormBuilder, private periodoService: PeriodoService,
-    private aulaService: AulaService, private usuarioService: UsuarioService,
-    private asistenciaService: AsistenciaService, private institucionService: InstitucionService,
-    private situacionService: SituacionService, private alumnoService:AlumnoService) {
+    private usuarioService: UsuarioService, private asistenciaService: AsistenciaService, 
+    private institucionService: InstitucionService, private situacionService: SituacionService, 
+    private alumnoService: AlumnoService, private matriculadetalleService: MatriculadetalleService) {
 
     this.periodoService.todo().subscribe({
       next: ({ ok, periodos }) => {
         if (ok) {
           this.periodos = periodos;
-        }
-      }
-    });
-    this.aulaService.todo().subscribe({
-      next: ({ ok, aulas }) => {
-        if (ok) {
-          this.aulas = aulas;
         }
       }
     });
@@ -88,9 +83,9 @@ export class VerAsistenciaPadreComponent implements OnInit {
       if (ok) {
         this.padre = padre;
         this.alumnoService.listaAlumnosPorPadre(Number(padre.id)).subscribe({
-          next: ({ok, alumnos})=>{
-            if(ok){
-              this.alumnos=alumnos;
+          next: ({ ok, alumnos }) => {
+            if (ok) {
+              this.alumnos = alumnos;
             }
           }
         });
@@ -103,6 +98,29 @@ export class VerAsistenciaPadreComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  listarAulas() {
+    let arrPeriodos = (this.asisForm.get('periodoId')?.value).split(',');
+    this.aulas = [];
+    this.aulasAux = [];
+    this.matriculadetalleService.matriculadetallesAlumnoPadre(Number(this.padre.id), Number(arrPeriodos[0]))
+      .subscribe(({ ok, matriculadetalles }) => {
+        if (ok) {
+          if (matriculadetalles.length > 0) {
+            var lookupObject: any = {};
+            matriculadetalles.forEach(matriculadetalle => {
+              this.aulasAux.push(matriculadetalle.programacion?.aula!);
+            });
+            for (var i in this.aulasAux) {
+              lookupObject[this.aulasAux[i].id!] = this.aulasAux[i];
+            }
+            for (i in lookupObject) {
+              this.aulas.push(lookupObject[i]);
+            }
+          }
+        }
+      });
   }
 
   buscarAsistencias() {

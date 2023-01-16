@@ -12,7 +12,7 @@ export class AulasComponent implements OnInit {
 
   public aulas:Aula[]=[];
   public cargando:boolean= true;
-  public titulo:string='Tabla Aulas';
+  public titulo:string='Lista Aulas';
   public icono:string='bi bi-table';
   public desde:number=0;
   public totalRegistros:number=0;

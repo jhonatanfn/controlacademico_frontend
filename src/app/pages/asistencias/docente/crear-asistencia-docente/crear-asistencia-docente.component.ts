@@ -47,6 +47,7 @@ export class CrearAsistenciaDocenteComponent implements OnInit {
   ngOnInit(): void {
     this.asisForm = this.fb.group({
       fecha: [moment().format("YYYY-MM-DD"), Validators.required],
+      hora: [moment().format('LTS')],
       matriculadetalleId: [''],
       situacionId: [''],
       aulaId: [Number(this.route.snapshot.paramMap.get('id'))]
@@ -84,7 +85,9 @@ export class CrearAsistenciaDocenteComponent implements OnInit {
                               matriculadetalle: matriculadetalle,
                               situacionId: 14,
                               color: "success",
-                              texto: "ASISTIÓ"
+                              texto: "ASISTIÓ",
+                              fecha: this.asisForm.controls['fecha'].value,
+                              hora: this.asisForm.controls['hora'].value
                             });
                           });
                           this.cargando = false;

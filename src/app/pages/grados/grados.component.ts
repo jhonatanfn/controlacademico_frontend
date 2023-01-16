@@ -13,7 +13,7 @@ export class GradosComponent implements OnInit {
 
   public grados: Grado[] = [];
   public cargando: boolean = true;
-  public titulo: string = 'Tabla Grados';
+  public titulo: string = 'Lista Grados';
   public icono: string = 'bi bi-table';
   public desde: number = 0;
   public totalRegistros: number = 0;
